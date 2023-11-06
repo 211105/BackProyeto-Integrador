@@ -1,1 +1,3 @@
-#hexagonal
+# hexagonal
+
+## Integrantes
