@@ -20,7 +20,7 @@ export class UpdatePasswordController {
                 return res.status(200).send({
                     status: "succes",
                     data: {
-                        update_user: updatePasswor
+                        
                     }
                 })
             } else {
