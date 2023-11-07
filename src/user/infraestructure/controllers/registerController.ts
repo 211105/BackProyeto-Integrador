@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { RegisterUserUseCase } from "../../application/registerUseCase";
 import { User } from "../../domain/user";
+import { UploadedFile } from "express-fileupload";
+import uploadToFirebase from "../../../helpers/saveImages";
 
 
 export class ResgisterUserController {
@@ -12,20 +14,29 @@ export class ResgisterUserController {
 
             let {
                 name,
-                last_name,
-                phone_number,
                 email,
+                phone_number,
                 password,
             } = req.body
-            console.log(req.body)
+            
 
+            if (!req.files || !req.files.img_file) {
+                return res.status(400).send({
+                    status: "error",
+                    message: "No image file uploaded."
+                });
+            }
 
+               // Castear el archivo a UploadedFile (express-fileupload)
+               const imgFile = req.files.img_file as UploadedFile;
+               const img_url = await uploadToFirebase(imgFile)
+               console.log(img_url)
 
             let registerUser = await this.registerUserUseCase.run(
                 name,
-                last_name,
-                phone_number,
                 email,
+                phone_number,
+                img_url,
                 password,
             )
             if (registerUser instanceof Error) {

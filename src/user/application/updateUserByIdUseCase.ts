@@ -2,6 +2,7 @@ import { validate } from "class-validator";
 import { User } from "../domain/user";
 import { IUsuarioRepository } from "../domain/userRepository";
 import { ValidatorUpdate } from "../domain/validations/user";
+import { url } from "inspector";
 
 
 export class UpdateUserByIdUseCase {
@@ -10,20 +11,19 @@ export class UpdateUserByIdUseCase {
     async run(
         uuid: string,
         name?: string,
-        last_name?: string,
-        phone_number?: string,
         email?: string,
+        phone_number?: string,
+        img_url?: string,
         ): Promise<User | null> {
 
-        let post = new ValidatorUpdate(uuid,name,last_name,phone_number,email)
+        let post = new ValidatorUpdate(uuid,name,email,phone_number,img_url)
         const validation = await validate(post)
-        console.log(validation.length)
         if (validation.length > 0) {
             throw new Error(JSON.stringify(validation));
         }
         
         try {
-            const updateUserById = await this.usuarioRepository.updateUserById(uuid,name,last_name,phone_number,email);
+            const updateUserById = await this.usuarioRepository.updateUserById(uuid,name,email,phone_number,img_url);
             return updateUserById;
         } catch (error) {
             return null;

@@ -1,7 +1,7 @@
 import { IsString, IsUUID, Length, IsBoolean, IsNotEmpty, ValidateIf, IsIn, IsOptional,IsEmail} from 'class-validator';
 
 
-export class ValidatorCreateUser {
+export class ValidatorRegisterUser {
     @IsNotEmpty()
     @IsUUID()
     public uuid: string;
@@ -12,49 +12,37 @@ export class ValidatorCreateUser {
     public name: string;
 
     @IsNotEmpty()
-    @IsString()
-    @Length(1, 100)
-    public last_name: string;
+    @IsEmail()
+    public email: string;
 
     @IsNotEmpty()
     @IsString()
     @Length(10) 
     public phone_number: string;
 
-    @IsNotEmpty()
-    @IsEmail()
-    public email: string;
+    @IsString()
+    public img_url: string;
 
     @IsNotEmpty()
     @IsString()
     public password: string;
 
-    @IsNotEmpty()
-    @IsBoolean()
-    public loan_status: boolean;
-
-    @IsNotEmpty()
-    @IsBoolean()
-    public status: boolean;
+   
 
     constructor(
         uuid: string,
         name: string,
-        last_name: string,
-        phone_number: string,
         email: string,
+        phone_number: string,
+        img_url: string,
         password: string,
-        loan_status: boolean,
-        status: boolean
     ) {
         this.uuid = uuid;
         this.name = name;
-        this.last_name = last_name;
-        this.phone_number = phone_number;
         this.email = email;
+        this.phone_number = phone_number;
+        this.img_url = img_url;
         this.password = password;
-        this.loan_status = loan_status;
-        this.status = status;
     }
 
 
@@ -97,40 +85,6 @@ export class ValidatorupdatePassword {
 }
 
 
-export class ValidatorFilter {
-    @IsNotEmpty()
-    @IsString()
-    @IsIn(['email', 'name', 'phone_number'])
-    public filter: string;
-
-    @ValidateIf(o => o.filter === 'email')
-    @IsNotEmpty()
-    @IsEmail()
-    public email?: string;
-
-    @ValidateIf(o => o.filter === 'name')
-    @IsNotEmpty()
-    @IsString()
-    public name?: string;
-
-    @ValidateIf(o => o.filter === 'phone_number')
-    @IsNotEmpty()
-    
-    public phone_number?: string;
-
-    constructor(
-        filter: string,
-        email?: string,
-        name?: string,
-        phone_number?: string
-    ) {
-        this.filter = filter;
-        this.email = email;
-        this.name = name;
-        this.phone_number = phone_number;
-    }
-}
-
 export class ValidatorId {
     @IsNotEmpty()
     @IsUUID()
@@ -153,7 +107,7 @@ export class ValidatorUpdate {
     @IsOptional()
     @IsString()
     @Length(1, 100)
-    public last_name?: string;
+    public email?: string;
 
     @IsOptional()
     @IsString()
@@ -162,18 +116,20 @@ export class ValidatorUpdate {
 
     @IsOptional()
     @IsString()
-    @Length(1, 100)
-    public email?: string;
+    public img_url?: string;
+
+   
     constructor( 
         uuid: string,
         name?: string,
-        last_name?: string,
+        email?: string,
         phone_number?: string,
-        email?: string,) {
+        img_url?: string,
+        ) {
         this.uuid = uuid;
         this.name = name;
-        this.last_name = last_name;
-        this.phone_number = phone_number
         this.email = email;
+        this.phone_number = phone_number
+        this.img_url = img_url
     }
 }

@@ -32,7 +32,7 @@ export class LoginUserController {
             }
             if (loginUser) {
                 return res.status(201).send({
-                   token: loginUser
+                   data: loginUser
                 })
             }
              
