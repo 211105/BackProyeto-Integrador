@@ -6,6 +6,7 @@ import { userRoutes } from "./user/infraestructure/userRouter";
 import * as serviceAccount from "./helpers/integrador-9.json";
 import * as admin from "firebase-admin";
 import fileUpload from 'express-fileupload';
+import { driverRoutes } from "./driver/infraestructure/driverRoutes";
 
 
 
@@ -27,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use('/api/v1/users', userRoutes);
-
+app.use('/api/v1/drivers', driverRoutes);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
