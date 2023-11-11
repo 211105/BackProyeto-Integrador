@@ -3,7 +3,7 @@ import { query } from "../../../database/connection";
 export async function isEmailRegistered(email: string) {
     const checkEmailSql = `
         SELECT COUNT(*) as emailCount
-        FROM users
+        FROM drivers
         WHERE email = ?;
     `;
     const [emailResults]: any = await query(checkEmailSql, [email]);

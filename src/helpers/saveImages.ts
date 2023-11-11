@@ -8,6 +8,7 @@ import * as admin from 'firebase-admin';
  * @param {UploadedFile} file El archivo a subir.
  * @returns {Promise<string>} La URL pública del archivo subido.
  */
+
 async function uploadToFirebase(file: UploadedFile): Promise<string> {
     const bucket = admin.storage().bucket();
 
@@ -33,4 +34,4 @@ async function uploadToFirebase(file: UploadedFile): Promise<string> {
     });
 }
 
-export default uploadToFirebase;  // Exporta la función para usarla en otros archivos.
+export default uploadToFirebase; 

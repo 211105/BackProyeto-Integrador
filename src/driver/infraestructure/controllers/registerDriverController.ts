@@ -17,26 +17,31 @@ export class RegisterDriverController{
                 email,
                 password,
                 identification_number,
-                phone
+                phone,
             } = req.body;
-            if (!req.files || !req.files.photo_file) {
+
+            if (!req.files || !req.files.url_photography) {
                 return res.status(400).send({
                     status: "error",
-                    message: "No image file uploaded."
+                    message: "No image file uploaded url_photography."
                 });
             }
-            if (!req.files || !req.files.identification_file) {
+            if (!req.files || !req.files.url_identification) {
                 return res.status(400).send({
                     status: "error",
-                    message: "No image file uploaded."
+                    message: "No image file uploaded url_identification."
                 });
             }
+            console.log("ssss")
+            
+            console.log("ssssssss")
+           
             // Castear el archivo a UploadedFile (express-fileupload)
-            const photoFile = req.files.photo_file as UploadedFile;
+            const photoFile = req.files.url_photography as UploadedFile;
             const url_photography = await uploadToFirebase(photoFile)
             console.log(url_photography)
-    
-            const imgFile = req.files.photo_file as UploadedFile;
+
+            const imgFile = req.files.url_identification as UploadedFile;
             const url_identification = await uploadToFirebase(imgFile)
             console.log(url_identification)
     

@@ -3,7 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 import { Signale } from 'signale';
 import { userRoutes } from "./user/infraestructure/userRouter";
-import * as serviceAccount from "./helpers/integrador-9.json";
+import * as serviceAccount from "./helpers/integrador-image-firebase-adminsdk-17aek-114f65daa8.json";
 import * as admin from "firebase-admin";
 import fileUpload from 'express-fileupload';
 import { driverRoutes } from "./driver/infraestructure/driverRoutes";
@@ -12,7 +12,7 @@ import { driverRoutes } from "./driver/infraestructure/driverRoutes";
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-  storageBucket: "integrador-ff8cd.appspot.com/"
+  storageBucket: "integrador-image.appspot.com"
 });
 
 const app = express();
