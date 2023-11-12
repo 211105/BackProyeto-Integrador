@@ -59,4 +59,39 @@ export class MysqlDriverRepository implements DriverRepository {
             throw error;
         }
     }
+    async updatePassword(uuid: string, password: string): Promise<Driver | null> {
+        try {
+            // Asumiendo que 'password' ya está cifrado.
+            const hashPassword = await encrypt(password)
+            const sql = 'UPDATE drivers SET password = ? WHERE uuid = ?';
+            const result: any = await query(sql, [hashPassword, uuid]);
+
+            // Verificar si se actualizó alguna fila
+            if (!result || result.affectedRows === 0) return null;
+
+            // Obtener el usuario actualizado
+            const [updatedRows]: any = await query('SELECT * FROM drivers WHERE uuid = ?', [uuid]);
+            if (updatedRows.length === 0) return null;
+
+            const updatedUser = new Driver(
+                updatedRows[0].uuid,
+                updatedRows[0].name,
+                updatedRows[0].surname,
+                updatedRows[0].second_surname,
+                updatedRows[0].email,
+                updatedRows[0].password,
+                updatedRows[0].url_photography,
+                updatedRows[0].identification_number,
+                updatedRows[0].url_identification,
+                updatedRows[0].phone,
+                updatedRows[0].status,
+                
+            );
+
+            return updatedUser;
+        } catch (error) {
+            console.error('Error updating password:', error);
+            throw error; // O maneja el error de la manera que prefieras.
+        }
+    }
 }

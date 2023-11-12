@@ -110,3 +110,22 @@ export class ValidateLogin {
         this.password = password
     }
 }
+
+export class ValidatorupdatePassword {
+
+    @IsNotEmpty()
+    @IsUUID()
+    public uuid: string;
+
+    @IsNotEmpty()
+    @IsString()
+    public password: string;
+
+    constructor(
+        uuid: string,
+        password: string
+    ) {
+        this.uuid = uuid;
+        this.password = password;
+    }
+}

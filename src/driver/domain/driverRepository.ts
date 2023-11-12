@@ -18,4 +18,6 @@ export interface DriverRepository{
     ):Promise<Driver | null | Error>
 
     loginDriver(email:string, password:string):Promise<ResonseLogin | null | string>
+
+    updatePassword(uuid:string, password:string):Promise<Driver | null>
 }
