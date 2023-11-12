@@ -1,4 +1,5 @@
 import { Driver} from "./driver";
+import { ResonseLogin } from "../../driver/domain/driver";
 
 export interface DriverRepository{
     
@@ -14,5 +15,7 @@ export interface DriverRepository{
         url_identification:string,
         phone:string,
         status:boolean
-        ):Promise<Driver | null | Error>
+    ):Promise<Driver | null | Error>
+
+    loginDriver(email:string, password:string):Promise<ResonseLogin | null | string>
 }

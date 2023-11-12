@@ -92,3 +92,21 @@ export class ValidatorRegisterDriver {
         this.phone = phone;
     }
 }
+
+export class ValidateLogin {
+    @IsNotEmpty()
+    @IsEmail()
+    public email: string;
+
+    @IsNotEmpty()
+    @IsString()
+    public password: string;
+
+    constructor(
+        email:string,
+        password:string,
+    ){
+        this.email = email,
+        this.password = password
+    }
+}
