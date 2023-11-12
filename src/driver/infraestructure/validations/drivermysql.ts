@@ -1,13 +1,11 @@
 import { query } from "../../../database/connection";
 
-export async function isEmailRegistered(email: string) {
+export async function isEmailRegistered(email: string): Promise<boolean> {
     const checkEmailSql = `
         SELECT COUNT(*) as emailCount
         FROM drivers
         WHERE email = ?;
     `;
     const [emailResults]: any = await query(checkEmailSql, [email]);
-    if (emailResults[0].emailCount > 0) {
-        throw new Error("El correo electrónico ya está registrado en la base de datos.");
-    }
+    return emailResults[0].emailCount > 0;
 }
