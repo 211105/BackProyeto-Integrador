@@ -1,4 +1,4 @@
-import { query } from "../../../database/connection";
+import { query } from "../../../../database/connection";
 
 export async function isEmailRegistered(email: string): Promise<boolean> {
     const checkEmailSql = `

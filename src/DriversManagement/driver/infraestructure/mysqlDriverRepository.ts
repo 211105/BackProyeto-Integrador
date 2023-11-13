@@ -1,8 +1,8 @@
-import { query } from "../../database/connection";
+import { query } from "../../../database/connection";
 import { Driver,ResonseLogin } from "../domain/driver";
 import { DriverRepository } from "../domain/driverRepository";
-import { compare, encrypt } from '../../helpers/ashs';
-import { tokenSigIn } from "../../helpers/token";
+import { compare, encrypt } from '../../../helpers/ashs';
+import { tokenSigIn } from "../../../helpers/token";
 
 
 export class MysqlDriverRepository implements DriverRepository {

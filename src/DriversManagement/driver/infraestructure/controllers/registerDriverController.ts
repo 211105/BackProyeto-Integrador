@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { RegisterDriverUseCase } from '../../application/registerDriverUseCase';
 import { Driver } from '../../domain/driver';
 import { UploadedFile } from 'express-fileupload';
-import uploadToFirebase from '../../../helpers/saveImages';
-import { detectText, validateFields } from '../../../helpers/validationIdentity'; // Cambiar la ruta según tu estructura
+import uploadToFirebase from '../../../../helpers/saveImages';
+import { detectText, validateFields } from '../../../../helpers/validationIdentity'; // Cambiar la ruta según tu estructura
 import { isEmailRegistered } from '../validations/drivermysql';
 
 export class RegisterDriverController {
@@ -80,7 +80,7 @@ export class RegisterDriverController {
                 identification_number,
                 url_identification,
                 phone,
-                true
+                false
             );
             console.log("pasooooo esto")
 

@@ -1,7 +1,7 @@
 import { Driver } from "../domain/driver";
 import { DriverRepository } from "../domain/driverRepository";
 import { v4 as uuid } from "uuid";
-import { encrypt } from "../../helpers/ashs";
+import { encrypt } from "../../../helpers/ashs";
 import { validate } from "class-validator";
 import { ValidatorRegisterDriver } from "../domain/validations/driver";
 
