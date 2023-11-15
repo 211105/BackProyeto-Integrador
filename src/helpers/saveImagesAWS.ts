@@ -16,30 +16,30 @@ const s3Client = new S3Client({
 });
 
 export async function uploadToS3(fileBuffer: Buffer, key: string, contentType: string): Promise<string> {
-  const uploadParams = {
-    Bucket: process.env.BUCKET_NAME || '',
-    Body: fileBuffer,
-    Key: key,
-    ContentType: contentType,
-  };
-
-  try {
-    // Subir el archivo a S3
-    await s3Client.send(new PutObjectCommand(uploadParams));
-
-    // Generar una URL firmada que expire en 5 minutos (ajusta según sea necesario)
-    const command = new GetObjectCommand({
+    const uploadParams = {
       Bucket: process.env.BUCKET_NAME || '',
+      Body: fileBuffer,
       Key: key,
-    });
-    const signedUrl = await getSignedUrl(s3Client, command);
-
-    return signedUrl;
-  } catch (error) {
-    console.error("Error uploading to S3:", error);
-    throw error; // Re-lanzar el error para que se maneje en el controlador
+      ContentType: contentType,
+    };
+  
+    try {
+      // Subir el archivo a S3
+      await s3Client.send(new PutObjectCommand(uploadParams));
+  
+      // Generar una URL firmada que expire en una semana
+      const command = new GetObjectCommand({
+        Bucket: process.env.BUCKET_NAME || '',
+        Key: key,
+      });
+      const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 60 * 60 * 24 * 7 }); // Una semana
+  
+      return signedUrl;
+    } catch (error) {
+      console.error("Error uploading to S3:", error);
+      throw error; // Re-lanzar el error para que se maneje en el controlador
+    }
   }
-}
 
 export async function deleteFromS3(key: string): Promise<void> {
     try {

@@ -81,13 +81,18 @@ export class ValidatorUpdate {
 
     @IsOptional()
     @IsString()
-    @Length(1, 100)
+    @IsEmail()
     public email?: string;
 
     @IsOptional()
     @IsString()
     @Length(10)  
     public phone_number?: string;
+
+    @IsOptional()
+    @IsString()
+    @Length(1, 600)
+    public img_url?: string;
 
    
     constructor( 
@@ -97,13 +102,15 @@ export class ValidatorUpdate {
         second_surname?: string,
         email?: string,
         phone_number?: string,
+        img_url?:string
         ) {
         this.uuid = uuid;
         this.name = name;
         this.surname = surname;
         this.second_surname = second_surname;
         this.email = email;
-        this.phone_number = phone_number
+        this.phone_number = phone_number;
+        this.img_url = img_url;
     }
 }
 export class ValidatorUuid {

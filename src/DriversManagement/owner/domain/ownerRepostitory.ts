@@ -20,6 +20,7 @@ export interface OwnerRepository{
         second_surname?:string,
         email?:string,
         phone_number?:string,
+        img_url?:string
     ):Promise<Owner | null>
 
     deleteOwnner(uuid:string):Promise<Owner | null | string>
