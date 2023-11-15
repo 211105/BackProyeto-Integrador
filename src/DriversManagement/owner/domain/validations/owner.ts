@@ -106,3 +106,15 @@ export class ValidatorUpdate {
         this.phone_number = phone_number
     }
 }
+export class ValidatorUuid {
+    @IsNotEmpty()
+    @IsUUID()
+    public uuid: string;
+
+   
+    constructor( 
+        uuid: string,
+        ) {
+        this.uuid = uuid;
+    }
+}

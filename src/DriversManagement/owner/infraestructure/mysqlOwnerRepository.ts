@@ -59,4 +59,18 @@ export class MysqlOwnerRepository implements OwnerRepository{
             throw error; // O maneja el error de la manera que prefieras.
         }
     }
+    async deleteOwnner(uuid: string): Promise<string | Owner | null> {
+        try {
+            const sql = 'DELETE FROM owners WHERE uuid = ?';
+            const result: any = await query(sql, [uuid]);
+            if (result[0].affectedRows === 0){
+                return null;
+            } 
+
+            return 'Owner deleted successfully.';
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            throw error; // O maneja el error de la manera que prefieras.
+        }
+    }
 }

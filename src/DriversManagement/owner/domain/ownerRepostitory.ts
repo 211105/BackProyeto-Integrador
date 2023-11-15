@@ -22,7 +22,7 @@ export interface OwnerRepository{
         phone_number?:string,
     ):Promise<Owner | null>
 
-    
+    deleteOwnner(uuid:string):Promise<Owner | null | string>
 
     
 
