@@ -13,4 +13,17 @@ export interface OwnerRepository{
         type_user:string,
         status:boolean):Promise<Owner | null| Error | string>;
 
+    updateOwner(
+        uuid:string,
+        name?:string,
+        surname?:string,
+        second_surname?:string,
+        email?:string,
+        phone_number?:string,
+    ):Promise<Owner | null>
+
+    
+
+    
+
 }
