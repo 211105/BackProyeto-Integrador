@@ -1,23 +1,20 @@
-import { Note } from "../../domain/note";
-import { UpdateFileNameUseCase } from "../../application/updateFileNameUseCase";
-import { Request, Response } from "express";
+import { Request,Response } from "express";
+import { GetFilesByUserUseCase } from "../../application/getFilesByUserUseCase";
 
+export class GetFilesByUserController{
+    constructor(readonly getFilesByUserUseCase: GetFilesByUserUseCase){}
 
-export class UpdateFileNameController {
-    constructor(readonly updateFileNameUseCase: UpdateFileNameUseCase) { }
-
-    async update(req: Request, res: Response) {
+    async get(req: Request, res: Response){
         try {
-            let { uuid } = req.params;
-            let { title } = req.body;
+            let{user_uuid} = req.params;
 
-            const updateFileName = await this.updateFileNameUseCase.update(uuid, title);
+            const getFilesByUser = await this.getFilesByUserUseCase.get(user_uuid);
 
-            if (updateFileName) {
+            if (getFilesByUser) {
                 return res.status(200).send({
                     status: "succes",
                     data: {
-                        update_file: updateFileName
+                        file: getFilesByUser
                     }
                 })
             } else {
@@ -26,7 +23,10 @@ export class UpdateFileNameController {
                     message: "User not found "
                 });
             }
+
+
         } catch (error) {
+
             if (error instanceof Error) {
                 if (error.message.startsWith('[')) {
                     return res.status(400).send({
@@ -41,6 +41,5 @@ export class UpdateFileNameController {
                 message: "An error occurred while update the user."
             });
         }
-
     }
 }

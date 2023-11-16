@@ -14,4 +14,8 @@ export interface NoteRepository{
     ):Promise<Note | null | Error>
 
     updateFileName(uuid:string, title:string):Promise<Note | null | Error>;
+
+    getFilesbyUser(user_uuid:string):Promise<Note[] | null | Error>
+
+    delteFile(uuid:string):Promise<Note | null | Error | string>
 }

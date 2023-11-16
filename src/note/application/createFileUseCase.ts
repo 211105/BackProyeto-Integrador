@@ -10,11 +10,13 @@ export class CreateFileUseCase{
     async post(user_uuid:string,title:string,description:string,url_file:string,type_file:string,status:boolean):Promise<Note | null | Error>{
         //valres generados 
         const miuuid: string = uuid();
+
         let data = new ValidatorFile(miuuid, user_uuid, title, description, url_file, type_file,status);
         const validation = await validate(data)
         if (validation.length > 0) {
             throw new Error(JSON.stringify(validation));
         }
+        
         try {
             const createFile = await this.noteRepository.createFile(miuuid, user_uuid,title, description,url_file,type_file,status);
             return createFile;

@@ -54,43 +54,6 @@ export class ValidatorFile {
 
 
 }
-export class ValidateLogin {
-    @IsNotEmpty()
-    @IsEmail()
-    public email: string;
-
-    @IsNotEmpty()
-    @IsString()
-    public password: string;
-
-    constructor(
-        email:string,
-        password:string,
-    ){
-        this.email = email,
-        this.password = password
-    }
-}
-
-export class ValidatorupdatePassword {
-
-    @IsNotEmpty()
-    @IsUUID()
-    public uuid: string;
-
-    @IsNotEmpty()
-    @IsString()
-    public password: string;
-
-    constructor(
-        uuid: string,
-        password: string
-    ) {
-        this.uuid = uuid;
-        this.password = password;
-    }
-}
-
 
 export class ValidatorId {
     @IsNotEmpty()
@@ -98,6 +61,20 @@ export class ValidatorId {
     public uuid: string;
     constructor(uuid:string) {
         this.uuid = uuid
+    }
+}
+
+export class ValidatorUpdateName {
+    @IsNotEmpty()
+    @IsUUID()
+    public uuid: string;
+
+    @IsNotEmpty()
+    @IsString()
+    public title: string;
+    constructor(uuid:string, title:string) {
+        this.uuid = uuid
+        this.title = title
     }
 }
 
