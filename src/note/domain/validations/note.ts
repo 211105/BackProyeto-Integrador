@@ -16,8 +16,6 @@ export class ValidatorFile {
     @Length(1, 100)
     public title: string;
 
-
-    @IsNotEmpty()
     @IsString()
     public description: string;
 

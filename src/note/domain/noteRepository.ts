@@ -10,5 +10,8 @@ export interface NoteRepository{
         description:string,
         url_file:string,
         type_file:string,
-        status:boolean):Promise<Note | null | Error>
+        status:boolean
+    ):Promise<Note | null | Error>
+
+    updateFileName(uuid:string, title:string):Promise<Note | null | Error>;
 }
