@@ -54,6 +54,58 @@ export class ValidatorFile {
 
 
 }
+export class ValidatorNote {
+    @IsNotEmpty()
+    @IsUUID()
+    public uuid: string;
+
+    @IsNotEmpty()
+    @IsUUID()
+    public user_uuid: string;
+
+
+    @IsNotEmpty()
+    @IsString()
+    @Length(1, 100)
+    public title: string;
+
+    @IsNotEmpty()
+    @IsString()
+    public description: string;
+
+    @IsString()
+    public url_file: string;
+
+    @IsString()
+    public type_file: string;
+
+    @IsNotEmpty()
+    @IsBoolean()
+    public status: boolean;
+
+
+    constructor(
+        uuid: string,
+        user_uuid: string,
+        title: string,
+        description: string,
+        url_file: string,
+        type_file: string,
+        status: boolean
+
+    ) {
+        this.uuid = uuid;
+        this.user_uuid = user_uuid;
+        this.title = title;
+        this.description = description;
+        this.url_file = url_file;
+        this.type_file = type_file;
+        this.status = status;
+
+    }
+
+
+}
 
 export class ValidatorId {
     @IsNotEmpty()
@@ -86,34 +138,22 @@ export class ValidatorUpdate {
     @IsOptional()
     @IsString()
     @Length(1, 100)
-    public name?: string;
+    public title?: string;
 
     @IsOptional()
     @IsString()
     @Length(1, 100)
-    public email?: string;
-
-    @IsOptional()
-    @IsString()
-    @Length(10)  
-    public phone_number?: string;
-
-    @IsOptional()
-    @IsString()
-    public img_url?: string;
+    public description?: string;
 
    
     constructor( 
         uuid: string,
-        name?: string,
-        email?: string,
-        phone_number?: string,
-        img_url?: string,
+        title?: string,
+        description?: string,
         ) {
         this.uuid = uuid;
-        this.name = name;
-        this.email = email;
-        this.phone_number = phone_number
-        this.img_url = img_url
+        this.title = title;
+        this.description = description;
     }
 }
+

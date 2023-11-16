@@ -4,6 +4,9 @@ import {
     updateFileNameController,
     getFilesByUserController,
     deleteFileController,
+    createNoteController,
+    updateNoteController,
+    getNoteByUserController
      } from "./dependencies";
 import { validateToken } from "../../helpers/veryfyToken";
 
@@ -17,7 +20,13 @@ noteRoutes.put('/file/:uuid',updateFileNameController.update.bind(updateFileName
 
 noteRoutes.get('/file/:user_uuid',getFilesByUserController.get.bind(getFilesByUserController))
 
-noteRoutes.delete('/file/:uuid',deleteFileController.delete.bind(deleteFileController))  
+noteRoutes.delete('/file/:uuid',deleteFileController.delete.bind(deleteFileController))
+
+noteRoutes.post('/',createNoteController.post.bind(createNoteController))
+
+noteRoutes.put('/:uuid',updateNoteController.update.bind(updateNoteController))
+
+noteRoutes.get('/:user_uuid',getNoteByUserController.get.bind(getNoteByUserController))   
 
 
 

@@ -18,4 +18,18 @@ export interface NoteRepository{
     getFilesbyUser(user_uuid:string):Promise<Note[] | null | Error>
 
     delteFile(uuid:string):Promise<Note | null | Error | string>
+    
+    createNote(
+        uuid:string, 
+        user_uuid:string, 
+        title:string,
+        description:string,
+        url_file:string,
+        type_file:string,
+        status:boolean
+    ):Promise<Note | null | Error | string>
+
+    updateNote(uuid:string, title?:string, description?:string):Promise<Note | null | Error>;
+
+    getNoteByUser(user_uuid:string):Promise<Note[] | null | Error>
 }
