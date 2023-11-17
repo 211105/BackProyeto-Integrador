@@ -14,10 +14,11 @@ export interface DriverRepository{
         identification_number: string,
         url_identification:string,
         phone:string,
-        status:boolean
+        status:boolean,
+        status_identity:boolean,
+        status_moto_selection:boolean,
+        owner_uuid:string
+
     ):Promise<Driver | null | Error>
 
-    loginDriver(email:string, password:string):Promise<ResonseLogin | null | string>
-
-    updatePassword(uuid:string, password:string):Promise<Driver | null>
 }

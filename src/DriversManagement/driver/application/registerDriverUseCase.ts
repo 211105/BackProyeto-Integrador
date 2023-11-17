@@ -18,11 +18,15 @@ export class RegisterDriverUseCase {
         identification_number: string,
         url_identification: string,
         phone: string,
-        status: boolean,): Promise<Driver | null | string | Error> {
+        status: boolean,
+        status_identity: boolean,
+        status_moto_selection: boolean,
+        owner_uuid: string,
+        ): Promise<Driver | null | string | Error> {
         //valres generados 
         const miuuid: string = uuid()
 
-        let data = new ValidatorRegisterDriver(miuuid, name,surname,second_surname,email,password,url_photography,identification_number,url_identification,phone);
+        let data = new ValidatorRegisterDriver(miuuid, name,surname,second_surname,email,password,url_photography,identification_number,url_identification,phone,owner_uuid);
         const validation = await validate(data)
         if (validation.length > 0) {
             throw new Error(JSON.stringify(validation));
@@ -44,7 +48,10 @@ export class RegisterDriverUseCase {
                 identification_number,
                 url_identification,
                 phone,
-                status
+                status,
+                status_identity,
+                status_moto_selection,
+                owner_uuid
             );
 
             return registerDriver;

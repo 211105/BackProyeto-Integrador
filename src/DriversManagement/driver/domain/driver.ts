@@ -11,6 +11,9 @@ export class Driver{
         public url_identification : string,
         public phone:string,
         public status:boolean,
+        public status_identity:boolean,
+        public status_moto_selection:boolean,
+        public owner_uuid:string,
 
     ){}
 }

@@ -5,52 +5,27 @@ import { UploadedFile } from 'express-fileupload';
 import uploadToFirebase from '../../../../helpers/saveImages';
 import { detectText, validateFields } from '../../../../helpers/validationIdentity'; // Cambiar la ruta según tu estructura
 import { isEmailRegistered } from '../validations/drivermysql';
+import { isOwnerUUIDRegistered } from '../validations/drivermysql';
 
 export class RegisterDriverController {
     constructor(readonly registerDriverUseCase: RegisterDriverUseCase) { }
 
     async post(req: Request, res: Response) {
-        let { name, surname, second_surname, email, password, identification_number, phone } = req.body;
-
-        if (!req.files || !req.files.url_photography) {
-            return res.status(400).send({
-                status: 'error',
-                message: 'No image file uploaded url_photography.',
-            });
-        }
-        if (!req.files || !req.files.url_identification) {
-            return res.status(400).send({
-                status: 'error',
-                message: 'No image file uploaded url_identification.',
-            });
-        }
-
-
-
-        const imgFile = req.files.url_identification as UploadedFile;
-        const imageBuffer = imgFile.data.toString('base64');
-
-        // Castear el archivo a UploadedFile (express-fileupload)
-        const photoFile = req.files.url_photography as UploadedFile;
 
         try {
-            // Detectar texto en la imagen
-            const extractedText = await detectText(imageBuffer);
+            let { name, surname, second_surname, email, password, identification_number, phone,owner_uuid } = req.body;
 
-            // Validar campos
-            const isValid = validateFields(extractedText, {
-                name,
-                surname,
-                second_surname,
-                identification_number,
-            });
-
-            if (!isValid) {
+            if (!req.files || !req.files.url_photography) {
                 return res.status(400).send({
                     status: 'error',
-                    message: 'Validation failed. Fields do not match extracted text.',
+                    message: 'No image file uploaded url_photography.',
                 });
             }
+
+            // Castear el archivo a UploadedFile (express-fileupload)
+            const photoFile = req.files.url_photography as UploadedFile;
+            const url_photography = await uploadToFirebase(photoFile);
+            console.log(url_photography);
 
             // Verificar si el correo ya está registrado
             const emailRegistered = await isEmailRegistered(email);
@@ -60,15 +35,13 @@ export class RegisterDriverController {
                     message: 'El correo electrónico ya está registrado en la base de datos.',
                 });
             }
-
-            // Continuar con la subida a Firebase y registro en la base de datos
-            const url_identification = await uploadToFirebase(imgFile);
-            console.log(url_identification);
-
-            const url_photography = await uploadToFirebase(photoFile);
-            console.log(url_photography);
-
-            console.log("Se enviaron las imagenes")
+            const VerifiqueUUIDOwner = await isOwnerUUIDRegistered(owner_uuid);
+            if (!VerifiqueUUIDOwner) {
+                return res.status(409).send({
+                    status: 'error',
+                    message: 'El UUID de owner no se encuentra o no existe',
+                });
+            }
 
             let registerDriver = await this.registerDriverUseCase.post(
                 name,
@@ -78,11 +51,13 @@ export class RegisterDriverController {
                 password,
                 url_photography,
                 identification_number,
-                url_identification,
+                '',
                 phone,
-                false
+                false,
+                false,
+                false,
+                owner_uuid
             );
-            console.log("pasooooo esto")
 
             if (registerDriver instanceof Driver) {
                 return res.status(201).send({
@@ -97,9 +72,12 @@ export class RegisterDriverController {
                         identification_number: registerDriver.identification_number,
                         phone: registerDriver.phone,
                         status: registerDriver.status,
+                        status_identity: registerDriver.status_identity,
+                        status_moto_selection: registerDriver.status_moto_selection,
+                        owner_uuid: registerDriver.owner_uuid
                     },
                 });
-            
+
             } else {
                 return res.status(500).send({
                     status: 'error',

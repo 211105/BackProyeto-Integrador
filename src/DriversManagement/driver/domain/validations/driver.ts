@@ -59,7 +59,6 @@ export class ValidatorRegisterDriver {
     @IsCurpValid() 
     public identification_number: string;
 
-    @IsNotEmpty()
     @IsString()
     public url_identification: string;
 
@@ -67,6 +66,10 @@ export class ValidatorRegisterDriver {
     @IsString()
     @Length(10)
     public phone: string;
+
+    @IsNotEmpty()
+    @IsUUID()
+    public owner_uuid: string;
 
     constructor(
         uuid: string,
@@ -79,6 +82,7 @@ export class ValidatorRegisterDriver {
         identification_number: string,
         url_identification: string,
         phone: string,
+        owner_uuid:string,
     ) {
         this.uuid = uuid;
         this.name = name;
@@ -90,6 +94,7 @@ export class ValidatorRegisterDriver {
         this.identification_number = identification_number;
         this.url_identification = url_identification;
         this.phone = phone;
+        this.owner_uuid = owner_uuid;
     }
 }
 
