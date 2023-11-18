@@ -4,7 +4,7 @@ export interface FileRepository{
     createFile(
         uuid:string, 
         user_uuid:string,
-        folder_uuid:string, 
+        notes_uuid:string, 
         title:string,
         url_file:string,
         type_file:string,
@@ -13,5 +13,7 @@ export interface FileRepository{
 
     updateFile(uuid:string,title:string):Promise<File | null | Error | string>;
 
-    getFilesByFolder(folder_uuid:string): Promise<File[] | null | Error| string>;
+    getFilesByFolder(notes_uuid:string): Promise<File[] | null | Error| string>;
+
+    deleteFile(uuid:string): Promise<File | null  | Error | string>
 }

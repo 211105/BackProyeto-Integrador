@@ -6,9 +6,9 @@ export class GetFilesByFolderController{
 
     async get(req: Request, res: Response){
         try {
-            let{folder_uuid} = req.params;
+            let{notes_uuid} = req.params;
 
-            const getFilesByFolder = await this.getFilesByFolderUseCase.get(folder_uuid);
+            const getFilesByFolder = await this.getFilesByFolderUseCase.get(notes_uuid);
 
             if (getFilesByFolder) {
                 return res.status(200).send({

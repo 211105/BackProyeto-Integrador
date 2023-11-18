@@ -9,6 +9,9 @@ import { UpdateFileController } from "./controllers/updateFileController";
 import { GetFilesByFolderUseCase } from "../application/getFilesByFolderUseCase";
 import { GetFilesByFolderController } from "./controllers/getFilesByFolderController";
 
+import { DeleteFileUseCase } from "../application/deleteFileUseCase";
+import { DeleteFileController } from "./controllers/deleteFolderController";
+
 export const mysqlFileRepository = new MysqlFileRepository();
 
 export const createFileUseCase = new CreateFileUseCase(mysqlFileRepository);
@@ -19,4 +22,7 @@ export const updateFileController = new UpdateFileController(updateFileUseCase);
 
 export const getFilesByFolderUseCase = new GetFilesByFolderUseCase(mysqlFileRepository);
 export const getFilesByFolderController = new GetFilesByFolderController(getFilesByFolderUseCase);
+
+export const deleteFileUseCase = new DeleteFileUseCase(mysqlFileRepository);
+export const deleteFileController = new DeleteFileController(deleteFileUseCase);
 

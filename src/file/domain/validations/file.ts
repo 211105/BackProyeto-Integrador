@@ -12,7 +12,7 @@ export class ValidatorFile {
 
     @IsNotEmpty()
     @IsUUID()
-    public folder_uuid: string;
+    public notes_uuid: string;
 
 
     @IsNotEmpty()
@@ -36,7 +36,7 @@ export class ValidatorFile {
     constructor(
         uuid: string,
         user_uuid: string,
-        folder_uuid: string,
+        notes_uuid: string,
         title: string,
         
         url_file: string,
@@ -46,7 +46,7 @@ export class ValidatorFile {
     ) {
         this.uuid = uuid;
         this.user_uuid = user_uuid;
-        this.folder_uuid = folder_uuid;
+        this.notes_uuid = notes_uuid;
         this.title = title;
         
         this.url_file = url_file;

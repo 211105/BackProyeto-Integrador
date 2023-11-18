@@ -3,17 +3,17 @@ import { File } from "../domain/file";
 import { FileRepository } from "../domain/fileRepository";
 
 export class MysqlFileRepository implements FileRepository {
-    async createFile(uuid: string, user_uuid: string,  folder_uuid: string,title: string, url_file: string, type_file: string, status: boolean): Promise<Error | File | null | string> {
+    async createFile(uuid: string, user_uuid: string,  notes_uuid: string,title: string, url_file: string, type_file: string, status: boolean): Promise<Error | File | null | string> {
         try {
             // const hashPassword = await encrypt(password)
     
-            let sql = "INSERT INTO files(uuid, user_uuid, folder_uuid, title, url_file, type_file, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            let sql = "INSERT INTO files(uuid, user_uuid, notes_uuid, title, url_file, type_file, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
             // Imprime los valores para depurar
-            console.log('Params:', uuid, user_uuid, folder_uuid, title,  url_file, type_file, status);
-            const params: any[] = [uuid, user_uuid, folder_uuid,title, url_file, type_file, status];
+            console.log('Params:', uuid, user_uuid, notes_uuid, title,  url_file, type_file, status);
+            const params: any[] = [uuid, user_uuid, notes_uuid,title, url_file, type_file, status];
             const [result]: any = await query(sql, params);
             // Ajusta la creación de la instancia Note según los campos de la tabla
-            return new File(uuid, user_uuid,folder_uuid ,title, url_file, type_file, status);
+            return new File(uuid, user_uuid,notes_uuid ,title, url_file, type_file, status);
         } catch (error) {
             console.error("Error adding review:", error);
             return error as Error;
@@ -47,7 +47,7 @@ export class MysqlFileRepository implements FileRepository {
                 return new File(
                     currentNote.uuid,
                     currentNote.user_uuid,
-                    currentNote.folder_uuid,
+                    currentNote.notes_uuid,
                     title,
                     currentNote.url_file,
                     currentNote.type_file,
@@ -63,11 +63,11 @@ export class MysqlFileRepository implements FileRepository {
         }
     }
 
-    async getFilesByFolder(folder_uuid: string): Promise<File[] | Error | null> {
+    async getFilesByFolder(notes_uuid: string): Promise<File[] | Error | null> {
         try {
             // Selecciona todas las notas del usuario con url_file no vacío o null
-            const sql = "SELECT * FROM files WHERE folder_uuid = ?";
-            const params: any[] = [folder_uuid];
+            const sql = "SELECT * FROM files WHERE notes_uuid = ?";
+            const params: any[] = [notes_uuid];
             const [result]: any = await query(sql, params);
 
             // Verifica si se obtuvieron resultados
@@ -77,7 +77,7 @@ export class MysqlFileRepository implements FileRepository {
                     return new File(
                         row.uuid,
                         row.user_uuid,
-                        row.folder_uuid,
+                        row.notes_uuid,
                         row.title,
                         row.url_file,
                         row.type_file,
@@ -95,19 +95,19 @@ export class MysqlFileRepository implements FileRepository {
             return error as Error;
         }
     }
-    async delteFile(uuid: string): Promise<string | Error | File | null> {
+    async deleteFile(uuid: string): Promise<string | Error | File | null> {
         try {
             // Elimina la nota de la base de datos
-            const deleteSql = "DELETE FROM notes WHERE uuid = ?";
+            const deleteSql = "DELETE FROM files WHERE uuid = ?";
             const deleteParams: any[] = [uuid];
             const [deleteResult]: any = await query(deleteSql, deleteParams);
 
             // Verifica si se eliminó alguna fila en la base de datos
             if (deleteResult.affectedRows > 0) {
-                return "La nota se ha eliminado correctamente.";
+                return "El archivo se ha eliminado correctamente.";
             } else {
                 // Si no se eliminó ninguna fila, el UUID podría no existir en la tabla
-                return "La nota con el UUID especificado no existe.";
+                return "El archivo el UUID especificado no existe.";
             }
         } catch (error) {
             console.error("Error deleting file:", error);

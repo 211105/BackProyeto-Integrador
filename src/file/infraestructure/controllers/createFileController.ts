@@ -14,7 +14,7 @@ export class CreateFileController {
         }
 
         try {
-            let { user_uuid,folder_uuid } = req.body;
+            let { user_uuid,notes_uuid } = req.body;
 
             if (!req.files || !req.files.url_file) {
                 return res.status(400).send({
@@ -71,7 +71,7 @@ export class CreateFileController {
 
             const createFile = await this.createFileUseCase.post(
                 user_uuid,
-                folder_uuid,
+                notes_uuid,
                 fileName,
                 url_file,
                 type_file || '', // Si type_file es null, usar un valor por defecto
@@ -87,7 +87,7 @@ export class CreateFileController {
                     data: {
                         uuid: noteWithCreatedAt.uuid,
                         user_uuid: noteWithCreatedAt.user_uuid,
-                        folder_uuid: noteWithCreatedAt.folder_uuid,
+                        notes_uuid: noteWithCreatedAt.notes_uuid,
                         title: noteWithCreatedAt.title,
                         url_file: noteWithCreatedAt.url_file,
                         type_file: noteWithCreatedAt.type_file, 
