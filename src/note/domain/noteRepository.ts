@@ -1,35 +1,20 @@
 import { Note} from "./note";
 
-
 export interface NoteRepository{
 
-    createFile(
-        uuid:string, 
-        user_uuid:string, 
-        title:string,
-        description:string,
-        url_file:string,
-        type_file:string,
-        status:boolean
-    ):Promise<Note | null | Error>
 
-    updateFileName(uuid:string, title:string):Promise<Note | null | Error>;
-
-    getFilesbyUser(user_uuid:string):Promise<Note[] | null | Error>
-
-    delteFile(uuid:string):Promise<Note | null | Error | string>
+delteFile(uuid:string):Promise<Note | null | Error | string>
     
     createNote(
         uuid:string, 
-        user_uuid:string, 
+        user_uuid:string,
+        folder_uuid:string, 
         title:string,
         description:string,
-        url_file:string,
-        type_file:string,
         status:boolean
     ):Promise<Note | null | Error | string>
 
     updateNote(uuid:string, title?:string, description?:string):Promise<Note | null | Error>;
 
-    getNoteByUser(user_uuid:string):Promise<Note[] | null | Error>
+    getNoteByUser(folder_uuid:string):Promise<Note[] | null | Error>
 }

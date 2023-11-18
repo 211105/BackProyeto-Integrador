@@ -6,16 +6,16 @@ import { ValidatorId } from "../domain/validations/note";
 export class GetNotesByUserUseCase{
     constructor(readonly noteRepository: NoteRepository){}
 
-    async get(user_uuid:string):Promise<Note[] | null | Error>{
+    async get(folder_uuid:string):Promise<Note[] | null | Error>{
 
-        let data = new ValidatorId(user_uuid);
+        let data = new ValidatorId(folder_uuid);
         const validation = await validate(data)
         if (validation.length > 0) {
             throw new Error(JSON.stringify(validation));
         }
 
         try {
-            const getNoteByUser = await this.noteRepository.getNoteByUser(user_uuid);
+            const getNoteByUser = await this.noteRepository.getNoteByUser(folder_uuid);
             return getNoteByUser;
         } catch (error) {
             return null;

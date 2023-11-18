@@ -13,15 +13,14 @@ export class CreateNoteController {
         }
 
         try {
-            let { user_uuid,title,description } = req.body;
+            let { user_uuid,folder_uuid,title,description } = req.body;
 
 
             const createFile = await this.createNoteUseCase.post(
                 user_uuid,
+                folder_uuid,
                 title,
                 description,
-                '',
-                '', 
                 false
             );
 
@@ -34,6 +33,7 @@ export class CreateNoteController {
                     data: {
                         uuid: noteWithCreatedAt.uuid,
                         user_uuid: noteWithCreatedAt.user_uuid,
+                        folder_uuid: noteWithCreatedAt.user_uuid,
                         title: noteWithCreatedAt.title,
                         description: noteWithCreatedAt.description,
                         status: noteWithCreatedAt.status,

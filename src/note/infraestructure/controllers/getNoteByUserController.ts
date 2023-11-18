@@ -6,9 +6,9 @@ export class GetNoteByUserController{
 
     async get(req: Request, res: Response){
         try {
-            let{user_uuid} = req.params;
+            let{folder_uuid} = req.params;
 
-            const getNotesByUser = await this.getNotesByUserUseCase.get(user_uuid);
+            const getNotesByUser = await this.getNotesByUserUseCase.get(folder_uuid);
 
             if (getNotesByUser) {
                 return res.status(200).send({

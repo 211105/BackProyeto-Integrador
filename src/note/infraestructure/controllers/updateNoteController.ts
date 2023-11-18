@@ -6,8 +6,7 @@ export class UpdateNoteController {
 
     async update(req: Request, res: Response) {
         try {
-            let{uuid} = req.params;
-            let { title, description } = req.body;
+            let { uuid ,title, description } = req.body;
 
             if (title === undefined && description === undefined) {
                 return res.status(200).send({
