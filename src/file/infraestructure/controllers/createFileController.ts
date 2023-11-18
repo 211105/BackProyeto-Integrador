@@ -2,19 +2,19 @@ import { Request, Response } from "express";
 import { CreateFileUseCase } from "../../application/createFileUseCase";
 import { UploadedFile } from "express-fileupload";
 import uploadToFirebase from "../../../helpers/saveFile";
-import { Note } from "../../domain/note";
+import { File } from "../../domain/file";
 
 export class CreateFileController {
     constructor(readonly createFileUseCase: CreateFileUseCase) { }
 
     async post(req: Request, res: Response) {
 
-        interface NoteWithCreatedAt extends Note {
+        interface NoteWithCreatedAt extends File {
             created_at: Date;
         }
 
         try {
-            let { user_uuid } = req.body;
+            let { user_uuid,folder_uuid } = req.body;
 
             if (!req.files || !req.files.url_file) {
                 return res.status(400).send({
@@ -71,8 +71,8 @@ export class CreateFileController {
 
             const createFile = await this.createFileUseCase.post(
                 user_uuid,
+                folder_uuid,
                 fileName,
-                '',
                 url_file,
                 type_file || '', // Si type_file es null, usar un valor por defecto
                 false
@@ -81,14 +81,16 @@ export class CreateFileController {
             // Aquí, "createFile" es de tipo Note, pero sabemos que en tiempo de ejecución tiene la propiedad "created_at".
             const noteWithCreatedAt = createFile as NoteWithCreatedAt;
 
-            if (createFile instanceof Note) {
+            if (createFile instanceof File) {
                 return res.status(201).send({
                     status: "success",
                     data: {
                         uuid: noteWithCreatedAt.uuid,
                         user_uuid: noteWithCreatedAt.user_uuid,
+                        folder_uuid: noteWithCreatedAt.folder_uuid,
                         title: noteWithCreatedAt.title,
                         url_file: noteWithCreatedAt.url_file,
+                        type_file: noteWithCreatedAt.type_file, 
                         status: noteWithCreatedAt.status,
                         created_at: noteWithCreatedAt.created_at
                     }
@@ -96,7 +98,7 @@ export class CreateFileController {
             } else {
                 return res.status(500).send({
                     status: "error",
-                    message: "An unexpected error occurred while registering the user."
+                    message: "An unexpected error occurred while registering the File."
                 });
             }
 
@@ -112,7 +114,7 @@ export class CreateFileController {
             }
             return res.status(500).send({
                 status: "error",
-                message: "An error occurred while adding the Note File."
+                message: "An error occurred while adding the File."
             });
         }
     }
