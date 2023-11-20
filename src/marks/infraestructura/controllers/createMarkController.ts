@@ -26,7 +26,9 @@ export class CreateMarkController{
             }   
             // Castear el archivo a UploadedFile (express-fileupload)
 
+            console.log(req.files.img_file)
             const imgFile = req.files.img_file as UploadedFile;
+            console.log(imgFile)
             const urlImage = await uploadToFirebase(imgFile)
 
 
