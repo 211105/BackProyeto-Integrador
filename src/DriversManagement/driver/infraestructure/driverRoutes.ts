@@ -5,6 +5,8 @@ import {
     updatePasswordController,
     validateIdentityController,
     updateDriverController,
+    getDriverByOwnerController,
+    deleteDriverController,
     } from "./dependencies";
 
 export const driverRoutes = express.Router();
@@ -18,5 +20,10 @@ driverRoutes.put('/update_password/:uuid',updatePasswordController.update.bind(u
 driverRoutes.put('/validate/identity/:uuid',validateIdentityController.update.bind(validateIdentityController));
 
 driverRoutes.put('/',updateDriverController.update.bind(updateDriverController));
+
+driverRoutes.get('/:owner_uuid',getDriverByOwnerController.get.bind(getDriverByOwnerController));
+
+driverRoutes.delete('/:uuid',deleteDriverController.delete.bind(deleteDriverController));
+
 
 

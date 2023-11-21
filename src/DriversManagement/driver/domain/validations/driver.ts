@@ -189,3 +189,12 @@ export class ValidatorUpdateDriver {
         this.phone = phone;
     }
 }
+
+export class ValidatorId {
+    @IsNotEmpty()
+    @IsUUID()
+    public uuid: string;
+    constructor(uuid:string) {
+        this.uuid = uuid
+    }
+}

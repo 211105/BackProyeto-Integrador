@@ -15,6 +15,12 @@ import { ValidateIdentityController } from "./controllers/validateIdentityContro
 import { UpdateDriverUseCase } from "../application/updateDriverUseCase";
 import { UpdateDriverController } from "./controllers/updateDriverUseCase";
 
+import { GetDriverByOwnerUseCase } from "../application/getDriversByOwnerUseCase";
+import { GetDriverByOwnerController } from "./controllers/getDriverByOwnerController";
+
+import { DeleteDriverUseCase } from "../application/deleteDriverUseCase";
+import { DeleteDriverController } from "./controllers/deleteDriverController";
+
 export const mysqlDriverRepository = new MysqlDriverRepository();
 
 export const registerDriverUseCase = new RegisterDriverUseCase(mysqlDriverRepository);
@@ -31,3 +37,9 @@ export const validateIdentityController = new ValidateIdentityController(validat
 
 export const updateDriverUseCase = new UpdateDriverUseCase(mysqlDriverRepository);
 export const updateDriverController = new UpdateDriverController(updateDriverUseCase);
+
+export const getDriverByOwnerUseCase = new GetDriverByOwnerUseCase(mysqlDriverRepository);
+export const getDriverByOwnerController = new GetDriverByOwnerController(getDriverByOwnerUseCase);
+
+export const deleteDriverUseCase = new DeleteDriverUseCase(mysqlDriverRepository);
+export const deleteDriverController = new DeleteDriverController(deleteDriverUseCase);

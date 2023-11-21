@@ -29,4 +29,9 @@ export interface DriverRepository{
     updatePassword(uuid:string, password:string):Promise<Driver | null>;
     
     updateDriver(uuid:string, email?:string, url_photography?:string, phone?:string):Promise<Driver | null | Error | string>
+
+
+    getDriversByOwner(owner_uuid:string):Promise<Driver[] | null | string | Error>
+
+    deleteDriver(uuid:string):Promise<Driver | null | string | Error>;
 }
