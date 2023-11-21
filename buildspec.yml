@@ -4,12 +4,8 @@ phases:
   pre_build:
     commands:
       - echo Installing NPM dependencies...
-      - npm install
+      - npm install --only=production
   build:
-    commands:
-      - echo Building the TypeScript project...
-      - npm run start
-  post_build:
     commands:
       - echo Build completed on `date`
 
