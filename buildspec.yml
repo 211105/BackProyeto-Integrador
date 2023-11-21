@@ -8,7 +8,7 @@ phases:
   build:
     commands:
       - echo Building the TypeScript project...
-      - npm run dev
+      - npm run build
   post_build:
     commands:
       - echo Build completed on `date`
@@ -16,4 +16,5 @@ phases:
 artifacts:
   files:
     - '**/*'
+  base-directory: 'dist'
   discard-paths: yes
