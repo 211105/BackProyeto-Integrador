@@ -8,7 +8,6 @@ delteFile(uuid:string):Promise<Note | null | Error | string>
     createNote(
         uuid:string, 
         user_uuid:string,
-        folder_uuid:string, 
         title:string,
         description:string,
         status:boolean

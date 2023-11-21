@@ -4,16 +4,16 @@ import { NoteRepository } from "../domain/noteRepository";
 
 export class MysqlNoteRepository implements NoteRepository {
     
-    async createNote(uuid: string, user_uuid: string, folder_uuid: string,title: string, description: string, status: boolean): Promise<string | Note | Error | null> {
+    async createNote(uuid: string, user_uuid: string,title: string, description: string, status: boolean): Promise<string | Note | Error | null> {
         try {
     
-            let sql = "INSERT INTO notes(uuid, user_uuid, folder_uuid,title, description, status) VALUES (?, ?, ?, ?, ?, ?)";
+            let sql = "INSERT INTO notes(uuid, user_uuid, title, description, status) VALUES (?, ?, ?, ?, ?)";
             // Imprime los valores para depurar
-            console.log('Params:', uuid, user_uuid,folder_uuid ,title, description, status);
-            const params: any[] = [uuid, user_uuid,folder_uuid ,title, description, status];
+            console.log('Params:', uuid, user_uuid ,title, description, status);
+            const params: any[] = [uuid, user_uuid ,title, description, status];
             const [result]: any = await query(sql, params);
             // Ajusta la creación de la instancia Note según los campos de la tabla
-            return new Note(uuid, user_uuid,folder_uuid ,title, description, status);
+            return new Note(uuid, user_uuid ,title, description, status);
         } catch (error) {
             console.error("Error adding review:", error);
             return error as Error;
@@ -49,7 +49,6 @@ export class MysqlNoteRepository implements NoteRepository {
                 return new Note(
                     currentNote.uuid,
                     currentNote.user_uuid,
-                    currentNote.folder_uuid,
                     currentNote.title,
                     currentNote.description,
                     currentNote.status,
@@ -70,9 +69,7 @@ export class MysqlNoteRepository implements NoteRepository {
                     currentNote.user_uuid,
                     title !== undefined ? title : currentNote.title,
                     description !== undefined ? description : currentNote.description,
-                    currentNote.url_file,
-                    currentNote.type_file,
-                    
+                    currentNote.url_file,                    
                 );
             } else {
                 // Si no se actualizó ninguna fila, el UUID podría no existir en la tabla
@@ -83,11 +80,11 @@ export class MysqlNoteRepository implements NoteRepository {
             return error as Error;
         }
     }
-    async getNoteByUser(folder_uuid: string): Promise<Note[] | Error | null> {
+    async getNoteByUser(user_uuid: string): Promise<Note[] | Error | null> {
         try {
             // Selecciona todas las notas del usuario con url_file no vacío o null
-            const sql = "SELECT * FROM notes WHERE folder_uuid = ?";
-            const params: any[] = [folder_uuid];
+            const sql = "SELECT * FROM notes WHERE user_uuid = ?";
+            const params: any[] = [user_uuid];
             const [result]: any = await query(sql, params);
 
             // Verifica si se obtuvieron resultados
@@ -97,7 +94,6 @@ export class MysqlNoteRepository implements NoteRepository {
                     return new Note(
                         row.uuid,
                         row.user_uuid,
-                        row.folder_uuid,
                         row.title,
                         row.description,
                         row.status,

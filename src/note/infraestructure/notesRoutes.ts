@@ -14,9 +14,9 @@ export const noteRoutes = express.Router();
 
 noteRoutes.delete('/:uuid',deleteFileController.delete.bind(deleteFileController))
 
-noteRoutes.post('/',createNoteController.post.bind(createNoteController))
+noteRoutes.post('/create/',createNoteController.post.bind(createNoteController))
 
-noteRoutes.put('/',updateNoteController.update.bind(updateNoteController))
+noteRoutes.put('/update/',updateNoteController.update.bind(updateNoteController))
 
 noteRoutes.get('/:folder_uuid',getNoteByUserController.get.bind(getNoteByUserController))   
 

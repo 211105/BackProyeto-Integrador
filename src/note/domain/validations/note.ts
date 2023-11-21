@@ -10,10 +10,6 @@ export class ValidatorNote {
     @IsUUID()
     public user_uuid: string;
 
-    @IsNotEmpty()
-    @IsUUID()
-    public folder_uuid: string;
-
 
     @IsNotEmpty()
     @IsString()
@@ -31,7 +27,6 @@ export class ValidatorNote {
     constructor(
         uuid: string,
         user_uuid: string,
-        folder_uuid: string,
         title: string,
         description: string,
         status: boolean
@@ -39,7 +34,6 @@ export class ValidatorNote {
     ) {
         this.uuid = uuid;
         this.user_uuid = user_uuid;
-        this.folder_uuid = folder_uuid;
         this.title = title;
         this.description = description;
         this.status = status;

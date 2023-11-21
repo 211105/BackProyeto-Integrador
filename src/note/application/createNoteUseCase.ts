@@ -8,18 +8,18 @@ export class CreateNoteUseCase {
     constructor(readonly noteRepository: NoteRepository) { }
 
 
-    async post(user_uuid: string, folder_uuid: string, title: string, description: string,status: boolean): Promise<Note | null | Error | string> {
+    async post(user_uuid: string, title: string, description: string,status: boolean): Promise<Note | null | Error | string> {
 
         const miuuid: string = uuid();
 
-        let data = new ValidatorNote(miuuid, user_uuid, folder_uuid ,title, description,status);
+        let data = new ValidatorNote(miuuid, user_uuid ,title, description,status);
         const validation = await validate(data)
         if (validation.length > 0) {
             throw new Error(JSON.stringify(validation));
         }
 
         try {
-            const createNote = await this.noteRepository.createNote(miuuid, user_uuid, folder_uuid,title, description,status);
+            const createNote = await this.noteRepository.createNote(miuuid, user_uuid,title, description,status);
             return createNote;
         } catch (error) {
             return null;
