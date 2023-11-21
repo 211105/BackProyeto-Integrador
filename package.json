@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node ./dist/app.js",
-    "dev": "nodemon ./src/app.ts",
+    
+    "start": "tsc && node ./dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   
@@ -16,7 +15,6 @@
   "dependencies": {
     "@firebase/app": "^0.9.19",
     "@firebase/storage": "^0.11.2",
-    "@sequelize/core": "^7.0.0-alpha.32",
     "@types/express-fileupload": "^1.4.2",
     "@types/uuid": "^9.0.4",
     "bcrypt": "^5.1.1",
