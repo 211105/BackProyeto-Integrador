@@ -5,8 +5,7 @@
 # Dependencias
 node_modules
 
-# Directorio de salida
-dist/
+
 
 # Archivos de log
 npm-debug.log
