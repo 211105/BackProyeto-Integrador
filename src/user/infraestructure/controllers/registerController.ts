@@ -28,9 +28,9 @@ export class ResgisterUserController {
             }
 
                // Castear el archivo a UploadedFile (express-fileupload)
-               const imgFile = req.files.img_file as UploadedFile;
-               const img_url = await uploadToFirebase(imgFile)
-               console.log(img_url)
+            const imgFile = req.files.img_file as UploadedFile;
+            const img_url = await uploadToFirebase(imgFile)
+            console.log(img_url)
 
             let registerUser = await this.registerUserUseCase.run(
                 name,
