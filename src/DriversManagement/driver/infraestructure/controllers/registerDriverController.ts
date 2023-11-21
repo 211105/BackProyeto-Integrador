@@ -3,14 +3,16 @@ import { RegisterDriverUseCase } from '../../application/registerDriverUseCase';
 import { Driver } from '../../domain/driver';
 import { UploadedFile } from 'express-fileupload';
 import uploadToFirebase from '../../../../helpers/saveImages';
-import { detectText, validateFields } from '../../../../helpers/validationIdentity'; // Cambiar la ruta según tu estructura
 import { isEmailRegistered } from '../validations/drivermysql';
+import { isIdentificationNumberRegistered } from '../validations/drivermysql';
+import { isOwnerUuidRegistered } from '../validations/drivermysql';
 
 export class RegisterDriverController {
     constructor(readonly registerDriverUseCase: RegisterDriverUseCase) { }
 
     async post(req: Request, res: Response) {
-        let { name, surname, second_surname, email, password, identification_number, phone } = req.body;
+
+        let { name, surname, second_surname, email, password, identification_number, phone, owner_uuid } = req.body;
 
         if (!req.files || !req.files.url_photography) {
             return res.status(400).send({
@@ -18,37 +20,19 @@ export class RegisterDriverController {
                 message: 'No image file uploaded url_photography.',
             });
         }
-        if (!req.files || !req.files.url_identification) {
-            return res.status(400).send({
-                status: 'error',
-                message: 'No image file uploaded url_identification.',
-            });
-        }
 
-
-
-        const imgFile = req.files.url_identification as UploadedFile;
-        const imageBuffer = imgFile.data.toString('base64');
 
         // Castear el archivo a UploadedFile (express-fileupload)
         const photoFile = req.files.url_photography as UploadedFile;
 
         try {
-            // Detectar texto en la imagen
-            const extractedText = await detectText(imageBuffer);
 
-            // Validar campos
-            const isValid = validateFields(extractedText, {
-                name,
-                surname,
-                second_surname,
-                identification_number,
-            });
-
-            if (!isValid) {
-                return res.status(400).send({
+            // Verificar si el owner_uuid ya está registrado
+            const ownerUuidRegistered = await isOwnerUuidRegistered(owner_uuid);
+            if (ownerUuidRegistered) {
+                return res.status(409).send({
                     status: 'error',
-                    message: 'Validation failed. Fields do not match extracted text.',
+                    message: 'El owner_uuid ya está registrado en la base de datos.',
                 });
             }
 
@@ -60,10 +44,15 @@ export class RegisterDriverController {
                     message: 'El correo electrónico ya está registrado en la base de datos.',
                 });
             }
-
-            // Continuar con la subida a Firebase y registro en la base de datos
-            const url_identification = await uploadToFirebase(imgFile);
-            console.log(url_identification);
+            
+            // Verificar si el identification_number ya está registrado
+            const identificationNumberRegistered = await isIdentificationNumberRegistered(identification_number);
+            if (identificationNumberRegistered) {
+                return res.status(409).send({
+                    status: 'error',
+                    message: 'El identification_number ya está registrado en la base de datos.',
+                });
+            }
 
             const url_photography = await uploadToFirebase(photoFile);
             console.log(url_photography);
@@ -78,9 +67,13 @@ export class RegisterDriverController {
                 password,
                 url_photography,
                 identification_number,
-                url_identification,
+                '',
                 phone,
-                false
+                false,
+                false,
+                false,
+                owner_uuid,
+                "driver"
             );
             console.log("pasooooo esto")
 
@@ -94,12 +87,18 @@ export class RegisterDriverController {
                         second_surname: registerDriver.second_surname,
                         email: registerDriver.email,
                         password: registerDriver.password,
+                        url_photography:registerDriver.url_photography,
                         identification_number: registerDriver.identification_number,
+                        url_identification:registerDriver.url_identification,
                         phone: registerDriver.phone,
                         status: registerDriver.status,
+                        status_identity: registerDriver.status_identity,
+                        status_moto_selection: registerDriver.status_moto_selection,
+                        owner_uuid: registerDriver.owner_uuid,
+                        type_user: registerDriver.type_user
                     },
                 });
-            
+
             } else {
                 return res.status(500).send({
                     status: 'error',

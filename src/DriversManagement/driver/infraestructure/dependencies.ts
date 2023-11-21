@@ -9,6 +9,12 @@ import { LoginDriverController } from "./controllers/loginDriverController";
 import { UpdatePasswordUseCase } from "../application/updatePasswordUseCase";
 import { UpdatePasswordController } from "./controllers/updatePasswordController";
 
+import { ValidateIdentityUseCase } from "../application/validateIdentityUseCase";
+import { ValidateIdentityController } from "./controllers/validateIdentityController";
+
+import { UpdateDriverUseCase } from "../application/updateDriverUseCase";
+import { UpdateDriverController } from "./controllers/updateDriverUseCase";
+
 export const mysqlDriverRepository = new MysqlDriverRepository();
 
 export const registerDriverUseCase = new RegisterDriverUseCase(mysqlDriverRepository);
@@ -17,5 +23,11 @@ export const registerDriverController = new RegisterDriverController(registerDri
 export const loginDriverUseCase = new LoginDriverUseCase(mysqlDriverRepository);
 export const loginDriverController = new LoginDriverController(loginDriverUseCase);
 
-export const updateDriverUseCase = new UpdatePasswordUseCase(mysqlDriverRepository);
-export const updateDriverController = new UpdatePasswordController(updateDriverUseCase);
+export const updatePasswordUseCase = new UpdatePasswordUseCase(mysqlDriverRepository);
+export const updatePasswordController = new UpdatePasswordController(updatePasswordUseCase);
+
+export const validateIdentityUseCase = new ValidateIdentityUseCase(mysqlDriverRepository);
+export const validateIdentityController = new ValidateIdentityController(validateIdentityUseCase);
+
+export const updateDriverUseCase = new UpdateDriverUseCase(mysqlDriverRepository);
+export const updateDriverController = new UpdateDriverController(updateDriverUseCase);
