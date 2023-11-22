@@ -4,6 +4,7 @@ import { IMarkRepository } from "../domain/markRepository";
 
 
 export class MysqlMarkRepository implements IMarkRepository {
+    
     async createMark(
         uuid: string,
         latitude: number,
@@ -92,6 +93,18 @@ export class MysqlMarkRepository implements IMarkRepository {
         } catch (error) {
             console.error(error);
             return null;
+        }
+    }
+
+    async userAsist(uuid: string, markUuid: string, userUuid: string): Promise<string | null> {
+        try {
+            const sql = "INSERT INTO assists (uuid, attended_at, pin_uuid, user_uuid) VALUES (?, UTC_TIMESTAMP(), ?, ?);"
+            const params: any[] =  [uuid,markUuid,userUuid];
+            const [result]: any = await query(sql, params);
+            return "exitoso"
+        } catch (error) {
+            console.log(error)
+            return null
         }
     }
 

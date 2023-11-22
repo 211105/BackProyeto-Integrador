@@ -73,6 +73,20 @@ class MysqlMarkRepository {
             }
         });
     }
+    userAsist(uuid, markUuid, userUuid) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const sql = "INSERT INTO assists (uuid, attended_at, pin_uuid, user_uuid) VALUES (?, UTC_TIMESTAMP(), ?, ?);";
+                const params = [uuid, markUuid, userUuid];
+                const [result] = yield (0, connection_1.query)(sql, params);
+                return "exitoso";
+            }
+            catch (error) {
+                console.log(error);
+                return null;
+            }
+        });
+    }
 }
 exports.MysqlMarkRepository = MysqlMarkRepository;
 //# sourceMappingURL=mysqlMarkRepository.js.map
