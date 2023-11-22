@@ -6,7 +6,7 @@ import { userRoutes } from "./user/infraestructure/userRouter";
 import * as serviceAccount from "./helpers/integrador-9.json";
 import * as admin from "firebase-admin";
 import fileUpload from 'express-fileupload';
-import { markRouter } from "./marks/infraestructura/markRoutes";
+import { activitRoutes } from "./activity/infraestructure/activityRouter";
 
 
 admin.initializeApp({
@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use('/api/v1/users', userRoutes);
-app.use('/api/v1/pins', markRouter);
+app.use('/api/v1/activitys',activitRoutes)
 
 
 

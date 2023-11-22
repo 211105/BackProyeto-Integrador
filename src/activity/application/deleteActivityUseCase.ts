@@ -1,19 +1,15 @@
 import { Activity } from "../domain/activity";
 import { IActivityRepository } from "../domain/activityRepository";
-import { v4 as uuid } from "uuid";
 
-export class AddActivityUseCase {
+export class DeleteActivityUseCase {
     constructor(readonly activityRepository: IActivityRepository) {}
 
     async run(
-        name: string,
-        imgUrl: string
+        uuid:string
     ):Promise<Activity | null | string | Error>{
-        const miuuid: string = uuid()
-
         try {
-            const addActivity = await this.activityRepository.addActivity(miuuid,name,imgUrl)
-            return addActivity;
+            const deleteActivity = await this.activityRepository.deleteActivity(uuid)
+            return deleteActivity;
         } catch (error) {
             return null
         }
