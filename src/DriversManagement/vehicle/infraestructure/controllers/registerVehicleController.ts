@@ -4,7 +4,7 @@ import { Vehicle } from "../../domain/vehicle";
 import { UploadedFile } from 'express-fileupload';
 import uploadToFirebase from '../../../../helpers/saveImages';
 import { isPlateNumberRegistered } from "../validations/vehiclemysql";
-import { isDriverUuidRegistered } from "../validations/vehiclemysql";
+import { isOwnerUuidRegistered } from "../validations/vehiclemysql";
 
 export class RegisterVehicleController{
     constructor( readonly registerVehicleUseCase: RegisterVehicleUseCase){}
@@ -12,9 +12,9 @@ export class RegisterVehicleController{
 
     async post(req: Request, res: Response){
         try {
-            let{brand,model,plate_number,name_association,vin,uuid_driver} = req.body;
+            let{brand,model,plate_number,name_association,vin,owner_uuid} = req.body;
 
-            if (!req.files || !req.files.url_img_vehicle) {
+            if (!req.files || !req.files.url_img) {
                 return res.status(400).send({
                     status: 'error',
                     message: 'No image file uploaded url_img_vehicle.',
@@ -28,18 +28,18 @@ export class RegisterVehicleController{
                     message: 'La matricula ya esta registrada',
                 });
             }
-            const driverUuidRegistered = await isDriverUuidRegistered(uuid_driver);
-            if (!driverUuidRegistered) {
+            const OwnerUuidRegistered = await isOwnerUuidRegistered(owner_uuid);
+            if (OwnerUuidRegistered) {
                 return res.status(409).send({
                     status: 'error',
-                    message: 'No existe el conducto',
+                    message: 'No existe el Dueño',
                 });
             }
 
             // Castear el archivo a UploadedFile (express-fileupload)
-            const fileVehicle= req.files.url_img_vehicle as UploadedFile;
-            const url_img_vehicle = await uploadToFirebase(fileVehicle);
-            console.log(url_img_vehicle);
+            const fileVehicle= req.files.url_img as UploadedFile;
+            const url_img = await uploadToFirebase(fileVehicle);
+            console.log(url_img);
 
             const registerVehicle = await this.registerVehicleUseCase.post(
                 brand,
@@ -47,9 +47,10 @@ export class RegisterVehicleController{
                 plate_number,
                 name_association,
                 vin,
-                url_img_vehicle,
-                uuid_driver,
-                true
+                url_img,
+                owner_uuid,
+                false,
+                false
             );
             if(registerVehicle instanceof Vehicle){
                 return res.status(200).send({
@@ -61,9 +62,10 @@ export class RegisterVehicleController{
                         plate_number:registerVehicle.plate_number,
                         name_association:registerVehicle.name_association,
                         vin:registerVehicle.vin,
-                        url_img_vehicle:registerVehicle.url_img_vehicle,
-                        uuid_driver:registerVehicle.uuid_driver,
-                        status:registerVehicle.status
+                        url_img:registerVehicle.url_img,
+                        owner_uuid:registerVehicle.owner_uuid,
+                        status:registerVehicle.status,
+                        status_driver_selection:registerVehicle.status_driver_selection
                     }
                 })
             }

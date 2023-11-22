@@ -10,12 +10,12 @@ export async function isPlateNumberRegistered(plateNumber: string): Promise<bool
     return plateNumberResults[0].plateNumberCount > 0;
 }
 
-export async function isDriverUuidRegistered(driverUuid: string): Promise<boolean> {
+export async function isOwnerUuidRegistered(ownerUuid: string): Promise<boolean> {
     const checkDriverUuidSql = `
-        SELECT COUNT(*) as driverUuidCount
-        FROM drivers
+        SELECT COUNT(*) as ownerUuidCount
+        FROM owners
         WHERE uuid = ?;
     `;
-    const [driverUuidResults]: any = await query(checkDriverUuidSql, [driverUuid]);
+    const [driverUuidResults]: any = await query(checkDriverUuidSql, [ownerUuid]);
     return driverUuidResults[0].driverUuidCount > 0;
 }
