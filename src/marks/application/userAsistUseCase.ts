@@ -9,14 +9,18 @@ export class UserAsistUseCase {
 
     async run(
         markUuid: string,
-        userUuid: string
+        userUuid: string, 
+        latitude: number, 
+        longitude: number
     ): Promise<string | null> {
         const miuuid: string = uuid()
         try {
             const createMark = await this.markRepository.userAsist(
                 miuuid,
                 markUuid,
-                userUuid
+                userUuid,
+                latitude,
+                longitude
             )
             return createMark
         } catch (error) {

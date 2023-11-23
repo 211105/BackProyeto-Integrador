@@ -96,16 +96,34 @@ export class MysqlMarkRepository implements IMarkRepository {
         }
     }
 
-    async userAsist(uuid: string, markUuid: string, userUuid: string): Promise<string | null> {
+    async userAsist(uuid: string, markUuid: string, userUuid: string, latitude: number, longitude: number): Promise<string | null> {
         try {
-            const sql = "INSERT INTO assists (uuid, attended_at, pin_uuid, user_uuid) VALUES (?, UTC_TIMESTAMP(), ?, ?);"
-            const params: any[] =  [uuid,markUuid,userUuid];
-            const [result]: any = await query(sql, params);
-            return "exitoso"
+            // Primero, verificar la distancia entre la latitud y longitud proporcionadas y la ubicación del pin
+            const checkDistanceSql = `
+                SELECT ST_Distance_Sphere(
+                    point(?, ?), 
+                    (SELECT location FROM pines WHERE uuid = ?)
+                ) AS distance
+            `;
+            const checkParams = [longitude, latitude, markUuid];
+            const [[distanceResult]]: any = await query(checkDistanceSql, checkParams);
+            console.log(checkDistanceSql)
+            // Verificar si la distancia es menor o igual a 500 metros
+            if (distanceResult.distance <= 500) {
+                // Realizar la inserción si el usuario está dentro del rango permitido
+                const insertSql = "INSERT INTO assists (uuid, attended_at, pin_uuid, user_uuid) VALUES (?, UTC_TIMESTAMP(), ?, ?);";
+                const insertParams: any[] = [uuid, markUuid, userUuid];
+                await query(insertSql, insertParams);
+                return "exitoso";
+            } else {
+                // El usuario no está dentro del rango permitido
+                return "Usuario fuera de rango.";
+            }
         } catch (error) {
-            console.log(error)
-            return null
+            console.log(error);
+            return null;
         }
     }
+    
 
 }

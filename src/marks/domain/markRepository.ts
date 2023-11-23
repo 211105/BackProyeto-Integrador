@@ -15,5 +15,5 @@ export interface IMarkRepository {
 
     listMarks(userLatitude: number, userLongitude: number): Promise <MarkDescription[] | null | string>; 
 
-    userAsist(uuid: string, markUuid: string, userUuid: string ):Promise<string | null>;
+    userAsist(uuid: string, markUuid: string, userUuid: string, latitude: number, longitude: number):Promise<string | null>;
 }

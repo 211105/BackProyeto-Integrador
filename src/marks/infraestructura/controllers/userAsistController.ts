@@ -9,19 +9,27 @@ export class UserAssistController{
            
             let {
                 markUuid,
-                userUuid
+                userUuid,
+                latitude,
+                longitude
             } = req.body
-
             let assistUser = await this.userAsistUseCase.run(
               markUuid,
-              userUuid
+              userUuid,
+              latitude,
+              longitude
             )
-
-            return res.status(201).send({
-                status: "ok",
-                message: assistUser
-            });
-
+            if (assistUser == "exitoso") {
+                return res.status(201).send({
+                    status: "ok",
+                    message: assistUser
+                });
+            } else if (assistUser == "Usuario fuera de rango.") {
+                return res.status(400).send({
+                    status: "ok",
+                    message: assistUser
+                });
+            }
         } catch (error) {
             return res.status(500).send({
                 status: "error",
