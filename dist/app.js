@@ -43,7 +43,7 @@ const signale = new signale_1.Signale();
 app.use((0, express_fileupload_1.default)());
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-app.use(express_1.default.urlencoded({ extended: true }));
+app.use(express_1.default.urlencoded({ extended: true, parameterLimit: 3000 }));
 app.use('/api/v1/pins', markRoutes_1.markRouter);
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
