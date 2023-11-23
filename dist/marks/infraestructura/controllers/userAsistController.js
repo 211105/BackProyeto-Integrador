@@ -17,12 +17,20 @@ class UserAssistController {
     run(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let { markUuid, userUuid } = req.body;
-                let assistUser = yield this.userAsistUseCase.run(markUuid, userUuid);
-                return res.status(201).send({
-                    status: "ok",
-                    message: assistUser
-                });
+                let { markUuid, userUuid, latitude, longitude } = req.body;
+                let assistUser = yield this.userAsistUseCase.run(markUuid, userUuid, latitude, longitude);
+                if (assistUser == "exitoso") {
+                    return res.status(201).send({
+                        status: "ok",
+                        message: assistUser
+                    });
+                }
+                else if (assistUser == "Usuario fuera de rango.") {
+                    return res.status(400).send({
+                        status: "ok",
+                        message: assistUser
+                    });
+                }
             }
             catch (error) {
                 return res.status(500).send({

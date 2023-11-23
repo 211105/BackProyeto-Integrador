@@ -73,13 +73,27 @@ class MysqlMarkRepository {
             }
         });
     }
-    userAsist(uuid, markUuid, userUuid) {
+    userAsist(uuid, markUuid, userUuid, latitude, longitude) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const sql = "INSERT INTO assists (uuid, attended_at, pin_uuid, user_uuid) VALUES (?, UTC_TIMESTAMP(), ?, ?);";
-                const params = [uuid, markUuid, userUuid];
-                const [result] = yield (0, connection_1.query)(sql, params);
-                return "exitoso";
+                const checkDistanceSql = `
+                SELECT ST_Distance_Sphere(
+                    point(?, ?), 
+                    (SELECT location FROM pines WHERE uuid = ?)
+                ) AS distance
+            `;
+                const checkParams = [longitude, latitude, markUuid];
+                const [[distanceResult]] = yield (0, connection_1.query)(checkDistanceSql, checkParams);
+                console.log(checkDistanceSql);
+                if (distanceResult.distance <= 500) {
+                    const insertSql = "INSERT INTO assists (uuid, attended_at, pin_uuid, user_uuid) VALUES (?, UTC_TIMESTAMP(), ?, ?);";
+                    const insertParams = [uuid, markUuid, userUuid];
+                    yield (0, connection_1.query)(insertSql, insertParams);
+                    return "exitoso";
+                }
+                else {
+                    return "Usuario fuera de rango.";
+                }
             }
             catch (error) {
                 console.log(error);

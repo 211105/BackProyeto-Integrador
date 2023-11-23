@@ -15,11 +15,11 @@ class UserAsistUseCase {
     constructor(markRepository) {
         this.markRepository = markRepository;
     }
-    run(markUuid, userUuid) {
+    run(markUuid, userUuid, latitude, longitude) {
         return __awaiter(this, void 0, void 0, function* () {
             const miuuid = (0, uuid_1.v4)();
             try {
-                const createMark = yield this.markRepository.userAsist(miuuid, markUuid, userUuid);
+                const createMark = yield this.markRepository.userAsist(miuuid, markUuid, userUuid, latitude, longitude);
                 return createMark;
             }
             catch (error) {
