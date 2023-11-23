@@ -14,10 +14,10 @@ export class UserAssistController{
                 longitude
             } = req.body
             let assistUser = await this.userAsistUseCase.run(
-              markUuid,
-              userUuid,
-              latitude,
-              longitude
+                markUuid,
+                userUuid,
+                latitude,
+                longitude
             )
             if (assistUser == "exitoso") {
                 return res.status(201).send({

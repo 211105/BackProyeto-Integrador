@@ -76,15 +76,18 @@ class MysqlMarkRepository {
     userAsist(uuid, markUuid, userUuid, latitude, longitude) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const sql = `SELECT ST_X(location) AS latitude, ST_Y(location) AS longitude FROM pines WHERE uuid = ?`;
+                const params = [markUuid];
+                const [[locationResult]] = yield (0, connection_1.query)(sql, params);
                 const checkDistanceSql = `
-                SELECT ST_Distance_Sphere(
-                    point(?, ?), 
-                    (SELECT location FROM pines WHERE uuid = ?)
-                ) AS distance
+            SELECT ST_Distance_Sphere(
+                POINT(?, ?), 
+                POINT(?, ?)
+            ) AS distance
             `;
-                const checkParams = [longitude, latitude, markUuid];
+                const checkParams = [longitude, latitude, locationResult.longitude, locationResult.latitude];
+                console.log(checkParams);
                 const [[distanceResult]] = yield (0, connection_1.query)(checkDistanceSql, checkParams);
-                console.log(checkDistanceSql);
                 if (distanceResult.distance <= 500) {
                     const insertSql = "INSERT INTO assists (uuid, attended_at, pin_uuid, user_uuid) VALUES (?, UTC_TIMESTAMP(), ?, ?);";
                     const insertParams = [uuid, markUuid, userUuid];
