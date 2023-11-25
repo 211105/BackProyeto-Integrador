@@ -6,10 +6,8 @@ import { userRoutes } from "./user/infraestructure/userRouter";
 import * as serviceAccount from "./helpers/integrador-image-firebase-adminsdk-17aek-114f65daa8.json";
 import * as admin from "firebase-admin";
 import fileUpload from 'express-fileupload';
-import { driverRoutes } from "./DriversManagement/driver/infraestructure/driverRoutes";
-import { vehicleRoutes } from "./DriversManagement/vehicle/infraestructure/vehicleRoutes";
-import { ownerRoutes } from "./DriversManagement/owner/infraestructure/ownerRoutes";
-import { driver_vehicleRoutes } from "./DriversManagement/driver-vehicle/infraestructure/driver-vehicleRoutes";
+import { weeklyAmountRoutes } from "./weekly_amount/infraestructure/weekly_amountRouter";
+import { expenseRouter } from "./expense/infraestructure/expenseRoutes";
 
 
 
@@ -28,10 +26,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/v1/users', userRoutes);
-app.use('/api/v1/drivers', driverRoutes);
-app.use('/api/v1/vehicles', vehicleRoutes);
-app.use('/api/v1/owners', ownerRoutes);
-app.use('/api/v1/driver_vehicles', driver_vehicleRoutes);
+app.use('/api/v1/weeklyAmount', weeklyAmountRoutes);
+app.use('/api/v1/expenses', expenseRouter);
+
+
+
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
