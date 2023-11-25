@@ -8,6 +8,7 @@ export class CreateMarkController{
 
     async  run(req: Request, res: Response) {
         try {
+        console.log("se ejecuta primero use case")
            
             let {
                 latitude,
@@ -42,18 +43,35 @@ export class CreateMarkController{
                 userUuid,
                 activityUuid
             )
-
+            console.log(typeof(createMark))
             return res.status(201).send({
                 status: "ok",
                 message: createMark
             });
 
         } catch (error) {
+            if (error instanceof Error) {
+                if (error.message.startsWith('[')) {      
+                    const errors = JSON.parse(error.message);
+                    const modifiedErrors = errors.map(({ property, children, constraints }) => ({
+                        property,
+                        children,
+                        constraints
+                    }));
+                    return res.status(400).send({
+                        status: "error",
+                        message: "Validation failed",
+                        errors: modifiedErrors
+                    });
+                }
+            }
+            
             return res.status(500).send({
                 status: "error",
-                message: "An unexpected error occurred. Please try again later.",
+                message: "An error occurred while adding the book."
             });
         }
+
     }
 }
 
