@@ -28,35 +28,40 @@ export class MysqlActivityRepository implements IActivityRepository {
         }
        
     }
+ 
     async updateActivity(uuid: string, name?: string, imgUrl?: string): Promise<string | null> {
+        // Inicializa un objeto para almacenar las actualizaciones.
+        const updates: { [key: string]: string } = {};
+    
+        // Agrega los valores al objeto de actualizaciones solo si no son undefined.
+        if (name !== undefined) updates.name = name;
+        if (imgUrl !== undefined) updates.imgUrl = imgUrl;
+    
+        // Verifica si hay algo que actualizar.
+        const keys = Object.keys(updates);
+        if (keys.length === 0) return null; // No hay nada que actualizar.
+    
+        // Construye la parte de asignación de la consulta SQL.
+        const sqlParts = keys.map(key => `${key} = ?`);
+        const sql = `UPDATE activitys SET ${sqlParts.join(', ')} WHERE uuid = ?`;
+    
         try {
-        
-            let updates = [];
-            const params: any = [];
+            // Prepara los valores para la consulta.
+            const values = keys.map(key => updates[key]);
+            values.push(uuid); // Añade el UUID al final del array de valores.
     
-            if (name) {
-                updates.push("name = ?");
-                params.push(name);
-            }
+            // Ejecuta la consulta SQL.
+            await query(sql, values);
     
-            if (imgUrl) {
-                updates.push("imgUrl = ?");
-                params.push(imgUrl);
-            }
-    
-            let sql = `UPDATE activitys SET ${updates.join(", ")} WHERE uuid = ?`;
-            params.push(uuid);
-    
-            // Ejecutar la consulta SQL
-            const [result]: any = await query(sql, params);
-    
-            // Devolver un mensaje de éxito
+            // Retorna un mensaje de éxito.
             return "Actividad actualizada con éxito";
         } catch (error) {
-            // Devolver el error como un string
-            return `${error}`;
+            console.error('Error updating activity:', error);
+            // Devuelve el error como un string o maneja de otra manera.
+            return `Error al actualizar la actividad: ${error}`;
         }
     }
+    
     
     async listActyvitiys(): Promise<Activity[] | null> {
         try {

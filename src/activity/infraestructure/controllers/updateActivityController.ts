@@ -51,11 +51,17 @@ export class UpdateActivityByIdController {
 
         } catch (error) {
             if (error instanceof Error) {
-                if (error.message.startsWith('[')) {
+                if (error.message.startsWith('[')) {      
+                    const errors = JSON.parse(error.message);
+                    const modifiedErrors = errors.map(({ property, children, constraints }) => ({
+                        property,
+                        children,
+                        constraints
+                    }));
                     return res.status(400).send({
                         status: "error",
                         message: "Validation failed",
-                        errors: JSON.parse(error.message)
+                        errors: modifiedErrors
                     });
                 }
             }

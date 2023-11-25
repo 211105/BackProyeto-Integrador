@@ -1,0 +1,22 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.listActivitysController = exports.listActivitysUseCase = exports.updateActivityControllr = exports.updateActivityUseCase = exports.deleteActivityController = exports.deleteActivityUseCase = exports.addActivityController = exports.addActivityUseCase = exports.mysqActivityRepository = void 0;
+const addActivityUseCase_1 = require("../application/addActivityUseCase");
+const deleteActivityUseCase_1 = require("../application/deleteActivityUseCase");
+const listActyvitiysUseCase_1 = require("../application/listActyvitiysUseCase");
+const updateActivityUseCase_1 = require("../application/updateActivityUseCase");
+const addActivityController_1 = require("./controllers/addActivityController");
+const deleteActivityController_1 = require("./controllers/deleteActivityController");
+const listActivitysController_1 = require("./controllers/listActivitysController");
+const updateActivityController_1 = require("./controllers/updateActivityController");
+const mysqlActivityRepository_1 = require("./mysqlActivityRepository");
+exports.mysqActivityRepository = new mysqlActivityRepository_1.MysqlActivityRepository();
+exports.addActivityUseCase = new addActivityUseCase_1.AddActivityUseCase(exports.mysqActivityRepository);
+exports.addActivityController = new addActivityController_1.AddActivityController(exports.addActivityUseCase);
+exports.deleteActivityUseCase = new deleteActivityUseCase_1.DeleteActivityUseCase(exports.mysqActivityRepository);
+exports.deleteActivityController = new deleteActivityController_1.DeleteActivityController(exports.deleteActivityUseCase);
+exports.updateActivityUseCase = new updateActivityUseCase_1.UpdateActivityUseCase(exports.mysqActivityRepository);
+exports.updateActivityControllr = new updateActivityController_1.UpdateActivityByIdController(exports.updateActivityUseCase);
+exports.listActivitysUseCase = new listActyvitiysUseCase_1.ListActivitysUseCase(exports.mysqActivityRepository);
+exports.listActivitysController = new listActivitysController_1.ListActivitysController(exports.listActivitysUseCase);
+//# sourceMappingURL=dependencies.js.map

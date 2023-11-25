@@ -1,5 +1,7 @@
 import { Activity } from "../domain/activity";
 import { IActivityRepository } from "../domain/activityRepository";
+import { validate } from "class-validator";
+import { ValidatorUpdateActivity } from "../domain/validation/activity";
 
 export class UpdateActivityUseCase {
     constructor(readonly activityRepository: IActivityRepository) {}
@@ -9,6 +11,11 @@ export class UpdateActivityUseCase {
         name?: string,
         imgUrl?: string
     ):Promise<string | null>{
+        let data = new ValidatorUpdateActivity(uuid,name,imgUrl);
+        const validation = await validate(data);
+        if (validation.length > 0) {
+            throw new Error(JSON.stringify(validation));
+        }
 
         try {
             const updateActivity = await this.activityRepository.updateActivity(uuid, name, imgUrl)

@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import { Signale } from 'signale';
-import { userRoutes } from "./user/infraestructure/userRouter";
 import * as serviceAccount from "./helpers/integrador-9.json";
 import * as admin from "firebase-admin";
 import fileUpload from 'express-fileupload';
@@ -26,7 +25,6 @@ app.use(express.urlencoded({ extended: true }));
 
 
 
-app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/activitys',activitRoutes)
 
 
