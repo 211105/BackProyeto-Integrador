@@ -33,20 +33,21 @@ class MysqlMarkRepository {
             try {
                 let sql = `
                 SELECT p.uuid, 
-                    ST_X(p.location) AS latitude, 
-                    ST_Y(p.location) AS longitude, 
-                    p.description, 
-                    p.create_date, 
-                    p.end_date, 
-                    p.url_image, 
-                    p.user_uuid, 
-                    p.activity_uuid,
-                    (ST_Distance_Sphere(
-                        POINT(ST_Y(p.location), ST_X(p.location)), 
-                        POINT(?, ?)
-                    ) / 1000) AS distance_km
-                FROM pines p
-                HAVING distance_km <= 4;
+                ST_X(p.location) AS latitude, 
+                ST_Y(p.location) AS longitude, 
+                p.description, 
+                p.create_date, 
+                p.end_date, 
+                p.url_image, 
+                p.user_uuid, 
+                p.activity_uuid,
+                (ST_Distance_Sphere(
+                    POINT(ST_Y(p.location), ST_X(p.location)), 
+                    POINT(?, ?)
+                ) / 1000) AS distance_km
+            FROM pines p
+            WHERE p.end_date > NOW()
+            HAVING distance_km <= 4;   
                 `;
                 const result = yield (0, connection_1.query)(sql, [userLongitude, userLatitude]);
                 if (!result) {
