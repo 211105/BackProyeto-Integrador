@@ -15,9 +15,11 @@ export class UserAsistUseCase {
         latitude: number, 
         longitude: number
     ): Promise<string | null> {
+        const numLatitude = Number(latitude);
+        const numLongitude = Number(longitude);
         const miuuid: string = uuid()
         try {
-            let data = new ValidatorUserAssist(miuuid, markUuid, userUuid, latitude, longitude);
+            let data = new ValidatorUserAssist(miuuid, markUuid, userUuid, numLatitude, numLongitude);
             const validation = await validate(data);
             if (validation.length > 0) {
                 throw new Error(JSON.stringify(validation));

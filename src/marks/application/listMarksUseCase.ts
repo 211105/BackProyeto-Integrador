@@ -12,15 +12,16 @@ export class ListMarkUseCase {
         userLongitude: number
     ): Promise<MarkDescription[] | null | string> {
         
-        try {
-            let data = new ValidatorListMark(userLatitude,userLongitude);
-            const validation = await validate(data);
-            if (validation.length > 0) {
-                throw new Error(JSON.stringify(validation));
-            }
-            
-            const createMark = await this.markRepository.listMarks(userLatitude, userLongitude)
+        const numLatitude = Number(userLatitude);
+        const numLongitude = Number(userLongitude);
+        let data = new ValidatorListMark(numLatitude,numLongitude);
+        const validation = await validate(data);
 
+        if (validation.length > 0) {
+            throw new Error(JSON.stringify(validation));
+        }
+        try {
+            const createMark = await this.markRepository.listMarks(userLatitude, userLongitude)
             return createMark
         } catch (error) {
             return `${error}`
