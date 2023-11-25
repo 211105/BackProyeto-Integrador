@@ -19,7 +19,6 @@ export class AddActivityController {
 
             const imgFile = req.files.img_file as UploadedFile;
             const imgUrl = await uploadToFirebase(imgFile)
-
             let addActivity = await this.addActivityUseCase.run(name, imgUrl)
             
             return res.status(201).send({

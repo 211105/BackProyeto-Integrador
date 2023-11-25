@@ -30,13 +30,16 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
 const signale_1 = require("signale");
-const serviceAccount = __importStar(require("./helpers/integrador-9.json"));
 const admin = __importStar(require("firebase-admin"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const activityRouter_1 = require("./activity/infraestructure/activityRouter");
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    storageBucket: "integrador-ff8cd.appspot.com/"
+    credential: admin.credential.cert({
+        projectId: process.env.FIREBASE_PROJECT_ID || 'default_project_id',
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL || 'default_client_email',
+        privateKey: (process.env.FIREBASE_PRIVATE_KEY || 'default_private_key').replace(/\\n/g, '\n'),
+    }),
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET || 'default_storage_bucket'
 });
 const app = (0, express_1.default)();
 const signale = new signale_1.Signale();

@@ -9,9 +9,14 @@ import { activitRoutes } from "./activity/infraestructure/activityRouter";
 
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-  storageBucket: "integrador-ff8cd.appspot.com/"
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID || 'default_project_id',
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL || 'default_client_email',
+    privateKey: (process.env.FIREBASE_PRIVATE_KEY || 'default_private_key').replace(/\\n/g, '\n'),
+  }),
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET || 'default_storage_bucket'
 });
+
 
 const app = express();
 const signale = new Signale();
