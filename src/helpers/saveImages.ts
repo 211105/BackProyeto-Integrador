@@ -6,8 +6,7 @@ import path from 'path';
 import deleteFromFirebase from './deleteImage';
 const keyFilename = path.join(__dirname, 'vision.json');
 // const client = new vision.ImageAnnotatorClient({ keyFilename });
-const googleClientEmail = process.env.GOOGLE_CLIENT_EMAIL;
-const googlePrivateKey = process.env.GOOGLE_PRIVATE_KEY;
+
 
 const client = new vision.ImageAnnotatorClient({
     credentials: {

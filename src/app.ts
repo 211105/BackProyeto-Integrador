@@ -6,7 +6,6 @@ import * as serviceAccount from "./helpers/integrador-9.json";
 import * as admin from "firebase-admin";
 import fileUpload from 'express-fileupload';
 import { markRouter } from "./marks/infraestructura/markRoutes";
-import vision from '@google-cloud/vision';
 
 
 admin.initializeApp({
