@@ -42,13 +42,10 @@ const deleteImage_1 = __importDefault(require("./deleteImage"));
 const keyFilename = path_1.default.join(__dirname, 'vision.json');
 const googleClientEmail = process.env.GOOGLE_CLIENT_EMAIL;
 const googlePrivateKey = process.env.GOOGLE_PRIVATE_KEY;
-if (!googleClientEmail || !googlePrivateKey) {
-    throw new Error('Las variables de entorno para las credenciales de Google Cloud no están definidas.');
-}
 const client = new vision_1.default.ImageAnnotatorClient({
     credentials: {
-        client_email: googleClientEmail,
-        private_key: googlePrivateKey,
+        client_email: process.env.GOOGLE_CLIENT_EMAIL || 'default_project_id',
+        private_key: process.env.GOOGLE_PRIVATE_KEY || ' default_client_email'
     }
 });
 function uploadToFirebase(file) {

@@ -9,19 +9,10 @@ const keyFilename = path.join(__dirname, 'vision.json');
 const googleClientEmail = process.env.GOOGLE_CLIENT_EMAIL;
 const googlePrivateKey = process.env.GOOGLE_PRIVATE_KEY;
 
-if (!googleClientEmail) {
-    throw new Error('Las variables de entorno para las credenciales de Google Cloud no están definidas.1');
-}
-
-if (!googlePrivateKey) {
-    throw new Error('Las variables de entorno para las credenciales de Google Cloud no están definidas.2');
-    
-}
-
 const client = new vision.ImageAnnotatorClient({
     credentials: {
-      client_email: googleClientEmail,
-      private_key: googlePrivateKey,
+      client_email: process.env.GOOGLE_CLIENT_EMAIL || 'default_project_id',
+      private_key: process.env.GOOGLE_PRIVATE_KEY || ' default_client_email'
     }
   });
 
