@@ -13,11 +13,11 @@ export class ConsultationPromController {
 
             console.log('consultProm:', consultProm);
 
-            if (consultProm instanceof Bot) {
+            if (consultProm) {
                 return res.status(200).send({
                     status: "success",
                     data: {
-                        consultProm,
+                        consultProm
                     },
                 });
             } else {

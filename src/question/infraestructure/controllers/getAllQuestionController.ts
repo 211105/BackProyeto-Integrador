@@ -1,34 +1,30 @@
 import { Request, Response } from "express";
-import { DeleteExpenseByUuidUseCase } from "../../application/deleteExpenseByUuidUseCase";
+import { GetAllQuestionUseCase } from "../../application/getAllQuestionUseCase";
 
 
+export class GetAllQuestionController {
+    constructor(readonly getAllQuestionUseCase: GetAllQuestionUseCase) { }
 
-export class DeleteExpenseByUuidController {
-    constructor(readonly deleteExpenseByUuidUseCase: DeleteExpenseByUuidUseCase) { }
 
-    async delete(req: Request, res: Response) {
+    async get(req: Request, res: Response) {
         try {
+            const getAllQuestions = await this.getAllQuestionUseCase.get();
 
-            let {uuid } = req.params;
-
-            const deleteExpense = await this.deleteExpenseByUuidUseCase.delete(uuid);
-
-            if (deleteExpense) {
-                return res.status(201).send({
+            if (getAllQuestions) {
+                return res.status(200).send({
                     status: "succes",
                     data: {
-                        deleteExpense
+                        getAllQuestions
                     }
                 })
             }
             else {
                 return res.status(500).send({
                     status: "error",
-                    message: "An unexpected error occurred while register the expense."
+                    message: "An unexpected error occurred while register the question."
                 });
             }
         } catch (error) {
-
             if (error instanceof Error) {
                 if (error.message.startsWith('[')) {
                     return res.status(400).send({
@@ -40,10 +36,8 @@ export class DeleteExpenseByUuidController {
             }
             return res.status(500).send({
                 status: "error",
-                message: "An error occurred while update the expense."
+                message: "An error occurred while update the question."
             });
         }
-
-
     }
 }

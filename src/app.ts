@@ -7,7 +7,7 @@ import * as serviceAccount from "./helpers/integrador-image-firebase-adminsdk-17
 import * as admin from "firebase-admin";
 import fileUpload from 'express-fileupload';
 import { botRoutes } from "./bot/infraestructure/botRouter";
-
+import { questionRoutes } from "./question/infraestructure/questionRouter";
 
 
 admin.initializeApp({
@@ -26,9 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/bot', botRoutes);
-
-
-
+app.use('/api/v1/questions', questionRoutes);
 
 
 const port = process.env.PORT || 3001;

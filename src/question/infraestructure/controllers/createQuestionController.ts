@@ -1,30 +1,29 @@
 import { Request, Response } from "express";
-import { CreateWeeklyAmountUseCase } from "../../application/createWeeklyAmountUseCase";
-import { Weeklyamount } from "../../domain/weekly_amount";
-import { verifyWeeklyAmount } from "../validations/mysqlweeklyamount";
+import { CreateQuestionUseCase } from "../../application/createQuestionUseCase";
+import { Question } from "../../domain/question";
 
-
-export class CreateWeeklyAmountController {
-    constructor(readonly createWeeklyAmountUseCase: CreateWeeklyAmountUseCase) { }
+export class CreateQuestionController {
+    constructor(readonly createQuestionUseCase: CreateQuestionUseCase) { }
 
     async post(req: Request, res: Response) {
         try {
-            let { user_uuid, amount } = req.body;
 
-            
+            let { content } = req.body;
+            const createQuestion = await this.createQuestionUseCase.post(content);
 
-            const createWeekly = await this.createWeeklyAmountUseCase.post(user_uuid, amount, amount, true);
-
-            if (createWeekly) {
+            if (createQuestion instanceof Question) {
                 return res.status(201).send({
                     status: "succes",
-                    message: "Create Weekly Amount"
+                    data: {
+                        id: createQuestion.uuid,
+                        content: createQuestion.content,                       
+                    }
                 })
             }
             else {
                 return res.status(500).send({
                     status: "error",
-                    message: "An unexpected error occurred while register the user."
+                    message: "An unexpected error occurred while register the question."
                 });
             }
         } catch (error) {
@@ -39,8 +38,10 @@ export class CreateWeeklyAmountController {
             }
             return res.status(500).send({
                 status: "error",
-                message: "An error occurred while update the expense."
+                message: "An error occurred while update the question."
             });
+
         }
+
     }
 }
