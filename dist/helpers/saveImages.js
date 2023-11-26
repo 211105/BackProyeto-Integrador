@@ -40,8 +40,6 @@ const vision_1 = __importDefault(require("@google-cloud/vision"));
 const path_1 = __importDefault(require("path"));
 const deleteImage_1 = __importDefault(require("./deleteImage"));
 const keyFilename = path_1.default.join(__dirname, 'vision.json');
-const googleClientEmail = process.env.GOOGLE_CLIENT_EMAIL;
-const googlePrivateKey = process.env.GOOGLE_PRIVATE_KEY;
 const client = new vision_1.default.ImageAnnotatorClient({
     credentials: {
         client_email: process.env.GOOGLE_CLIENT_EMAIL || 'default_project_id',
