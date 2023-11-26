@@ -8,7 +8,7 @@ const express_1 = __importDefault(require("express"));
 const dependencies_1 = require("./dependencies");
 const veryfyToken_1 = require("../../helpers/veryfyToken");
 exports.userRoutes = express_1.default.Router();
-exports.userRoutes.get('/rutine', (req, res) => { return res.status(201); });
+exports.userRoutes.get('/rutine', (req, res) => { return res.status(200); });
 exports.userRoutes.post('/', dependencies_1.resgisterUserController.run.bind(dependencies_1.resgisterUserController));
 exports.userRoutes.post('/login', dependencies_1.loginUserController.run.bind(dependencies_1.loginUserController));
 exports.userRoutes.put('/id', veryfyToken_1.validateToken, dependencies_1.updateUserByIdController.run.bind(dependencies_1.updateUserByIdController));
