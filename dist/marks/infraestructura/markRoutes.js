@@ -7,6 +7,7 @@ exports.markRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const dependencies_1 = require("./dependencies");
 exports.markRouter = express_1.default.Router();
+exports.markRouter.get('/rutine');
 exports.markRouter.post('/', dependencies_1.createMarkController.run.bind(dependencies_1.createMarkController));
 exports.markRouter.get('/', dependencies_1.listMarkController.run.bind(dependencies_1.listMarkController));
 exports.markRouter.post('/assist', dependencies_1.userAssistController.run.bind(dependencies_1.userAssistController));

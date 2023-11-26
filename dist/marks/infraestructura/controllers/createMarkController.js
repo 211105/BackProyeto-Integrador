@@ -33,6 +33,14 @@ class CreateMarkController {
                 const imgFile = req.files.img_file;
                 console.log(imgFile);
                 const urlImage = yield (0, saveImages_1.default)(imgFile);
+                console.log("aqui ando pa");
+                console.log(urlImage);
+                if (urlImage == null) {
+                    return res.status(400).send({
+                        status: "error",
+                        message: "La imagen no cumple con las políticas de privacidad y no está permitida."
+                    });
+                }
                 let createMark = yield this.createMarkUseCase.run(latitude, longitude, description, urlImage, endDate, userUuid, activityUuid);
                 console.log(typeof (createMark));
                 return res.status(201).send({

@@ -31,7 +31,14 @@ export class CreateMarkController{
             const imgFile = req.files.img_file as UploadedFile;
             console.log(imgFile)
             const urlImage = await uploadToFirebase(imgFile)
-
+            console.log("aqui ando pa")
+            console.log(urlImage)
+            if (urlImage == null) {
+                return res.status(400).send({
+                    status: "error",
+                    message: "La imagen no cumple con las políticas de privacidad y no está permitida."
+                });
+            }
 
 
             let createMark = await this.createMarkUseCase.run(
