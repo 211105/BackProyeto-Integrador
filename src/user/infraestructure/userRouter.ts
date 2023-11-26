@@ -5,6 +5,7 @@ import { validateToken } from "../../helpers/veryfyToken";
 
 
 export const userRoutes = express.Router();
+userRoutes.get('/rutine', (req,res) => {return res.status(201)})
 
 userRoutes.post('/',resgisterUserController.run.bind(resgisterUserController)) 
 
