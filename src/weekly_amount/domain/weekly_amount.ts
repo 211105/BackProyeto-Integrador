@@ -9,3 +9,13 @@ export class Weeklyamount{
         public status:boolean
     ){}
 }
+
+export class createWeekly{
+    constructor(
+        public uuid:string,
+        public user_uuid:string,
+        public amount:number,
+        public amount_update:number,
+        public status:boolean
+    ){}
+}

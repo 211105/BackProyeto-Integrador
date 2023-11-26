@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CreateWeeklyAmountUseCase } from "../../application/createWeeklyAmountUseCase";
-import { Weeklyamount } from "../../domain/weekly_amount";
+import { createWeekly } from "../../domain/weekly_amount";
 import { verifyWeeklyAmount } from "../validations/mysqlweeklyamount";
 
 
@@ -13,12 +13,18 @@ export class CreateWeeklyAmountController {
 
             
 
-            const createWeekly = await this.createWeeklyAmountUseCase.post(user_uuid, amount, amount, true);
+            const createWeeklyAmount = await this.createWeeklyAmountUseCase.post(user_uuid, amount, amount, true);
 
-            if (createWeekly) {
+            if (createWeeklyAmount instanceof createWeekly) {
                 return res.status(201).send({
                     status: "succes",
-                    message: "Create Weekly Amount"
+                    data:{
+                        uuid:createWeeklyAmount.uuid,
+                        user_uuid:createWeeklyAmount.user_uuid,
+                        amount:createWeeklyAmount.amount,
+                        amount_update:createWeeklyAmount.amount_update,
+                        status:createWeeklyAmount.status
+                    }
                 })
             }
             else {

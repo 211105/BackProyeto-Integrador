@@ -1,4 +1,4 @@
-import { Weeklyamount } from "../domain/weekly_amount";
+import { createWeekly } from "../domain/weekly_amount";
 import { Weekly_amountRepository } from "../domain/weekly_amountRepository";
 import { v4 as uuid } from "uuid";
 import { validate } from "class-validator";
@@ -8,7 +8,7 @@ export class CreateWeeklyAmountUseCase{
     constructor(readonly weekly_amountRepository:Weekly_amountRepository){}
 
 
-    async post(user_uuid:string,amount:number,amount_update:number,status:boolean):Promise<Weeklyamount | null | string | Error>{
+    async post(user_uuid:string,amount:number,amount_update:number,status:boolean):Promise<createWeekly | null | string | Error>{
         
         const miuuid: string = uuid()
 

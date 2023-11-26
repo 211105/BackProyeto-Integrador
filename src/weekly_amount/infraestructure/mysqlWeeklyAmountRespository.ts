@@ -1,17 +1,17 @@
 import { query } from "../../database/connection";
-import { Weeklyamount } from "../domain/weekly_amount";
+import { Weeklyamount,createWeekly } from "../domain/weekly_amount";
 import { Weekly_amountRepository } from "../domain/weekly_amountRepository";
 
 export class MysqlWeeklyAmountRepository implements Weekly_amountRepository{
 
-    async createWeeklyAmount(uuid: string, user_uuid: string, amount: number, amount_update: number,status: boolean): Promise<string | Error | Weeklyamount | null> {
+    async createWeeklyAmount(uuid: string, user_uuid: string, amount: number, amount_update: number,status: boolean): Promise<string | Error | createWeekly | null> {
         try {
            
             let sql = "INSERT INTO weekly_amount(uuid, user_uuid, amount, amount_update, create_date, end_date, status) VALUES (?, ?, ?, ?, UTC_TIMESTAMP(), UTC_TIMESTAMP() + INTERVAL 5 MINUTE, ?)";
 
             const params: any[] = [uuid, user_uuid, amount, amount_update,status];
             const [result]: any = await query(sql, params);
-            return result;
+            return new createWeekly(uuid, user_uuid, amount, amount_update,status);
             
             
         } catch (error) {
