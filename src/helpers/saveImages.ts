@@ -9,8 +9,13 @@ const keyFilename = path.join(__dirname, 'vision.json');
 const googleClientEmail = process.env.GOOGLE_CLIENT_EMAIL;
 const googlePrivateKey = process.env.GOOGLE_PRIVATE_KEY;
 
-if (!googleClientEmail || !googlePrivateKey) {
-    throw new Error('Las variables de entorno para las credenciales de Google Cloud no están definidas.');
+if (!googleClientEmail) {
+    throw new Error('Las variables de entorno para las credenciales de Google Cloud no están definidas.1');
+}
+
+if (!googlePrivateKey) {
+    throw new Error('Las variables de entorno para las credenciales de Google Cloud no están definidas.2');
+    
 }
 
 const client = new vision.ImageAnnotatorClient({
@@ -77,4 +82,3 @@ async function evaluateImage(url: string): Promise<void> {
 
 
 export default uploadToFirebase;
-
