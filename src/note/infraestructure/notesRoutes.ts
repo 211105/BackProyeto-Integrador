@@ -5,12 +5,16 @@ import {
     updateNoteController,
     getNoteByUserController
      } from "./dependencies";
+import { Request, Response } from "express";
 import { validateToken } from "../../helpers/veryfyToken";
 
 
 
 export const noteRoutes = express.Router();
 
+noteRoutes.get('/rutine/', (req: Request, res: Response) => {
+    res.status(200).send('Rutina ejecutada con éxito');
+})
 
 noteRoutes.delete('/:uuid',deleteFileController.delete.bind(deleteFileController))
 
