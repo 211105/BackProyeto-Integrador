@@ -5,8 +5,13 @@ import {
     updateStatusByUserController,
     updateWeeklyAmountController
  } from "./dependencies";
-
+ import { Request, Response } from "express";
+ 
 export const weeklyAmountRoutes = express.Router();
+
+weeklyAmountRoutes.get('/rutine/', (req: Request, res: Response) => {
+    res.status(200).send('Rutina ejecutada con éxito');
+})
 
 weeklyAmountRoutes.post('/',createWeeklyAmountController.post.bind(createWeeklyAmountController));
 
