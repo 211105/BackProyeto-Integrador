@@ -1,5 +1,5 @@
-import { Driver_Vehicle } from "../domain/driver_vehicle";
-import { Driver_VehicleRepository } from "../domain/driver_vehicleRepository";
+import { Driver_Vehicle ,RegisterDriverVehicle} from "../domain/driver_vehicle";
+import { Driver_VehicleRepository, } from "../domain/driver_vehicleRepository";
 import { validate } from "class-validator";
 import { ValidatorRegister } from "../domain/validations/driver_vehicles";
 import { v4 as uuid } from "uuid";
@@ -8,7 +8,7 @@ export class RegisterDriver_VehicleUseCase{
     constructor(readonly driver_vehicleRepository:Driver_VehicleRepository){}
 
 
-    async post(driver_uuid:string,vehicle_uuid:string,status:boolean):Promise<string | { data: Driver_Vehicle, driver?: any, vehicle?: any } | Error | null> {
+    async post(driver_uuid:string,vehicle_uuid:string,status:boolean):Promise<RegisterDriverVehicle | null | string | Error> {
 
         const miuuid: string = uuid()
 

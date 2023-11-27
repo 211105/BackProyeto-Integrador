@@ -24,3 +24,4 @@ export class ValidatorRegister {
         this.vehicle_uuid = vehicle_uuid;
     }
 }
+

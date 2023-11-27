@@ -1,47 +1,42 @@
+// Importa los módulos necesarios
 import { Request, Response } from "express";
 import { RegisterOwnerUseCase } from "../../application/registerOwnerUseCase";
 import { UploadedFile } from 'express-fileupload';
 import { Owner } from "../../domain/owner";
-import { uploadToS3 } from "../../../../helpers/saveImagesAWS";
+import uploadToFirebase from '../../../../helpers/saveImages';
 
 export class RegisterOwnerController {
   constructor(readonly registerOwnerUseCase: RegisterOwnerUseCase) { }
 
-  private generateS3Key(filename: string): string {
-    const timestamp = new Date().toISOString().replace(/[-:]/g, '');
-    return `images/${timestamp}_${filename}`;
-  }
-
   async post(req: Request, res: Response) {
     try {
+      // Desestructura los datos del cuerpo de la solicitud
       const { name, surname, second_surname, email, password, phone_number } = req.body;
 
+      // Verifica si se cargó un archivo en la solicitud
       if (!req.files || !req.files.img_url) {
         return res.status(400).send({
           status: 'error',
-          message: 'No image file uploaded img_url.',
+          message: 'No image file uploaded (img_url).',
         });
       }
 
-      const imageFile = req.files.img_url as UploadedFile;
-      const s3Key = this.generateS3Key(imageFile.name);
+      console.log("Before uploading to Firebase...");
 
-      // Llama a la función para subir a S3 y obtén la URL resultante
-      const s3ImageUrl = await uploadToS3(imageFile.data, s3Key, imageFile.mimetype);
+      // Castear el archivo a UploadedFile (express-fileupload)
+      const fileVehicle = req.files.img_url as UploadedFile;
+
+      // Llama a la función para cargar el archivo a Firebase
+      const url_img = await uploadToFirebase(fileVehicle);
+
+      console.log("After uploading to Firebase. URL:", url_img);
 
       // Llama a la función para registrar al propietario
       let registerOwner = await this.registerOwnerUseCase.post(
-        name,
-        surname,
-        second_surname,
-        email,
-        password,
-        phone_number,
-        s3ImageUrl,
-        "Owner",
-        false
+        name, surname, second_surname, email, password, phone_number, url_img, "Owner", false
       );
 
+      // Verifica el resultado de la operación de registro
       if (registerOwner instanceof Owner) {
         return res.status(201).send({
           status: 'success',
@@ -53,7 +48,7 @@ export class RegisterOwnerController {
             email: registerOwner.email,
             password: registerOwner.password,
             phone: registerOwner.phone_number,
-            img_url: s3ImageUrl,
+            img_url: registerOwner.img_url,
             type_user: registerOwner.type_user,
             status: registerOwner.status,
           },
@@ -65,27 +60,19 @@ export class RegisterOwnerController {
         });
       }
     } catch (error) {
-      // Manejo de errores
       if (error instanceof Error) {
-        if (error.message.includes('Duplicate entry') && error.message.includes('for key \'users.email\'')) {
-          return res.status(409).send({
-            status: "error",
-            message: "The email address is already in use. Please use a different email address.",
-          });
-        } else if (error.message.startsWith('[')) {
-          return res.status(400).send({
-            status: "error",
-            message: "Validation failed",
-            errors: JSON.parse(error.message),
-          });
+        if (error.message.startsWith('[')) {
+            return res.status(400).send({
+                status: "error",
+                message: "Validation failed",
+                errors: JSON.parse(error.message)
+            });
         }
-      }
-
-      // Para errores generales
-      return res.status(500).send({
+    }
+    return res.status(500).send({
         status: "error",
-        message: "An unexpected error occurred. Please try again later.",
-      });
+        message: "An error occurred while adding the Driver."
+    });
     }
   }
 }

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { RegisterDriver_VehicleUseCase } from "../../application/registerDriver_VehicleUseCase";
-import { Driver_Vehicle } from "../../domain/driver_vehicle";
+import { Driver_Vehicle,RegisterDriverVehicle } from "../../domain/driver_vehicle";
 import { doesDriverExist, doesVehicleExist, statusDriver, statusVehicle } from '../validations/mysqldriver_vehicle';
 
 export class RegisterDriver_VehicleController {
@@ -25,7 +25,7 @@ export class RegisterDriver_VehicleController {
                 });
             }
             const driver = await statusDriver(driver_uuid);
-            if (driver) {
+            if (!driver) {
                 return res.status(409).send({
                     status: 'error',
                     message: 'El conductor ya tiene un vehiculo asignado',
@@ -35,35 +35,34 @@ export class RegisterDriver_VehicleController {
             if (!vehicle) {
                 return res.status(409).send({
                     status: 'error',
-                    message: 'El vehiculo ya tiene un vehiculo asignado',
+                    message: 'El vehiculo ya tiene un conductor asignado',
                 });
             }
 
             const registerDriver_VehicleResult = await this.registerDriver_VehicleUseCase.post(driver_uuid, vehicle_uuid, true);
 
-            if (registerDriver_VehicleResult instanceof Error) {
-                // Manejar el caso de error
+            if (registerDriver_VehicleResult instanceof RegisterDriverVehicle) {
+                return res.status(201).send({
+                    status: 'success',
+                    data: {
+                        uuid:registerDriver_VehicleResult.uuid,
+                        driver_uuid:registerDriver_VehicleResult.driver_uuid,
+                        vehicle_uuid:registerDriver_VehicleResult.vehicle_uuid,
+                        status:registerDriver_VehicleResult.status,
+                        dataDriver:registerDriver_VehicleResult.dataDriver,
+                        dataVechile:registerDriver_VehicleResult.dataVehicle,
+                    },
+                });
+
+            } else {
                 return res.status(500).send({
                     status: 'error',
-                    message: 'An unexpected error occurred while registering the Driver_Vehicle.',
+                    message: 'An unexpected error occurred while registering the Driver.',
                 });
             }
 
-            const registerDriver_Vehicle = (registerDriver_VehicleResult as { data: Driver_Vehicle; driver?: any; vehicle?: any }).data;
-            const driverInfo = (registerDriver_VehicleResult as { data: Driver_Vehicle; driver?: any; vehicle?: any }).driver;
-            const vehicleInfo = (registerDriver_VehicleResult as { data: Driver_Vehicle; driver?: any; vehicle?: any }).vehicle;
 
-            return res.status(201).send({
-                status: 'success',
-                data: {
-                    id: registerDriver_Vehicle.uuid,
-                    driver_uuid: registerDriver_Vehicle.driver_uuid,
-                    vehicle_uuid: registerDriver_Vehicle.vehicle_uuid,
-                    status: registerDriver_Vehicle.status,
-                    driver_info: driverInfo,
-                    vehicle_info: vehicleInfo,
-                },
-            });
+            
 
         } catch (error) {
             if (error instanceof Error) {
