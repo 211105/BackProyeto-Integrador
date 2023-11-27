@@ -34,7 +34,6 @@ const userRouter_1 = require("./user/infraestructure/userRouter");
 const serviceAccount = __importStar(require("./helpers/integrador-image-firebase-adminsdk-17aek-114f65daa8.json"));
 const admin = __importStar(require("firebase-admin"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
-const notesRoutes_1 = require("./note/infraestructure/notesRoutes");
 const fileRoutes_1 = require("./file/infraestructure/fileRoutes");
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -47,7 +46,6 @@ app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use('/api/v1/users', userRouter_1.userRoutes);
-app.use('/api/v1/notes', notesRoutes_1.noteRoutes);
 app.use('/api/v1/files', fileRoutes_1.fileRoutes);
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
