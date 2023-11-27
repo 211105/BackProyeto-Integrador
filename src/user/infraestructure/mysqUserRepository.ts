@@ -1,5 +1,5 @@
 import { query } from "../../database/connection";
-import { ResponseLogin, User } from "../domain/user";
+import { ResponseLogin, User,ResponseLoginAllUsers } from "../domain/user";
 import { IUsuarioRepository } from "../domain/userRepository";
 import { compare, encrypt } from '../../helpers/ashs';
 import { tokenSigIn } from "../../helpers/token";
@@ -9,54 +9,70 @@ import deleteFromFirebase from "../../helpers/deleteImage";
 export class MysqlUserRepository implements IUsuarioRepository {
     
 
-    async registerUser(uuid: string, name: string, email: string, phone_number: string, img_url: string, password: string): Promise<User | null | string | Error> {
+    async registerUser(uuid: string, name: string, email: string, phone_number: string, img_url: string, password: string,type_user:string): Promise<User | null | string | Error> {
       
         try {
             // const hashPassword = await encrypt(password)
             
             await isEmailRegistered(email)
            
-            let sql = "INSERT INTO users(uuid, name, email, phone_number , password, img_url) VALUES (?, ?, ?, ?, ?, ?)";
-            const params: any[] = [uuid, name, email, phone_number, password, img_url];
+            let sql = "INSERT INTO users(uuid, name, email, phone_number , password, img_url,type_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            const params: any[] = [uuid, name, email, phone_number, password, img_url,type_user];
             const [result]: any = await query(sql, params);
-            return new User(uuid, name, email, phone_number, img_url , password,);
+            return new User(uuid, name, email, phone_number, img_url , password,type_user);
         } catch (error) {
             console.error("Error adding review:", error);
             return error as Error;
         }
     }
 
-    async loginUser(email: string, password: string): Promise<ResponseLogin  |string | null> {
+    async loginUser(email: string, password: string): Promise<ResponseLoginAllUsers | string | null> {
         try {
-            // Primero, obtener el usuario por email.
+            // Buscar en la tabla 'users'
             const [users]: any = await query('SELECT * FROM users WHERE email = ? LIMIT 1', [email]);
-          
-            if (!users || users.length === 0) {
-                return null
+    
+            if (users && users.length > 0) {
+                const user = users[0];
+                const passwordMatches = await compare(password, user.password);
+    
+                if (passwordMatches) {
+                    const token: string = tokenSigIn(user.uuid, user.email);
+                    const responseLogin: ResponseLoginAllUsers = new ResponseLoginAllUsers(user, token);
+    
+                    return responseLogin;
+                }
             }
-
-            const user = users[0];
-            console.log(user)
-            // Verificar si la contraseña proporcionada coincide con la almacenada en la base de datos.
-            const passwordMatches = await compare(password, user.password); //pasar a la parte 
-          
-
-            if (!passwordMatches) {
-                return 'Unauthorized'
+    
+            // Si no se encontró en 'users', buscar en la tabla 'owner'
+            const [owners]: any = await query('SELECT * FROM owners WHERE email = ? LIMIT 1', [email]);
+    
+            if (owners && owners.length > 0) {
+                const owner = owners[0];
+                // Procesar el usuario de la tabla 'owner' y agregarlo a data_users
+                // ...
+    
+                const token: string = tokenSigIn(owner.uuid, owner.email);
+                const responseLogin: ResponseLoginAllUsers = new ResponseLoginAllUsers(owner, token);
+    
+                return responseLogin;
             }
-            const token:string = tokenSigIn(user.uuid,user.email)
-
-            const dataUser: ResponseLogin = new ResponseLogin(
-                user.uuid,
-                user.name,
-                user.email,
-                user.phone_number,
-                user.img_url,
-                token
-            )
-           
-            return dataUser;
-
+    
+            // Si no se encontró en 'owner', buscar en la tabla 'driver'
+            const [drivers]: any = await query('SELECT * FROM drivers WHERE email = ? LIMIT 1', [email]);
+    
+            if (drivers && drivers.length > 0) {
+                const driver = drivers[0];
+                // Procesar el usuario de la tabla 'driver' y agregarlo a data_users
+                // ...
+    
+                const token: string = tokenSigIn(driver.uuid, driver.email);
+                const responseLogin: ResponseLoginAllUsers = new ResponseLoginAllUsers(driver, token);
+    
+                return responseLogin;
+            }
+    
+            // Si no se encontró en ninguna tabla, devolver null
+            return null;
         } catch (error) {
             console.error('Error during login:', error);
             throw error;
@@ -101,6 +117,7 @@ export class MysqlUserRepository implements IUsuarioRepository {
                 updatedRows[0].phone_number,
                 updatedRows[0].img_url,
                 "",
+                updatedRows[0].type_user
             );
 
             return updatedUser;
@@ -132,6 +149,7 @@ export class MysqlUserRepository implements IUsuarioRepository {
                 updatedRows[0].phone_number,
                 updatedRows[0].email,
                 updatedRows[0].password,
+                updatedRows[0].type_user,
             );
 
             return updatedUser;

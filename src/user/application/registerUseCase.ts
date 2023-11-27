@@ -16,6 +16,7 @@ export class RegisterUserUseCase {
         phone_number: string,
         img_url: string,
         password: string,
+        type_user:string,
     ): Promise<User | null | string | Error>{
 
         //valres generados 
@@ -38,6 +39,7 @@ export class RegisterUserUseCase {
                 phone_number,
                 img_url,
                 hashPassword,
+                type_user
             );
 
             return createUser;

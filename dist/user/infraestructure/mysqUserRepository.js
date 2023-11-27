@@ -20,14 +20,14 @@ const token_1 = require("../../helpers/token");
 const usermysql_1 = require("./validation/usermysql");
 const deleteImage_1 = __importDefault(require("../../helpers/deleteImage"));
 class MysqlUserRepository {
-    registerUser(uuid, name, email, phone_number, img_url, password) {
+    registerUser(uuid, name, email, phone_number, img_url, password, type_user) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 yield (0, usermysql_1.isEmailRegistered)(email);
-                let sql = "INSERT INTO users(uuid, name, email, phone_number , password, img_url) VALUES (?, ?, ?, ?, ?, ?)";
-                const params = [uuid, name, email, phone_number, password, img_url];
+                let sql = "INSERT INTO users(uuid, name, email, phone_number , password, img_url,type_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                const params = [uuid, name, email, phone_number, password, img_url, type_user];
                 const [result] = yield (0, connection_1.query)(sql, params);
-                return new user_1.User(uuid, name, email, phone_number, img_url, password);
+                return new user_1.User(uuid, name, email, phone_number, img_url, password, type_user);
             }
             catch (error) {
                 console.error("Error adding review:", error);
@@ -39,18 +39,30 @@ class MysqlUserRepository {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const [users] = yield (0, connection_1.query)('SELECT * FROM users WHERE email = ? LIMIT 1', [email]);
-                if (!users || users.length === 0) {
-                    return null;
+                if (users && users.length > 0) {
+                    const user = users[0];
+                    const passwordMatches = yield (0, ashs_1.compare)(password, user.password);
+                    if (passwordMatches) {
+                        const token = (0, token_1.tokenSigIn)(user.uuid, user.email);
+                        const responseLogin = new user_1.ResponseLoginAllUsers(user, token);
+                        return responseLogin;
+                    }
                 }
-                const user = users[0];
-                console.log(user);
-                const passwordMatches = yield (0, ashs_1.compare)(password, user.password);
-                if (!passwordMatches) {
-                    return 'Unauthorized';
+                const [owners] = yield (0, connection_1.query)('SELECT * FROM owners WHERE email = ? LIMIT 1', [email]);
+                if (owners && owners.length > 0) {
+                    const owner = owners[0];
+                    const token = (0, token_1.tokenSigIn)(owner.uuid, owner.email);
+                    const responseLogin = new user_1.ResponseLoginAllUsers(owner, token);
+                    return responseLogin;
                 }
-                const token = (0, token_1.tokenSigIn)(user.uuid, user.email);
-                const dataUser = new user_1.ResponseLogin(user.uuid, user.name, user.email, user.phone_number, user.img_url, token);
-                return dataUser;
+                const [drivers] = yield (0, connection_1.query)('SELECT * FROM drivers WHERE email = ? LIMIT 1', [email]);
+                if (drivers && drivers.length > 0) {
+                    const driver = drivers[0];
+                    const token = (0, token_1.tokenSigIn)(driver.uuid, driver.email);
+                    const responseLogin = new user_1.ResponseLoginAllUsers(driver, token);
+                    return responseLogin;
+                }
+                return null;
             }
             catch (error) {
                 console.error('Error during login:', error);
@@ -87,7 +99,7 @@ class MysqlUserRepository {
                     throw new Error('No user found with the provided UUID.');
                 }
                 yield (0, deleteImage_1.default)(imgUrlUser[0].img_url);
-                const updatedUser = new user_1.User(updatedRows[0].uuid, updatedRows[0].name, updatedRows[0].email, updatedRows[0].phone_number, updatedRows[0].img_url, "");
+                const updatedUser = new user_1.User(updatedRows[0].uuid, updatedRows[0].name, updatedRows[0].email, updatedRows[0].phone_number, updatedRows[0].img_url, "", updatedRows[0].type_user);
                 return updatedUser;
             }
             catch (error) {
@@ -107,7 +119,7 @@ class MysqlUserRepository {
                 const [updatedRows] = yield (0, connection_1.query)('SELECT * FROM users WHERE uuid = ?', [uuid]);
                 if (updatedRows.length === 0)
                     return null;
-                const updatedUser = new user_1.User(updatedRows[0].uuid, updatedRows[0].name, updatedRows[0].last_name, updatedRows[0].phone_number, updatedRows[0].email, updatedRows[0].password);
+                const updatedUser = new user_1.User(updatedRows[0].uuid, updatedRows[0].name, updatedRows[0].last_name, updatedRows[0].phone_number, updatedRows[0].email, updatedRows[0].password, updatedRows[0].type_user);
                 return updatedUser;
             }
             catch (error) {
