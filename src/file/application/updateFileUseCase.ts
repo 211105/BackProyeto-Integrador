@@ -3,9 +3,6 @@ import { FileRepository } from "../domain/fileRepository";
 import { validate } from "class-validator";
 import { ValidatorUpdate } from "../domain/validations/file";
 
-
-
-
 export class UpdateFileUseCase{
     constructor(readonly fileRepository: FileRepository) {}
 
