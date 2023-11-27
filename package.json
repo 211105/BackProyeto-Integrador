@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
+    "start": "npm install --production && node ./dist/app.js",
     "dev": "nodemon ./src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
