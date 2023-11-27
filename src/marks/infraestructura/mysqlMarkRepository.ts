@@ -101,6 +101,16 @@ export class MysqlMarkRepository implements IMarkRepository {
 
     async userAsist(uuid: string, markUuid: string, userUuid: string, latitude: number, longitude: number): Promise<string | null> {
         try {
+
+
+            const checkAttendanceSql = "SELECT * FROM assists WHERE user_uuid = ? AND pin_uuid = ?";
+            const checkAttendanceParams = [userUuid, markUuid];
+            const [attendanceResult]: any = await query(checkAttendanceSql, checkAttendanceParams);
+
+            if (attendanceResult.length > 0) {
+                return "El usuario ya ha asistido.";
+            }
+    
             const sql = `SELECT ST_X(location) AS latitude, ST_Y(location) AS longitude FROM pines WHERE uuid = ?`;
             const params = [markUuid];
             const [[locationResult]]: any = await query(sql, params);

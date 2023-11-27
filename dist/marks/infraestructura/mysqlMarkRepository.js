@@ -78,6 +78,12 @@ class MysqlMarkRepository {
     userAsist(uuid, markUuid, userUuid, latitude, longitude) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const checkAttendanceSql = "SELECT * FROM assists WHERE user_uuid = ? AND pin_uuid = ?";
+                const checkAttendanceParams = [userUuid, markUuid];
+                const [attendanceResult] = yield (0, connection_1.query)(checkAttendanceSql, checkAttendanceParams);
+                if (attendanceResult.length > 0) {
+                    return "El usuario ya ha asistido.";
+                }
                 const sql = `SELECT ST_X(location) AS latitude, ST_Y(location) AS longitude FROM pines WHERE uuid = ?`;
                 const params = [markUuid];
                 const [[locationResult]] = yield (0, connection_1.query)(sql, params);
