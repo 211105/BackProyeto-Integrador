@@ -10,6 +10,7 @@ import { driverRoutes } from "./DriversManagement/driver/infraestructure/driverR
 import { vehicleRoutes } from "./DriversManagement/vehicle/infraestructure/vehicleRoutes";
 import { ownerRoutes } from "./DriversManagement/owner/infraestructure/ownerRoutes";
 import { driver_vehicleRoutes } from "./DriversManagement/driver-vehicle/infraestructure/driver-vehicleRoutes";
+import { commentRouter } from "./DriversManagement/comment/infraestructure/commentRouter";
 
 
 
@@ -32,6 +33,7 @@ app.use('/api/v1/drivers', driverRoutes);
 app.use('/api/v1/vehicles', vehicleRoutes);
 app.use('/api/v1/owners', ownerRoutes);
 app.use('/api/v1/driver_vehicles', driver_vehicleRoutes);
+app.use('/api/v1/comments', commentRouter);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
