@@ -81,8 +81,8 @@ function evaluateImage(url) {
         console.log(result);
         const detections = result.safeSearchAnnotation;
         if (detections) {
-            const isAdultContent = detections.adult !== 'VERY_UNLIKELY';
-            const isViolentContent = detections.violence !== 'VERY_UNLIKELY';
+            const isAdultContent = detections.adult !== 'POSSIBLE';
+            const isViolentContent = detections.violence !== 'POSSIBLE';
             if (isAdultContent || isViolentContent) {
                 throw new Error('La imagen contiene contenido inapropiado.');
             }
