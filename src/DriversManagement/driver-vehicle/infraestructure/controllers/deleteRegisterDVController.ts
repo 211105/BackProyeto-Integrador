@@ -8,8 +8,7 @@ export class DeleteRegisterDVController {
  
     async delete(req: Request, res: Response) {
         try {
-
-            let { uuid} = req.params;
+            let {uuid} = req.params;
             console.log(uuid);
 
             const deleteRegisterDV = await this.deleteRegisterDVUseCase.delete(uuid);
@@ -30,8 +29,6 @@ export class DeleteRegisterDVController {
                 });
             }
 
-
-            
 
         } catch (error) {
             if (error instanceof Error) {

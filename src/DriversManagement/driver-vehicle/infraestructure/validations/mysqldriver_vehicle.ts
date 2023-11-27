@@ -34,19 +34,15 @@ export async function doesVehicleExist(uuid: string): Promise<boolean> {
     }
 }
 
-export async function statusDriver(vehicle_uuid: string): Promise<boolean> {
+export async function statusDriver(driver_uuid:string): Promise<boolean> {
     try {
         const checkDriverSql = `
             SELECT COUNT(*) as driverCount
             FROM drivers
-            WHERE uuid = (
-                SELECT driver_uuid
-                FROM drivers_vehicles
-                WHERE vehicle_uuid = ?
-            ) AND status_moto_selection = false;
+            WHERE uuid = ? AND status_moto_selection = false;
         `;
 
-        const [driverResults]: any = await query(checkDriverSql, [vehicle_uuid]);
+        const [driverResults]: any = await query(checkDriverSql, [driver_uuid]);
 
         return driverResults[0].driverCount > 0;
     } catch (error) {
@@ -55,7 +51,7 @@ export async function statusDriver(vehicle_uuid: string): Promise<boolean> {
     }
 }
 
-export async function statusVehicle(driver_uuid: string): Promise<boolean> {
+export async function statusVehicle(vehicle_uuid: string): Promise<boolean> {
     try {
         const checkVehicleSql = `
             SELECT COUNT(*) as vehicleCount
@@ -63,7 +59,7 @@ export async function statusVehicle(driver_uuid: string): Promise<boolean> {
             WHERE uuid = ? AND status_driver_selection = false;
         `;
 
-        const [vehicleResults]: any = await query(checkVehicleSql, [driver_uuid]);
+        const [vehicleResults]: any = await query(checkVehicleSql, [vehicle_uuid]);
 
         return vehicleResults[0].vehicleCount > 0;
     } catch (error) {
