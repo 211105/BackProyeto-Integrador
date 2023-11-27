@@ -9,7 +9,9 @@ export const userRoutes = express.Router();
 userRoutes.get('/rutine', (req: Request, res: Response) => {
     res.status(200).send('Rutina ejecutada con éxito');
 })
-
+userRoutes.get('/rutine2', (req: Request, res: Response) => {
+    res.status(200).send('Rutina ejecutada con éxito');
+})
 userRoutes.post('/',resgisterUserController.run.bind(resgisterUserController)) 
 
 userRoutes.post('/login',loginUserController.run.bind(loginUserController))
