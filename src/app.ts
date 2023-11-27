@@ -7,8 +7,6 @@ import * as serviceAccount from "./helpers/integrador-image-firebase-adminsdk-17
 import * as admin from "firebase-admin";
 import fileUpload from 'express-fileupload';
 import { weeklyAmountRoutes } from "./weekly_amount/infraestructure/weekly_amountRouter";
-import { expenseRouter } from "./expense/infraestructure/expenseRoutes";
-
 
 
 admin.initializeApp({
@@ -27,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/weeklyAmount', weeklyAmountRoutes);
-app.use('/api/v1/expenses', expenseRouter);
+
 
 
 
