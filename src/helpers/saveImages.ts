@@ -58,15 +58,14 @@ async function evaluateImage(url: string): Promise<void> {
     const detections = result.safeSearchAnnotation;
 
     if (detections) {
-        const isAdultContent = detections.adult !== 'POSSIBLE';
-        const isViolentContent = detections.violence !== 'POSSIBLE';
-
+        const isAdultContent = detections.adult === 'LIKELY' || detections.adult === 'VERY_LIKELY';
+        const isViolentContent = detections.violence === 'LIKELY' || detections.violence === 'VERY_LIKELY';
+    
         if (isAdultContent || isViolentContent) {
             throw new Error('La imagen contiene contenido inapropiado.');
         }
-    } else {
-        throw new Error('No se pudo obtener la evaluación de la imagen.');
     }
+    
 }
 
 
