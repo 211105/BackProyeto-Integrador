@@ -14,5 +14,5 @@ exports.markRouter.post('/', dependencies_1.createMarkController.run.bind(depend
 exports.markRouter.get('/', dependencies_1.listMarkController.run.bind(dependencies_1.listMarkController));
 exports.markRouter.post('/assist', dependencies_1.userAssistController.run.bind(dependencies_1.userAssistController));
 exports.markRouter.get('/list/activity', dependencies_1.listActivitysController.run.bind(dependencies_1.listActivitysController));
-exports.markRouter.get('/activity/', dependencies_1.adActivityController.run.bind(dependencies_1.adActivityController));
+exports.markRouter.post('/activity/', dependencies_1.adActivityController.run.bind(dependencies_1.adActivityController));
 //# sourceMappingURL=markRoutes.js.map

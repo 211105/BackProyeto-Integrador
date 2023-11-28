@@ -13,7 +13,7 @@ markRouter.post('/',createMarkController.run.bind(createMarkController))
 markRouter.get('/',listMarkController.run.bind(listMarkController))
 markRouter.post('/assist',userAssistController.run.bind(userAssistController))
 markRouter.get('/list/activity',listActivitysController.run.bind(listActivitysController))
-markRouter.get('/activity/',adActivityController.run.bind(adActivityController))
+markRouter.post('/activity/',adActivityController.run.bind(adActivityController))
 
 
 
