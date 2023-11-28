@@ -15,7 +15,6 @@ const mark_1 = require("../domain/mark");
 class MysqlMarkRepository {
     createMark(uuid, latitude, longitude, description, endDate, urlImage, userUuid, activityUuid) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("se ejecuta primero repository en infraestructura");
             try {
                 let sql = "INSERT INTO pines(uuid, location, description, create_date, end_date, url_image, user_uuid, activity_uuid) VALUES (?, POINT(?, ?), ?, UTC_TIMESTAMP(), ADDDATE(UTC_TIMESTAMP(), INTERVAL ? HOUR_MINUTE), ?, ?, ?)";
                 const params = [uuid, latitude, longitude, description, endDate, urlImage, userUuid, activityUuid];

@@ -29,6 +29,11 @@ export class UserAssistController{
                     status: "ok",
                     message: assistUser
                 });
+            } else if (assistUser == "El usuario ya ha asistido.") {
+                return res.status(400).send({
+                    status: "ok",
+                    message: assistUser
+                });
             }
         } catch (error) {
             if (error instanceof Error) {

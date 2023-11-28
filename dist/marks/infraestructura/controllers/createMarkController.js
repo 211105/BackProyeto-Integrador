@@ -18,7 +18,6 @@ class CreateMarkController {
     run(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("se ejecuta primero use case");
                 let { latitude, longitude, description, endDate, userUuid, activityUuid, } = req.body;
                 if (!req.files || !req.files.img_file) {
                     return res.status(400).send({
@@ -28,13 +27,9 @@ class CreateMarkController {
                 }
                 const imgFile = req.files.img_file;
                 try {
-                    console.log("holisss");
-                    console.log("v1", process.env.GOOGLE_CLIENT_EMAIL);
-                    console.log("v2", process.env.GOOGLE_PRIVATE_KEY);
                     yield (0, saveImages_1.evaluateImage)(imgFile.data);
                 }
                 catch (error) {
-                    console.log(error);
                     return res.status(400).send({
                         status: "error",
                         message: "La imagen no cumple con las políticas de contenido y se considera inapropiada."

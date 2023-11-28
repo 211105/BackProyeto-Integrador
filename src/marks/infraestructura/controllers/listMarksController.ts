@@ -10,8 +10,6 @@ export class ListMarkController{
                 userLatitude,
                 userLongitude,      
             } = req.query
-            console.log(userLatitude)
-            console.log(userLongitude)
             //verificar si llegaron con algo 
             let createMark = await this.listMarkUseCase.run(Number(userLatitude), Number(userLongitude))
             return res.status(200).send({

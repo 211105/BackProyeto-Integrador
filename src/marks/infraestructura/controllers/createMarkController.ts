@@ -8,7 +8,6 @@ export class CreateMarkController{
 
     async  run(req: Request, res: Response) {
         try {
-        console.log("se ejecuta primero use case")
            
             let {
                 latitude,
@@ -30,12 +29,9 @@ export class CreateMarkController{
             const imgFile = req.files.img_file as UploadedFile;
 
             try {
-                console.log("holisss")
-                console.log("v1",process.env.GOOGLE_CLIENT_EMAIL)
-                console.log( "v2",process.env.GOOGLE_PRIVATE_KEY )
+            
                 await evaluateImage(imgFile.data);
             } catch (error) {
-                console.log(error)
                 // Si la imagen es inapropiada, se devuelve un error HTTP 400
                 return res.status(400).send({
                     status: "error",

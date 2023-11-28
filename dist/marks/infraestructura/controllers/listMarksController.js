@@ -18,8 +18,6 @@ class ListMarkController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { userLatitude, userLongitude, } = req.query;
-                console.log(userLatitude);
-                console.log(userLongitude);
                 let createMark = yield this.listMarkUseCase.run(Number(userLatitude), Number(userLongitude));
                 return res.status(200).send({
                     status: "ok",
