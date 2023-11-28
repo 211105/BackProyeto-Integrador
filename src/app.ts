@@ -6,11 +6,11 @@ import { userRoutes } from "./user/infraestructure/userRouter";
 import * as serviceAccount from "./helpers/integrador-image-firebase-adminsdk-17aek-114f65daa8.json";
 import * as admin from "firebase-admin";
 import fileUpload from 'express-fileupload';
-import { driverRoutes } from "./DriversManagement/driver/infraestructure/driverRoutes";
-import { vehicleRoutes } from "./DriversManagement/vehicle/infraestructure/vehicleRoutes";
-import { ownerRoutes } from "./DriversManagement/owner/infraestructure/ownerRoutes";
-import { driver_vehicleRoutes } from "./DriversManagement/driver-vehicle/infraestructure/driver-vehicleRoutes";
-import { commentRouter } from "./DriversManagement/comment/infraestructure/commentRouter";
+import { driverRoutes } from "./driver/infraestructure/driverRoutes";
+import { vehicleRoutes } from "./vehicle/infraestructure/vehicleRoutes";
+import { ownerRoutes } from "./owner/infraestructure/ownerRoutes";
+import { driver_vehicleRoutes } from "./driver-vehicle/infraestructure/driver-vehicleRoutes";
+import { commentRouter } from "./comment/infraestructure/commentRouter";
 
 
 

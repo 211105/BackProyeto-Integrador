@@ -1,5 +1,5 @@
 import { validate } from "class-validator";
-import { ResponseLogin, User } from "../domain/user";
+import { ResponseLogin, User, ResponseLoginAllUsers } from "../domain/user";
 import { IUsuarioRepository } from "../domain/userRepository";
 import { ValidateLogin } from "../domain/validations/user";
 
@@ -10,7 +10,7 @@ export class LoginUserUseCase {
     async run(
         email:string,
         password:string
-    ): Promise<ResponseLogin |string | null> {
+    ): Promise<ResponseLoginAllUsers |string | null> {
         
          //validator-class
         let post = new ValidateLogin(email, password)

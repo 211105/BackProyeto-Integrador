@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
+    "start": "npm install --production && node ./dist/app.js",
     "dev": "nodemon ./src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "18.x"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +31,7 @@
     "express-fileupload": "^1.4.1",
     "firebase-admin": "^11.10.1",
     "jsonwebtoken": "^9.0.2",
+    "moment-timezone": "^0.5.43",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.6.1",
     "signale": "^1.4.0",
@@ -38,7 +44,11 @@
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.3",
     "@types/multer": "^1.4.7",
-    "@types/node": "^20.9.0",
-    "@types/signale": "^1.4.4"
+    "@types/node": "^20.6.5",
+    "@types/signale": "^1.4.4",
+    "@firebase/app": "^0.9.19",
+    "@firebase/storage": "^0.11.2",
+    "@types/express-fileupload": "^1.4.2",
+    "@types/uuid": "^9.0.4"
   }
 }

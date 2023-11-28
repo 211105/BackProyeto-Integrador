@@ -38,6 +38,7 @@ export class ResgisterUserController {
                 phone_number,
                 img_url,
                 password,
+                'user'
             )
             if (registerUser instanceof Error) {
                 return res.status(409).send({
@@ -52,7 +53,8 @@ export class ResgisterUserController {
                         id: registerUser.uuid,
                         name: registerUser.name,
                         email: registerUser.email,
-                        phone_number: registerUser.phone_number
+                        phone_number: registerUser.phone_number,
+                        type_user: registerUser.type_user
                     }
                 })
             }
