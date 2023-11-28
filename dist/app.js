@@ -30,13 +30,14 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
 const signale_1 = require("signale");
-const userRouter_1 = require("./user/infraestructure/userRouter");
-const serviceAccount = __importStar(require("./helpers/integrador-9.json"));
+const serviceAccount = __importStar(require("./helpers/integrador-image-firebase-adminsdk-17aek-114f65daa8.json"));
 const admin = __importStar(require("firebase-admin"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
+const userRouter_1 = require("./user/infraestructure/userRouter");
+const ownerRoutes_1 = require("./owner/infraestructure/ownerRoutes");
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    storageBucket: "integrador-ff8cd.appspot.com/"
+    storageBucket: "integrador-image.appspot.com"
 });
 const app = (0, express_1.default)();
 const signale = new signale_1.Signale();
@@ -45,6 +46,7 @@ app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use('/api/v1/users', userRouter_1.userRoutes);
+app.use('/api/v1/owners', ownerRoutes_1.ownerRoutes);
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
     console.log(`Corriendo en el puerto ${port}`);

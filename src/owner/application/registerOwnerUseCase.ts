@@ -8,6 +8,7 @@ import { validate } from "class-validator";
 export class RegisterOwnerUseCase{
     constructor( readonly ownerRepository: OwnerRepository){}
 
+    
     async post( 
         name:string,
         surname:string,
