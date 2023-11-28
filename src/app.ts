@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import { Signale } from 'signale';
-import * as serviceAccount from "./helpers/integrador-9.json";
 import * as admin from "firebase-admin";
 import fileUpload from 'express-fileupload';
 import { activitRoutes } from "./activity/infraestructure/activityRouter";

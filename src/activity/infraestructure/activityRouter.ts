@@ -1,8 +1,11 @@
 import express from "express";
 import { addActivityController, deleteActivityController, listActivitysController, updateActivityControllr } from "./dependencies";
-
+import { Request, Response } from "express";
 export const activitRoutes  = express.Router();
 
+activitRoutes.get('/rutine/', (req: Request, res: Response) => {
+    res.status(200).send('Rutina ejecutada con éxito');
+})
 
 activitRoutes.post("/", addActivityController.run.bind(addActivityController))
 

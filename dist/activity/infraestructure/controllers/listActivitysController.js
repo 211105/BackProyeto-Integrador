@@ -20,9 +20,7 @@ class ListActivitysController {
                 let listActivitys = yield this.listActivitysUseCase.run();
                 return res.status(200).send({
                     status: "succes",
-                    data: {
-                        Activitys: listActivitys
-                    }
+                    message: listActivitys
                 });
             }
             catch (error) {

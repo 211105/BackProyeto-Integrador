@@ -1,1 +1,1 @@
-{"version":3,"file":"activity.js","sourceRoot":"","sources":["../../../src/activity/domain/activity.ts"],"names":[],"mappings":";;;AAAA,MAAa,QAAQ;IACjB,YACW,IAAY,EACZ,IAAY,EACZ,MAAc;QAFd,SAAI,GAAJ,IAAI,CAAQ;QACZ,SAAI,GAAJ,IAAI,CAAQ;QACZ,WAAM,GAAN,MAAM,CAAQ;IACvB,CAAC;CACN;AAND,4BAMC"}
+{"version":3,"file":"activity.js","sourceRoot":"","sources":["../../../src/activity/domain/activity.ts"],"names":[],"mappings":";;;AAAA,MAAa,QAAQ;IACjB,YACW,IAAY,EACZ,IAAY,EACZ,SAAiB;QAFjB,SAAI,GAAJ,IAAI,CAAQ;QACZ,SAAI,GAAJ,IAAI,CAAQ;QACZ,cAAS,GAAT,SAAS,CAAQ;IAC1B,CAAC;CACN;AAND,4BAMC"}
