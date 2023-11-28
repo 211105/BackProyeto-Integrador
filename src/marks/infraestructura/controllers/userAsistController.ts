@@ -26,12 +26,12 @@ export class UserAssistController{
                 });
             } else if (assistUser == "Usuario fuera de rango.") {
                 return res.status(400).send({
-                    status: "ok",
+                    status: "error-fuera-de-rango",
                     message: assistUser
                 });
             } else if (assistUser == "El usuario ya ha asistido.") {
                 return res.status(400).send({
-                    status: "ok",
+                    status: "error-ya-asistio",
                     message: assistUser
                 });
             }
