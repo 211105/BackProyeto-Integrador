@@ -31,6 +31,8 @@ export class CreateMarkController{
 
             try {
                 console.log("holisss")
+                console.log("v1",process.env.GOOGLE_CLIENT_EMAIL)
+                console.log( "v2",process.env.GOOGLE_PRIVATE_KEY )
                 await evaluateImage(imgFile.data);
             } catch (error) {
                 console.log(error)

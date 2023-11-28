@@ -38,9 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.evaluateImage = exports.uploadToFirebase = void 0;
 const admin = __importStar(require("firebase-admin"));
 const vision_1 = __importDefault(require("@google-cloud/vision"));
-const path_1 = __importDefault(require("path"));
 const deleteImage_1 = __importDefault(require("./deleteImage"));
-const keyFilename = path_1.default.join(__dirname, 'vision.json');
 const client = new vision_1.default.ImageAnnotatorClient({
     credentials: {
         client_email: process.env.GOOGLE_CLIENT_EMAIL || 'default_project_id',

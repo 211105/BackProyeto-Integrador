@@ -29,6 +29,8 @@ class CreateMarkController {
                 const imgFile = req.files.img_file;
                 try {
                     console.log("holisss");
+                    console.log("v1", process.env.GOOGLE_CLIENT_EMAIL);
+                    console.log("v2", process.env.GOOGLE_PRIVATE_KEY);
                     yield (0, saveImages_1.evaluateImage)(imgFile.data);
                 }
                 catch (error) {

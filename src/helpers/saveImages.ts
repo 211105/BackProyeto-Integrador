@@ -1,11 +1,8 @@
 import { UploadedFile } from 'express-fileupload';
 import * as admin from 'firebase-admin';
 import vision from '@google-cloud/vision';
-
-import path from 'path';
 import deleteFromFirebase from './deleteImage';
-const keyFilename = path.join(__dirname, 'vision.json');
-// const client = new vision.ImageAnnotatorClient({ keyFilename });
+
 
 
 const client = new vision.ImageAnnotatorClient({
