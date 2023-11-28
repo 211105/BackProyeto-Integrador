@@ -1,7 +1,7 @@
 import { CreateMarkUseCase } from "../../application/createMarkUseCase";
 import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
-import uploadToFirebase from "../../../helpers/saveImages";
+import { evaluateImage, uploadToFirebase } from "../../../helpers/saveImages";
 
 export class CreateMarkController{ 
     constructor(readonly createMarkUseCase: CreateMarkUseCase){}
@@ -19,24 +19,33 @@ export class CreateMarkController{
                 activityUuid,
             } = req.body
 
+                
             if (!req.files || !req.files.img_file) {
                 return res.status(400).send({
                     status: "error",
                     message: "No image file uploaded."
                 });
             }   
-            // Castear el archivo a UploadedFile (express-fileupload)
 
-            console.log(req.files.img_file)
             const imgFile = req.files.img_file as UploadedFile;
-            console.log(imgFile)
-            const urlImage = await uploadToFirebase(imgFile)
-            console.log("aqui ando pa")
-            console.log(urlImage)
-            if (urlImage == null) {
+
+            try {
+                console.log("holisss")
+                await evaluateImage(imgFile.data);
+            } catch (error) {
+                console.log(error)
+                // Si la imagen es inapropiada, se devuelve un error HTTP 400
                 return res.status(400).send({
                     status: "error",
-                    message: "La imagen no cumple con las políticas de privacidad y no está permitida."
+                    message: "La imagen no cumple con las políticas de contenido y se considera inapropiada."
+                });
+            }
+
+            const urlImage = await uploadToFirebase(imgFile)
+            if (urlImage === null) {
+                return res.status(400).send({
+                    status: "error",
+                    message: "Failed to upload image."
                 });
             }
 

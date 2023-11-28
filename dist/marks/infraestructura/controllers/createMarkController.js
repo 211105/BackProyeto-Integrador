@@ -8,12 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateMarkController = void 0;
-const saveImages_1 = __importDefault(require("../../../helpers/saveImages"));
+const saveImages_1 = require("../../../helpers/saveImages");
 class CreateMarkController {
     constructor(createMarkUseCase) {
         this.createMarkUseCase = createMarkUseCase;
@@ -29,16 +26,23 @@ class CreateMarkController {
                         message: "No image file uploaded."
                     });
                 }
-                console.log(req.files.img_file);
                 const imgFile = req.files.img_file;
-                console.log(imgFile);
-                const urlImage = yield (0, saveImages_1.default)(imgFile);
-                console.log("aqui ando pa");
-                console.log(urlImage);
-                if (urlImage == null) {
+                try {
+                    console.log("holisss");
+                    yield (0, saveImages_1.evaluateImage)(imgFile.data);
+                }
+                catch (error) {
+                    console.log(error);
                     return res.status(400).send({
                         status: "error",
-                        message: "La imagen no cumple con las políticas de privacidad y no está permitida."
+                        message: "La imagen no cumple con las políticas de contenido y se considera inapropiada."
+                    });
+                }
+                const urlImage = yield (0, saveImages_1.uploadToFirebase)(imgFile);
+                if (urlImage === null) {
+                    return res.status(400).send({
+                        status: "error",
+                        message: "Failed to upload image."
                     });
                 }
                 let createMark = yield this.createMarkUseCase.run(latitude, longitude, description, urlImage, endDate, userUuid, activityUuid);

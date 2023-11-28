@@ -11,9 +11,9 @@ const keyFilename = path.join(__dirname, 'vision.json');
 const client = new vision.ImageAnnotatorClient({
     credentials: {
       client_email: process.env.GOOGLE_CLIENT_EMAIL || 'default_project_id',
-      private_key: process.env.GOOGLE_PRIVATE_KEY || ' default_client_email'
+      private_key: process.env.GOOGLE_PRIVATE_KEY ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n') : 'default_private_key'
     }
-  });
+});
 
 /**
  * Sube un archivo a Firebase Storage y devuelve su URL pública.
@@ -21,7 +21,7 @@ const client = new vision.ImageAnnotatorClient({
  * @param {UploadedFile} file El archivo a subir.
  * @returns {Promise<string>} La URL pública del archivo subido.
  */
-async function uploadToFirebase(file: UploadedFile): Promise<string | null> {
+export async function uploadToFirebase(file: UploadedFile): Promise<string | null> {
     const bucket = admin.storage().bucket();
 
     return new Promise((resolve, reject) => {
@@ -40,7 +40,6 @@ async function uploadToFirebase(file: UploadedFile): Promise<string | null> {
         blobStream.on('finish', async () => {
             const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(blob.name)}?alt=media`;
             try {
-                await evaluateImage(publicUrl);
                 resolve(publicUrl);
             } catch (error) {
                 await deleteFromFirebase(publicUrl);
@@ -52,10 +51,12 @@ async function uploadToFirebase(file: UploadedFile): Promise<string | null> {
     });
 }
 
-async function evaluateImage(url: string): Promise<void> {
-    const [result] = await client.safeSearchDetection(url);
-    console.log(result)
+export async function evaluateImage(imageData: Buffer): Promise<void> {
+    const [result] = await client.safeSearchDetection({ image: { content: imageData } });
+    console.log(result);
     const detections = result.safeSearchAnnotation;
+    console.log(detections?.adult);
+    console.log(detections?.violence);
 
     if (detections) {
         const isAdultContent = detections.adult === 'LIKELY' || detections.adult === 'VERY_LIKELY';
@@ -65,9 +66,7 @@ async function evaluateImage(url: string): Promise<void> {
             throw new Error('La imagen contiene contenido inapropiado.');
         }
     }
-    
 }
 
 
 
-export default uploadToFirebase;

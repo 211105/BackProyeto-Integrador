@@ -35,6 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.evaluateImage = exports.uploadToFirebase = void 0;
 const admin = __importStar(require("firebase-admin"));
 const vision_1 = __importDefault(require("@google-cloud/vision"));
 const path_1 = __importDefault(require("path"));
@@ -43,7 +44,7 @@ const keyFilename = path_1.default.join(__dirname, 'vision.json');
 const client = new vision_1.default.ImageAnnotatorClient({
     credentials: {
         client_email: process.env.GOOGLE_CLIENT_EMAIL || 'default_project_id',
-        private_key: process.env.GOOGLE_PRIVATE_KEY || ' default_client_email'
+        private_key: process.env.GOOGLE_PRIVATE_KEY ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n') : 'default_private_key'
     }
 });
 function uploadToFirebase(file) {
@@ -63,7 +64,6 @@ function uploadToFirebase(file) {
             blobStream.on('finish', () => __awaiter(this, void 0, void 0, function* () {
                 const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(blob.name)}?alt=media`;
                 try {
-                    yield evaluateImage(publicUrl);
                     resolve(publicUrl);
                 }
                 catch (error) {
@@ -75,11 +75,14 @@ function uploadToFirebase(file) {
         });
     });
 }
-function evaluateImage(url) {
+exports.uploadToFirebase = uploadToFirebase;
+function evaluateImage(imageData) {
     return __awaiter(this, void 0, void 0, function* () {
-        const [result] = yield client.safeSearchDetection(url);
+        const [result] = yield client.safeSearchDetection({ image: { content: imageData } });
         console.log(result);
         const detections = result.safeSearchAnnotation;
+        console.log(detections === null || detections === void 0 ? void 0 : detections.adult);
+        console.log(detections === null || detections === void 0 ? void 0 : detections.violence);
         if (detections) {
             const isAdultContent = detections.adult === 'LIKELY' || detections.adult === 'VERY_LIKELY';
             const isViolentContent = detections.violence === 'LIKELY' || detections.violence === 'VERY_LIKELY';
@@ -89,5 +92,5 @@ function evaluateImage(url) {
         }
     });
 }
-exports.default = uploadToFirebase;
+exports.evaluateImage = evaluateImage;
 //# sourceMappingURL=saveImages.js.map
