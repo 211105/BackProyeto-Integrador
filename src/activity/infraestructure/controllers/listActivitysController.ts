@@ -14,9 +14,7 @@ export class ListActivitysController {
           
                 return res.status(200).send({
                     status: "succes",
-                    data: {
-                        Activitys: listActivitys
-                    }
+                        message: listActivitys
                 })
         } catch (error) {
             if (error instanceof Error) {
