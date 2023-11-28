@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MarkDescription = exports.Mark = void 0;
+exports.Activity = exports.MarkDescription = exports.Mark = void 0;
 class Mark {
     constructor(uuid, latitude, longitude, description, createDate, endDate, urlImage, userUuid, activityUuid) {
         this.uuid = uuid;
@@ -32,4 +32,12 @@ class MarkDescription {
     }
 }
 exports.MarkDescription = MarkDescription;
+class Activity {
+    constructor(uuid, name, url_image) {
+        this.uuid = uuid;
+        this.name = name;
+        this.url_image = url_image;
+    }
+}
+exports.Activity = Activity;
 //# sourceMappingURL=mark.js.map

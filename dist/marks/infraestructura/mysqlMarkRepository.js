@@ -111,6 +111,33 @@ class MysqlMarkRepository {
             }
         });
     }
+    listActyvitiys() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const sql = "SELECT uuid, name, url_image FROM activitys";
+                const [results] = yield (0, connection_1.query)(sql);
+                const activities = results.map((row) => new mark_1.Activity(row.uuid, row.name, row.url_image));
+                return activities;
+            }
+            catch (error) {
+                return null;
+            }
+        });
+    }
+    addActivity(uuid, name, imgUrl) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let sql = "INSERT INTO activitys(uuid, name, url_image) VALUES (?,?,?)";
+                const params = [uuid, name, imgUrl];
+                const [rsult] = yield (0, connection_1.query)(sql, params);
+                return new mark_1.Activity(uuid, name, imgUrl);
+            }
+            catch (error) {
+                console.error("Error adding activity:", error);
+                return null;
+            }
+        });
+    }
 }
 exports.MysqlMarkRepository = MysqlMarkRepository;
 //# sourceMappingURL=mysqlMarkRepository.js.map

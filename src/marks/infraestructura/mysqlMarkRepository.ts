@@ -1,5 +1,5 @@
 import { query } from "../../database/connection";
-import { MarkDescription } from "../domain/mark";
+import { Activity, MarkDescription } from "../domain/mark";
 import { IMarkRepository } from "../domain/markRepository";
 
 
@@ -140,7 +140,34 @@ export class MysqlMarkRepository implements IMarkRepository {
             return null;
         }
     }
+
+    async listActyvitiys(): Promise<Activity[] | null> {
+        try {
+            // Completa la sentencia SQL para seleccionar los datos necesarios
+            const sql = "SELECT uuid, name, url_image FROM activitys"; // Asegúrate de que los nombres de columna coincidan con tu base de datos
+            const [results]: any = await query(sql);
     
+            // Convertir cada fila del resultado en una instancia de Activity
+            const activities = results.map((row: any) => new Activity(row.uuid, row.name, row.url_image));
+    
+            return activities;
+        } catch (error) {
+            // Manejar el error, tal vez registrarlo o devolver un valor diferente si es necesario
+            return null;
+        }
+    }
+    
+    async addActivity(uuid: string, name: string, imgUrl: string): Promise<string | Error | Activity | null> {
+        try {
+            let sql = "INSERT INTO activitys(uuid, name, url_image) VALUES (?,?,?)";
+            const params: any[] = [uuid, name, imgUrl];
+            const [rsult]: any = await  query(sql,params);
+            return new Activity(uuid,name,imgUrl);      
+        } catch (error) {
+            console.error("Error adding activity:", error);
+            return null;
+        }
+        }
     
 
 }

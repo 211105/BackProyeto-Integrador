@@ -1,5 +1,5 @@
 import express from "express";
-import { createMarkController, listMarkController, userAssistController } from "./dependencies";
+import { adActivityController, createMarkController, listActivitysController, listMarkController, userAssistController } from "./dependencies";
 import { validateToken } from "../../helpers/veryfyToken";
 import { Request, Response } from "express";
 
@@ -12,4 +12,10 @@ markRouter.get('/rutine', (req: Request, res: Response) => {
 markRouter.post('/',createMarkController.run.bind(createMarkController))
 markRouter.get('/',listMarkController.run.bind(listMarkController))
 markRouter.post('/assist',userAssistController.run.bind(userAssistController))
+markRouter.get('/list/activity',listActivitysController.run.bind(listActivitysController))
+markRouter.get('/activity/',adActivityController.run.bind(adActivityController))
+
+
+
+
 

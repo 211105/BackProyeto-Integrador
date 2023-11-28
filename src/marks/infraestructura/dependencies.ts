@@ -1,7 +1,11 @@
+import { AddActivityUseCase } from "../application/addActivityUseCase"
 import { CreateMarkUseCase } from "../application/createMarkUseCase"
+import { ListActivitysUseCase } from "../application/listActyvitiysUseCase"
 import { ListMarkUseCase } from "../application/listMarksUseCase"
 import { UserAsistUseCase } from "../application/userAsistUseCase"
+import { AddActivityController } from "./controllers/addActivityController"
 import { CreateMarkController } from "./controllers/createMarkController"
+import { ListActivitysController } from "./controllers/listActivitysController"
 import { ListMarkController } from "./controllers/listMarksController"
 import { UserAssistController } from "./controllers/userAsistController"
 import { MysqlMarkRepository } from "./mysqlMarkRepository"
@@ -19,4 +23,8 @@ export const listMarkController= new ListMarkController(listMarkUseCase)
 export const userAssistUseCase = new UserAsistUseCase(mysqlMarkRepository);
 export const userAssistController = new UserAssistController(userAssistUseCase)
 
+export const listActivitysUseCase = new ListActivitysUseCase(mysqlMarkRepository)
+export const listActivitysController = new ListActivitysController(listActivitysUseCase)
 
+export const addActivityUseCase = new AddActivityUseCase(mysqlMarkRepository)
+export const adActivityController = new AddActivityController(addActivityUseCase)
