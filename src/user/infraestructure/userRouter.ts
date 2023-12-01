@@ -10,9 +10,9 @@ userRoutes.get('/rutine', (req: Request, res: Response) => {
     res.status(200).send('Rutina ejecutada con éxito');
 })
 
-userRoutes.post('/register',resgisterUserController.run.bind(resgisterUserController)) 
+userRoutes.post('/auth/register',resgisterUserController.run.bind(resgisterUserController)) 
 
-userRoutes.post('/login',loginUserController.run.bind(loginUserController))
+userRoutes.post('/auth/login',loginUserController.run.bind(loginUserController))
 
 userRoutes.put('/id',validateToken,updateUserByIdController.run.bind(updateUserByIdController))
 

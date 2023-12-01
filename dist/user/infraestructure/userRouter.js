@@ -11,8 +11,8 @@ exports.userRoutes = express_1.default.Router();
 exports.userRoutes.get('/rutine', (req, res) => {
     res.status(200).send('Rutina ejecutada con éxito');
 });
-exports.userRoutes.post('/register', dependencies_1.resgisterUserController.run.bind(dependencies_1.resgisterUserController));
-exports.userRoutes.post('/login', dependencies_1.loginUserController.run.bind(dependencies_1.loginUserController));
+exports.userRoutes.post('/auth/register', dependencies_1.resgisterUserController.run.bind(dependencies_1.resgisterUserController));
+exports.userRoutes.post('/auth/login', dependencies_1.loginUserController.run.bind(dependencies_1.loginUserController));
 exports.userRoutes.put('/id', veryfyToken_1.validateToken, dependencies_1.updateUserByIdController.run.bind(dependencies_1.updateUserByIdController));
 exports.userRoutes.put('/restar_password', veryfyToken_1.validateToken, dependencies_1.updatePasswordController.run.bind(dependencies_1.updatePasswordController));
 //# sourceMappingURL=userRouter.js.map
