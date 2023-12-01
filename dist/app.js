@@ -33,7 +33,7 @@ const signale_1 = require("signale");
 const serviceAccount = __importStar(require("./helpers/integrador-9.json"));
 const admin = __importStar(require("firebase-admin"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
-const markRoutes_1 = require("./marks/infraestructura/markRoutes");
+const http_proxy_middleware_1 = require("http-proxy-middleware");
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     storageBucket: "integrador-ff8cd.appspot.com/"
@@ -44,7 +44,62 @@ app.use((0, express_fileupload_1.default)());
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use('/api/v1/pins', markRoutes_1.markRouter);
+const proxyOptionsUser = {
+    target: 'https://user.cristilex.com',
+    changeOrigin: true,
+    pathRewrite: {
+        '^/api/v1/users': '',
+    },
+};
+const proxyOptionsAuth = {
+    target: 'https://user.cristilex.com',
+    changeOrigin: true,
+    pathRewrite: {
+        '^/api/v1/users/auth': '',
+    },
+};
+const proxyOptionsMark = {
+    target: 'https://mark.cristilex.com',
+    changeOrigin: true,
+    pathRewrite: {
+        '^/api/v1/pins': '',
+    },
+};
+const proxyOptionsNote = {
+    target: 'https://note.cristilex.com',
+    changeOrigin: true,
+    pathRewrite: {
+        '^/api/v1/notes': '',
+    },
+};
+const proxyOptionsFile = {
+    target: 'https://file.cristilex.com',
+    changeOrigin: true,
+    pathRewrite: {
+        '^/api/v1/files': '',
+    },
+};
+const proxyOptionsWeekyAmount = {
+    target: 'https://mount.cristilex.com',
+    changeOrigin: true,
+    pathRewrite: {
+        '^/api/v1/weeklyAmoun': '',
+    },
+};
+const proxyOptionsExpense = {
+    target: 'https://expense.cristilex.com',
+    changeOrigin: true,
+    pathRewrite: {
+        '^/api/v1/expenses': '',
+    },
+};
+app.use('/api/v1/users', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsUser));
+app.use('/api/v1/users/auth', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsAuth));
+app.use('/api/v1/pins/', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsMark));
+app.use('/api/v1/notes', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsNote));
+app.use('/api/v1/files', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsFile));
+app.use('/api/v1/weeklyAmoun', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsWeekyAmount));
+app.use('/api/v1/expenses', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsExpense));
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
     console.log(`Corriendo en el puerto ${port}`);
