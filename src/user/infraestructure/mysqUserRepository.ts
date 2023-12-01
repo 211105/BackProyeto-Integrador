@@ -13,12 +13,18 @@ export class MysqlUserRepository implements IUsuarioRepository {
       
         try {
             // const hashPassword = await encrypt(password)
-            
+            console.log("se va a registrar")
             await isEmailRegistered(email)
-           
+            console.log("se va a registrar, ya verifico el correo")
+            
             let sql = "INSERT INTO users(uuid, name, email, phone_number , password, img_url, type_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            console.log("se va a registrar, ya insero los datos")
+
             const params: any[] = [uuid, name, email, phone_number, password, img_url,type_user];
+
             const [result]: any = await query(sql, params);
+            console.log("se va a registrar, aqui inseto los datos")
+
             return new User(uuid, name, email, phone_number, img_url , password,type_user);
         } catch (error) {
             console.error("Error adding review:", error);

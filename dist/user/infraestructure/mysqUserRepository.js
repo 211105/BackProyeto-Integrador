@@ -23,10 +23,14 @@ class MysqlUserRepository {
     registerUser(uuid, name, email, phone_number, img_url, password, type_user) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log("se va a registrar");
                 yield (0, usermysql_1.isEmailRegistered)(email);
+                console.log("se va a registrar, ya verifico el correo");
                 let sql = "INSERT INTO users(uuid, name, email, phone_number , password, img_url, type_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                console.log("se va a registrar, ya insero los datos");
                 const params = [uuid, name, email, phone_number, password, img_url, type_user];
                 const [result] = yield (0, connection_1.query)(sql, params);
+                console.log("se va a registrar, aqui inseto los datos");
                 return new user_1.User(uuid, name, email, phone_number, img_url, password, type_user);
             }
             catch (error) {
