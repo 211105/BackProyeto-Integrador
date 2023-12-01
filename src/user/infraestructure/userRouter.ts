@@ -6,11 +6,11 @@ import { Request, Response } from "express";
 
 
 export const userRoutes = express.Router();
-userRoutes.get('/rutine/', (req: Request, res: Response) => {
+userRoutes.get('/rutine', (req: Request, res: Response) => {
     res.status(200).send('Rutina ejecutada con éxito');
 })
 
-userRoutes.post('register',resgisterUserController.run.bind(resgisterUserController)) 
+userRoutes.post('/register',resgisterUserController.run.bind(resgisterUserController)) 
 
 userRoutes.post('/login',loginUserController.run.bind(loginUserController))
 
