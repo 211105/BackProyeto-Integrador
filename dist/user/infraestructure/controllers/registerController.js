@@ -33,7 +33,7 @@ class ResgisterUserController {
                 const imgFile = req.files.img_file;
                 const img_url = yield (0, saveImages_1.default)(imgFile);
                 console.log(img_url);
-                let registerUser = yield this.registerUserUseCase.run(name, email, phone_number, img_url, password);
+                let registerUser = yield this.registerUserUseCase.run(name, email, phone_number, img_url, password, 'user');
                 if (registerUser instanceof Error) {
                     return res.status(409).send({
                         status: "error",
@@ -47,7 +47,8 @@ class ResgisterUserController {
                             id: registerUser.uuid,
                             name: registerUser.name,
                             email: registerUser.email,
-                            phone_number: registerUser.phone_number
+                            phone_number: registerUser.phone_number,
+                            type_user: registerUser.type_user
                         }
                     });
                 }

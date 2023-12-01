@@ -18,7 +18,7 @@ class RegisterUserUseCase {
     constructor(usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
-    run(name, email, phone_number, img_url, password) {
+    run(name, email, phone_number, img_url, password, type_user) {
         return __awaiter(this, void 0, void 0, function* () {
             const miuuid = (0, uuid_1.v4)();
             let data = new user_1.ValidatorRegisterUser(miuuid, name, email, phone_number, img_url, password);
@@ -28,7 +28,7 @@ class RegisterUserUseCase {
             }
             const hashPassword = yield (0, ashs_1.encrypt)(password);
             try {
-                const createUser = yield this.usuarioRepository.registerUser(miuuid, name, email, phone_number, img_url, hashPassword);
+                const createUser = yield this.usuarioRepository.registerUser(miuuid, name, email, phone_number, img_url, hashPassword, type_user);
                 return createUser;
             }
             catch (error) {

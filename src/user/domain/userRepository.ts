@@ -1,4 +1,4 @@
-import { ResponseLogin, User } from "./user";
+import { ResponseLogin, User,ResponseLoginAllUsers } from "./user";
 
 export interface IUsuarioRepository {
     registerUser( 
@@ -8,12 +8,13 @@ export interface IUsuarioRepository {
         phone_number: string,
         img_url: string,
         password: string,
+        type_username: string
     ): Promise<User | null | string | Error> ;
 
     loginUser(
         email:string,
         password:string
-    ):Promise<ResponseLogin | string | null>  //listo
+    ):Promise<ResponseLoginAllUsers | string | null>  //listo
 
     updateUserById( //listo 
         uuid: string,
