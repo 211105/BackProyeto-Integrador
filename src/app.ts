@@ -6,6 +6,7 @@
   import * as admin from "firebase-admin";
   import fileUpload from 'express-fileupload';
   import { createProxyMiddleware } from "http-proxy-middleware";
+  import { Request, Response } from "express";
 
 
   admin.initializeApp({
@@ -77,6 +78,11 @@
     },
   };
 
+
+
+  app.get('/rutine',(req: Request, res: Response) => {
+    res.status(200).send('Rutina ejecutada con éxito');
+})
   app.use('/api/v1/users', createProxyMiddleware(proxyOptionsUser))
   app.use('/api/v1/users/auth', createProxyMiddleware(proxyOptionsAuth)) //validar todas con tokens menos esta
   app.use('/api/v1/pins/', createProxyMiddleware(proxyOptionsMark))

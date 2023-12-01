@@ -93,6 +93,9 @@ const proxyOptionsExpense = {
         '^/api/v1/expenses': '',
     },
 };
+app.get('/rutine', (req, res) => {
+    res.status(200).send('Rutina ejecutada con éxito');
+});
 app.use('/api/v1/users', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsUser));
 app.use('/api/v1/users/auth', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsAuth));
 app.use('/api/v1/pins/', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsMark));
