@@ -27,7 +27,7 @@
     res.status(200).send('Rutina ejecutada con éxito');
 })
 
-  app.use('/user-service',proxy('https://user.cristilex.com'));
+  app.use('/user-service',proxy('https://user.cristilex.com/api/v1/users'));
   app.use('/mark-service',proxy('https://mark.cristilex.com'));
   app.use('/note-service',proxy('https://note.cristilex.com'));
   app.use('/file-service',proxy('https://file.cristilex.com'));

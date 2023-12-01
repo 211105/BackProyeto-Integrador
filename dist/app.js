@@ -44,7 +44,7 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.get('/rutine', (req, res) => {
     res.status(200).send('Rutina ejecutada con éxito');
 });
-app.use('/user-service', (0, express_http_proxy_1.default)('https://user.cristilex.com'));
+app.use('/user-service', (0, express_http_proxy_1.default)('https://user.cristilex.com/api/v1/users'));
 app.use('/mark-service', (0, express_http_proxy_1.default)('https://mark.cristilex.com'));
 app.use('/note-service', (0, express_http_proxy_1.default)('https://note.cristilex.com'));
 app.use('/file-service', (0, express_http_proxy_1.default)('https://file.cristilex.com'));
