@@ -42,35 +42,6 @@ export class MysqlUserRepository implements IUsuarioRepository {
                     return responseLogin;
                 }
             }
-    
-            // Si no se encontró en 'users', buscar en la tabla 'owner'
-            const [owners]: any = await query('SELECT * FROM owners WHERE email = ? LIMIT 1', [email]);
-    
-            if (owners && owners.length > 0) {
-                const owner = owners[0];
-                // Procesar el usuario de la tabla 'owner' y agregarlo a data_users
-                // ...
-    
-                const token: string = tokenSigIn(owner.uuid, owner.email);
-                const responseLogin: ResponseLoginAllUsers = new ResponseLoginAllUsers(owner, token);
-    
-                return responseLogin;
-            }
-    
-            // Si no se encontró en 'owner', buscar en la tabla 'driver'
-            const [drivers]: any = await query('SELECT * FROM drivers WHERE email = ? LIMIT 1', [email]);
-    
-            if (drivers && drivers.length > 0) {
-                const driver = drivers[0];
-                // Procesar el usuario de la tabla 'driver' y agregarlo a data_users
-                // ...
-    
-                const token: string = tokenSigIn(driver.uuid, driver.email);
-                const responseLogin: ResponseLoginAllUsers = new ResponseLoginAllUsers(driver, token);
-    
-                return responseLogin;
-            }
-    
             // Si no se encontró en ninguna tabla, devolver null
             return null;
         } catch (error) {

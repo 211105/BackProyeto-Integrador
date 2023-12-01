@@ -8,10 +8,7 @@ const express_1 = __importDefault(require("express"));
 const dependencies_1 = require("./dependencies");
 const veryfyToken_1 = require("../../helpers/veryfyToken");
 exports.userRoutes = express_1.default.Router();
-exports.userRoutes.get('/rutine', (req, res) => {
-    res.status(200).send('Rutina ejecutada con éxito');
-});
-exports.userRoutes.get('/rutine2', (req, res) => {
+exports.userRoutes.get('/rutine/', (req, res) => {
     res.status(200).send('Rutina ejecutada con éxito');
 });
 exports.userRoutes.post('/', dependencies_1.resgisterUserController.run.bind(dependencies_1.resgisterUserController));

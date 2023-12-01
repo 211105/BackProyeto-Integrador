@@ -48,20 +48,6 @@ class MysqlUserRepository {
                         return responseLogin;
                     }
                 }
-                const [owners] = yield (0, connection_1.query)('SELECT * FROM owners WHERE email = ? LIMIT 1', [email]);
-                if (owners && owners.length > 0) {
-                    const owner = owners[0];
-                    const token = (0, token_1.tokenSigIn)(owner.uuid, owner.email);
-                    const responseLogin = new user_1.ResponseLoginAllUsers(owner, token);
-                    return responseLogin;
-                }
-                const [drivers] = yield (0, connection_1.query)('SELECT * FROM drivers WHERE email = ? LIMIT 1', [email]);
-                if (drivers && drivers.length > 0) {
-                    const driver = drivers[0];
-                    const token = (0, token_1.tokenSigIn)(driver.uuid, driver.email);
-                    const responseLogin = new user_1.ResponseLoginAllUsers(driver, token);
-                    return responseLogin;
-                }
                 return null;
             }
             catch (error) {
