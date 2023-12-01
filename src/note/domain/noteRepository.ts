@@ -3,7 +3,7 @@ import { Note} from "./note";
 export interface NoteRepository{
 
 
-delteFile(uuid:string):Promise<Note | null | Error | string>
+    delteFile(uuid:string):Promise<Note | null | Error | string>
     
     createNote(
         uuid:string, 

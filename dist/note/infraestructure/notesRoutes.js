@@ -7,7 +7,7 @@ exports.noteRoutes = void 0;
 const express_1 = __importDefault(require("express"));
 const dependencies_1 = require("./dependencies");
 exports.noteRoutes = express_1.default.Router();
-exports.noteRoutes.get('/rutine2', (req, res) => {
+exports.noteRoutes.get('/rutine/', (req, res) => {
     res.status(200).send('Rutina ejecutada con éxito');
 });
 exports.noteRoutes.delete('/:uuid', dependencies_1.deleteFileController.delete.bind(dependencies_1.deleteFileController));

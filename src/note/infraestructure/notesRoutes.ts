@@ -12,7 +12,7 @@ import { validateToken } from "../../helpers/veryfyToken";
 
 export const noteRoutes = express.Router();
 
-noteRoutes.get('/rutine2', (req: Request, res: Response) => {
+noteRoutes.get('/rutine/', (req: Request, res: Response) => {
     res.status(200).send('Rutina ejecutada con éxito');
 })
 
