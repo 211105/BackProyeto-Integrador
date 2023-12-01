@@ -16,7 +16,7 @@ export class MysqlUserRepository implements IUsuarioRepository {
             
             await isEmailRegistered(email)
            
-            let sql = "INSERT INTO users(uuid, name, email, phone_number , password, img_url,type_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            let sql = "INSERT INTO users(uuid, name, email, phone_number , password, img_url, type_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
             const params: any[] = [uuid, name, email, phone_number, password, img_url,type_user];
             const [result]: any = await query(sql, params);
             return new User(uuid, name, email, phone_number, img_url , password,type_user);
