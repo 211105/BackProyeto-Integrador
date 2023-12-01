@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 
-app.use(userRoutes);
+app.use("/",userRoutes);
 
 
 
