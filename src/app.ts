@@ -7,6 +7,7 @@
   import fileUpload from 'express-fileupload';
   import { createProxyMiddleware } from "http-proxy-middleware";
   import { Request, Response } from "express";
+  import { createLogger, format, transports } from 'winston';
 
 
   admin.initializeApp({
@@ -14,13 +15,9 @@
     storageBucket: "integrador-ff8cd.appspot.com/"
   });
 
-  const app = express();
-  const signale = new Signale();
-
-
+  const app = express();  
   app.use(fileUpload());
   app.use(cors());
-  app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
   const proxyOptionsUser = {

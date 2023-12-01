@@ -31,7 +31,8 @@
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.6.1",
     "signale": "^1.4.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "winston": "^3.11.0"
   },
   "devDependencies": {
     "@firebase/app": "^0.9.19",
