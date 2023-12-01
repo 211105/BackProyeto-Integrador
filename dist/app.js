@@ -29,80 +29,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
-const signale_1 = require("signale");
 const serviceAccount = __importStar(require("./helpers/integrador-9.json"));
 const admin = __importStar(require("firebase-admin"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
-const http_proxy_middleware_1 = require("http-proxy-middleware");
+const express_http_proxy_1 = __importDefault(require("express-http-proxy"));
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     storageBucket: "integrador-ff8cd.appspot.com/"
 });
 const app = (0, express_1.default)();
-const signale = new signale_1.Signale();
 app.use((0, express_fileupload_1.default)());
 app.use((0, cors_1.default)());
-app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
-const proxyOptionsUser = {
-    target: 'https://user.cristilex.com',
-    changeOrigin: true,
-    pathRewrite: {
-        '^/api/v1/users': '',
-    },
-};
-const proxyOptionsAuth = {
-    target: 'https://user.cristilex.com',
-    changeOrigin: true,
-    pathRewrite: {
-        '^/api/v1/users/auth': '',
-    },
-};
-const proxyOptionsMark = {
-    target: 'https://mark.cristilex.com',
-    changeOrigin: true,
-    pathRewrite: {
-        '^/api/v1/pins': '',
-    },
-};
-const proxyOptionsNote = {
-    target: 'https://note.cristilex.com',
-    changeOrigin: true,
-    pathRewrite: {
-        '^/api/v1/notes': '',
-    },
-};
-const proxyOptionsFile = {
-    target: 'https://file.cristilex.com',
-    changeOrigin: true,
-    pathRewrite: {
-        '^/api/v1/files': '',
-    },
-};
-const proxyOptionsWeekyAmount = {
-    target: 'https://mount.cristilex.com',
-    changeOrigin: true,
-    pathRewrite: {
-        '^/api/v1/weeklyAmoun': '',
-    },
-};
-const proxyOptionsExpense = {
-    target: 'https://expense.cristilex.com',
-    changeOrigin: true,
-    pathRewrite: {
-        '^/api/v1/expenses': '',
-    },
-};
 app.get('/rutine', (req, res) => {
     res.status(200).send('Rutina ejecutada con éxito');
 });
-app.use('/api/v1/users', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsUser));
-app.use('/api/v1/users/auth', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsAuth));
-app.use('/api/v1/pins/', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsMark));
-app.use('/api/v1/notes', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsNote));
-app.use('/api/v1/files', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsFile));
-app.use('/api/v1/weeklyAmoun', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsWeekyAmount));
-app.use('/api/v1/expenses', (0, http_proxy_middleware_1.createProxyMiddleware)(proxyOptionsExpense));
+app.use('/user-service', (0, express_http_proxy_1.default)('https://user.cristilex.com'));
+app.use('/mark-service', (0, express_http_proxy_1.default)('https://mark.cristilex.com'));
+app.use('/note-service', (0, express_http_proxy_1.default)('https://note.cristilex.com'));
+app.use('/file-service', (0, express_http_proxy_1.default)('https://file.cristilex.com'));
+app.use('/weeklyAmoun-service', (0, express_http_proxy_1.default)('https://mount.cristilex.com'));
+app.use('/expenses-service', (0, express_http_proxy_1.default)('https://expense.cristilex.com'));
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
     console.log(`Corriendo en el puerto ${port}`);
