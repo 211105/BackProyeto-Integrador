@@ -25,8 +25,8 @@ app.use(express.urlencoded({ extended: true }));
 
 
 
-app.use(userRoutes);
-app.use(noteRoutes);
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/notes', noteRoutes);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
