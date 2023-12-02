@@ -6,11 +6,14 @@ import { Signale } from "signale";
 
 const app:Application = express();
 const signale = new Signale();
+import { Request, Response } from "express";
 
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
-
+app.get('/rutine', (req: Request, res: Response) => {
+  res.status(200).send('Rutina ejecutada con éxito');
+})
 app.use('/api/v1/users',proxy('https://user.cristilex.com'))
 app.use('/api/v1/marks',proxy('https://mark.cristilex.com'));
 app.use('/api/v1/notes',proxy('https://note.cristilex.com'));
