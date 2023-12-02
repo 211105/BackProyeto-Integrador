@@ -8,9 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MysqlUserRepository = void 0;
 const connection_1 = require("../../database/connection");
@@ -18,7 +15,6 @@ const user_1 = require("../domain/user");
 const ashs_1 = require("../../helpers/ashs");
 const token_1 = require("../../helpers/token");
 const usermysql_1 = require("./validation/usermysql");
-const deleteImage_1 = __importDefault(require("../../helpers/deleteImage"));
 class MysqlUserRepository {
     registerUser(uuid, name, email, phone_number, img_url, password, type_user) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -88,7 +84,6 @@ class MysqlUserRepository {
                 if (!updatedRows || updatedRows.length === 0) {
                     throw new Error('No user found with the provided UUID.');
                 }
-                yield (0, deleteImage_1.default)(imgUrlUser[0].img_url);
                 const updatedUser = new user_1.User(updatedRows[0].uuid, updatedRows[0].name, updatedRows[0].email, updatedRows[0].phone_number, updatedRows[0].img_url, "", updatedRows[0].type_user);
                 return updatedUser;
             }

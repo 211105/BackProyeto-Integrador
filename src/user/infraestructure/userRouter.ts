@@ -14,7 +14,7 @@ userRoutes.post('/auth/register',resgisterUserController.run.bind(resgisterUserC
 
 userRoutes.post('/auth/login',loginUserController.run.bind(loginUserController))
 
-userRoutes.put('/id',validateToken,updateUserByIdController.run.bind(updateUserByIdController))
+userRoutes.put('/id',updateUserByIdController.run.bind(updateUserByIdController))
 
 userRoutes.put('/restar_password',validateToken,updatePasswordController.run.bind(updatePasswordController))
 

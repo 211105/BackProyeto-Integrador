@@ -36,7 +36,7 @@ export class UpdateUserByIdController {
             }
 
             let UpdateUserById = await this.updateUserByIdUseCase.run(uuid, name, email, phone_number, img_url)
-
+            console.log(UpdateUserById)
             if (UpdateUserById) {
                 return res.status(200).send({
                     status: "succes",

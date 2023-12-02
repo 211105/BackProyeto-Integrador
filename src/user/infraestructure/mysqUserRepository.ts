@@ -86,7 +86,7 @@ export class MysqlUserRepository implements IUsuarioRepository {
             if (!updatedRows || updatedRows.length === 0) {
                 throw new Error('No user found with the provided UUID.');
             }
-            await deleteFromFirebase(imgUrlUser[0].img_url)
+            // await deleteFromFirebase(imgUrlUser[0].img_url)cc
             const updatedUser = new User(
                 updatedRows[0].uuid,
                 updatedRows[0].name,
