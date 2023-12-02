@@ -13,10 +13,10 @@ const PORT = process.env.PORT || 3000;
 
 app.use('/api/v1/users',proxy('https://user.cristilex.com'))
 app.use('/api/v1/users',proxy('https://mark.cristilex.com'));
-app.use('/api/v1/users',proxy('https://note.cristilex.com'));
-app.use('/api/v1/users',proxy('https://file.cristilex.com'));
-app.use('/api/v1/users',proxy('https://mount.cristilex.com'));
-app.use('/api/v1/users',proxy('https://expense.cristilex.com'));
+app.use('/api/v1/notes',proxy('https://note.cristilex.com'));
+app.use('/api/v1/files',proxy('https://file.cristilex.com'));
+app.use('/api/v1/amount',proxy('https://mount.cristilex.com'));
+app.use('/api/v1/expense',proxy('https://expense.cristilex.com'));
 
 
 
