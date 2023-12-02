@@ -5,9 +5,7 @@
   import * as serviceAccount from "./helpers/integrador-9.json";
   import * as admin from "firebase-admin";
   import fileUpload from 'express-fileupload';
-  import { createProxyMiddleware } from "http-proxy-middleware";
   import { Request, Response } from "express";
-  import { createLogger, format, transports } from 'winston';
   import proxy from 'express-http-proxy';
 
   
@@ -27,7 +25,7 @@
     res.status(200).send('Rutina ejecutada con éxito');
 })
 
-  app.use('/user-service',proxy('https://user.cristilex.com/api/v1/users'));
+  app.use('/api/v1/users',proxy('https://user.cristilex.com'))
   app.use('/mark-service',proxy('https://mark.cristilex.com'));
   app.use('/note-service',proxy('https://note.cristilex.com'));
   app.use('/file-service',proxy('https://file.cristilex.com'));
@@ -35,7 +33,7 @@
   app.use('/expenses-service',proxy('https://expense.cristilex.com'));
 
 
-  const port = process.env.PORT || 3001;
+  const port = process.env.PORT || 3004;
 app.listen(port, () => {
   console.log(`Corriendo en el puerto ${port}`);
 });

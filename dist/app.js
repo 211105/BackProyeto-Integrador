@@ -44,13 +44,13 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.get('/rutine', (req, res) => {
     res.status(200).send('Rutina ejecutada con éxito');
 });
-app.use('/user-service', (0, express_http_proxy_1.default)('https://user.cristilex.com/api/v1/users'));
+app.use('/api/v1/users', (0, express_http_proxy_1.default)('https://user.cristilex.com'));
 app.use('/mark-service', (0, express_http_proxy_1.default)('https://mark.cristilex.com'));
 app.use('/note-service', (0, express_http_proxy_1.default)('https://note.cristilex.com'));
 app.use('/file-service', (0, express_http_proxy_1.default)('https://file.cristilex.com'));
 app.use('/weeklyAmoun-service', (0, express_http_proxy_1.default)('https://mount.cristilex.com'));
 app.use('/expenses-service', (0, express_http_proxy_1.default)('https://expense.cristilex.com'));
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3004;
 app.listen(port, () => {
     console.log(`Corriendo en el puerto ${port}`);
 });
