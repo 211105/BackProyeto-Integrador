@@ -44,7 +44,7 @@ app.use((0, express_fileupload_1.default)());
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use('/api/v1/pins', markRoutes_1.markRouter);
+app.use(markRoutes_1.markRouter);
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
     console.log(`Corriendo en el puerto ${port}`);

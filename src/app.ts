@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 
-app.use('/api/v1/pins', markRouter);
+app.use(markRouter);
 
 
 
