@@ -44,6 +44,7 @@ export class MysqlUserRepository implements IUsuarioRepository {
             if (!passwordMatches) {
                 return 'Unauthorized'
             }
+            //Se genera el token temporal 
             const token:string = tokenSigIn(user.uuid,user.email)
 
             const dataUser: ResponseLogin = new ResponseLogin(
