@@ -7,6 +7,9 @@ exports.fileRoutes = void 0;
 const express_1 = __importDefault(require("express"));
 const dependencies_1 = require("./dependencies");
 exports.fileRoutes = express_1.default.Router();
+exports.fileRoutes.get('/rutine/', (req, res) => {
+    res.status(200).send('Rutina ejecutada con éxito');
+});
 exports.fileRoutes.post('/', dependencies_1.createFileController.post.bind(dependencies_1.createFileController));
 exports.fileRoutes.put('/', dependencies_1.updateFileController.update.bind(dependencies_1.updateFileController));
 exports.fileRoutes.get('/:notes_uuid', dependencies_1.getFilesByFolderController.get.bind(dependencies_1.getFilesByFolderController));

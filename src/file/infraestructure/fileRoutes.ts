@@ -4,8 +4,14 @@ import {
     updateFileController,
     getFilesByFolderController,
     deleteFileController } from "./dependencies";
+import { Request, Response } from "express";
+
 
 export const fileRoutes = express.Router();
+
+fileRoutes.get('/rutine/', (req: Request, res: Response) => {
+    res.status(200).send('Rutina ejecutada con éxito');
+})
 
 fileRoutes.post('/',createFileController.post.bind(createFileController))
 
