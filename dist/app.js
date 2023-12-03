@@ -45,8 +45,8 @@ app.use((0, express_fileupload_1.default)());
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use('/api/v1/users', userRouter_1.userRoutes);
-app.use('/api/v1/files', fileRoutes_1.fileRoutes);
+app.use(userRouter_1.userRoutes);
+app.use(fileRoutes_1.fileRoutes);
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
     console.log(`Corriendo en el puerto ${port}`);
