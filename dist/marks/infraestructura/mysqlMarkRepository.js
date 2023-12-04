@@ -81,7 +81,7 @@ class MysqlMarkRepository {
                 const checkAttendanceParams = [userUuid, markUuid];
                 const [attendanceResult] = yield (0, connection_1.query)(checkAttendanceSql, checkAttendanceParams);
                 if (attendanceResult.length > 0) {
-                    return "El usuario ya ha asistido.";
+                    throw Error("El usuario ya ha asistido");
                 }
                 const sql = `SELECT ST_X(location) AS latitude, ST_Y(location) AS longitude FROM pines WHERE uuid = ?`;
                 const params = [markUuid];
@@ -93,7 +93,6 @@ class MysqlMarkRepository {
             ) AS distance
             `;
                 const checkParams = [longitude, latitude, locationResult.longitude, locationResult.latitude];
-                console.log(checkParams);
                 const [[distanceResult]] = yield (0, connection_1.query)(checkDistanceSql, checkParams);
                 if (distanceResult.distance <= 500) {
                     const insertSql = "INSERT INTO assists (uuid, attended_at, pin_uuid, user_uuid) VALUES (?, UTC_TIMESTAMP(), ?, ?);";
@@ -102,12 +101,11 @@ class MysqlMarkRepository {
                     return "exitoso";
                 }
                 else {
-                    return "Usuario fuera de rango.";
+                    throw Error('Hacercate un poco mas');
                 }
             }
             catch (error) {
-                console.log(error);
-                return null;
+                return error;
             }
         });
     }

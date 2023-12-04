@@ -14,7 +14,7 @@ export class UserAsistUseCase {
         userUuid: string, 
         latitude: number, 
         longitude: number
-    ): Promise<string | null> {
+    ): Promise<string | null | Error> {
         const numLatitude = Number(latitude);
         const numLongitude = Number(longitude);
         const miuuid: string = uuid()

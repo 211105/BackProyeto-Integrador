@@ -1,3 +1,4 @@
+import { error } from "console";
 import { query } from "../../database/connection";
 import { Activity, MarkDescription } from "../domain/mark";
 import { IMarkRepository } from "../domain/markRepository";
@@ -58,11 +59,12 @@ export class MysqlMarkRepository implements IMarkRepository {
             const [pines]: any[] = result;
             // Para cada pin, obtenemos los datos adicionales de UserOwner, UserAsist y Activity
             for (const pin of pines) {
+                    //desde la api
                 // Obtener UserOwner
                 sql = "SELECT uuid, name, img_url AS urlImage FROM users WHERE uuid = ?";
                 const [userOwner]: any = await query(sql, [pin.user_uuid]);
                 pin.userOwners = userOwner;
-    
+                    //pasar como endpoit a la api de usuarios
                 // Obtener UserAsist
                 sql = "SELECT u.uuid, u.name, u.img_url AS urlImage FROM users u JOIN assists a ON u.uuid = a.user_uuid WHERE a.pin_uuid = ?";
                 const [userAsists]: any = await query(sql, [pin.uuid]);
@@ -98,22 +100,20 @@ export class MysqlMarkRepository implements IMarkRepository {
         }
     }
 
-    async userAsist(uuid: string, markUuid: string, userUuid: string, latitude: number, longitude: number): Promise<string | null> {
+    async userAsist(uuid: string, markUuid: string, userUuid: string, latitude: number, longitude: number): Promise<string | null | Error> {
         try {
 
 
             const checkAttendanceSql = "SELECT * FROM assists WHERE user_uuid = ? AND pin_uuid = ?";
             const checkAttendanceParams = [userUuid, markUuid];
             const [attendanceResult]: any = await query(checkAttendanceSql, checkAttendanceParams);
-
             if (attendanceResult.length > 0) {
-                return "El usuario ya ha asistido.";
+                throw Error("El usuario ya ha asistido");
             }
     
             const sql = `SELECT ST_X(location) AS latitude, ST_Y(location) AS longitude FROM pines WHERE uuid = ?`;
             const params = [markUuid];
             const [[locationResult]]: any = await query(sql, params);
-
             const checkDistanceSql = `
             SELECT ST_Distance_Sphere(
                 POINT(?, ?), 
@@ -121,8 +121,8 @@ export class MysqlMarkRepository implements IMarkRepository {
             ) AS distance
             `;
             const checkParams = [longitude, latitude, locationResult.longitude, locationResult.latitude];
-            console.log(checkParams);
             const [[distanceResult]]: any = await query(checkDistanceSql, checkParams);
+
             if (distanceResult.distance <= 500) {
                 // Realizar la inserción si el usuario está dentro del rango permitido
                 const insertSql = "INSERT INTO assists (uuid, attended_at, pin_uuid, user_uuid) VALUES (?, UTC_TIMESTAMP(), ?, ?);";
@@ -131,13 +131,12 @@ export class MysqlMarkRepository implements IMarkRepository {
                 return "exitoso";
             } else {
                 // El usuario no está dentro del rango permitido
-                return "Usuario fuera de rango.";
+                throw Error('Hacercate un poco mas');
             }
 
         
         } catch (error) {
-            console.log(error);
-            return null;
+            return error as Error ;
         }
     }
 

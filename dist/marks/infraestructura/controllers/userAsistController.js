@@ -18,6 +18,7 @@ class UserAssistController {
     }
     run(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("aaaa");
             try {
                 let { markUuid, userUuid, latitude, longitude } = req.body;
                 let assistUser = yield this.userAsistUseCase.run(markUuid, userUuid, latitude, longitude);
@@ -27,21 +28,17 @@ class UserAssistController {
                         message: assistUser
                     });
                 }
-                else if (assistUser == FUERA_RANGO) {
-                    return res.status(400).send({
-                        status: "error-fuera-de-rango",
-                        message: assistUser
-                    });
-                }
-                else if (assistUser == ASISTENCIA_DUPLICADA) {
-                    return res.status(400).send({
-                        status: "error-ya-asistio",
-                        message: assistUser
+                else if (assistUser instanceof Error) {
+                    return res.status(500).send({
+                        status: "error",
+                        message: assistUser.message
                     });
                 }
             }
             catch (error) {
+                console.log("fallo");
                 if (error instanceof Error) {
+                    console.log("entre 1");
                     if (error.message.startsWith('[')) {
                         const errors = JSON.parse(error.message);
                         const modifiedErrors = errors.map(({ property, children, constraints }) => ({
@@ -58,7 +55,7 @@ class UserAssistController {
                 }
                 return res.status(500).send({
                     status: "error",
-                    message: "An unexpected error occurred. Please try again later.",
+                    message: error,
                 });
             }
         });
