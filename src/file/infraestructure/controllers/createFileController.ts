@@ -9,10 +9,6 @@ export class CreateFileController {
 
     async post(req: Request, res: Response) {
 
-        interface NoteWithCreatedAt extends File {
-            created_at: Date;
-        }
-
         try {
             let { user_uuid,notes_uuid } = req.body;
 
@@ -78,21 +74,18 @@ export class CreateFileController {
                 false
             );
 
-            // Aquí, "createFile" es de tipo Note, pero sabemos que en tiempo de ejecución tiene la propiedad "created_at".
-            const noteWithCreatedAt = createFile as NoteWithCreatedAt;
 
             if (createFile instanceof File) {
                 return res.status(201).send({
                     status: "success",
                     data: {
-                        uuid: noteWithCreatedAt.uuid,
-                        user_uuid: noteWithCreatedAt.user_uuid,
-                        notes_uuid: noteWithCreatedAt.notes_uuid,
-                        title: noteWithCreatedAt.title,
-                        url_file: noteWithCreatedAt.url_file,
-                        type_file: noteWithCreatedAt.type_file, 
-                        status: noteWithCreatedAt.status,
-                        created_at: noteWithCreatedAt.created_at
+                        uuid: createFile.uuid,
+                        user_uuid: createFile.user_uuid,
+                        notes_uuid: createFile.notes_uuid,
+                        title: createFile.title,
+                        url_file: createFile.url_file,
+                        type_file: createFile.type_file, 
+                        status: createFile.status
                     }
                 });
             } else {
