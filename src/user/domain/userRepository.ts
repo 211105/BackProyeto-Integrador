@@ -28,5 +28,7 @@ export interface IUsuarioRepository {
         uuid: string, 
         password: string
         ): Promise<User | null>  //listo
+
+    getUserByUuid(uuid: string): Promise<User | null>
 }
 

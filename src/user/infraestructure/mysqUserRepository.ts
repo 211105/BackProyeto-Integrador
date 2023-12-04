@@ -158,10 +158,33 @@ export class MysqlUserRepository implements IUsuarioRepository {
             throw error; // O maneja el error de la manera que prefieras.
         }
     }
+    async getUserByUuid(uuid: string): Promise<User | null> {
+        try {
+            const [rows]: any = await query('SELECT * FROM users WHERE uuid = ? LIMIT 1', [uuid]);
+    
+            if (rows && rows.length > 0) {
+                const user = rows[0];
+                return new User(
+                    user.uuid,
+                    user.name,
+                    user.email,
+                    user.phone_number,
+                    user.img_url,
+                    "",
+                    user.type_user
+                );
+            }
+    
+            // Si no se encuentra un usuario con ese uuid, devolver null
+            return null;
+        } catch (error) {
+            console.error('Error getting user by UUID:', error);
+            throw error;
+        
 
 
   
 
-
+        }}
 
 }
