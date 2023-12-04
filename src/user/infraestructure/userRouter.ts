@@ -20,7 +20,7 @@ userRoutes.put('/restar_password',validateToken,updatePasswordController.run.bin
 
 userRoutes.put('/restar_password',validateToken,updatePasswordController.run.bind(updatePasswordController))
 
-userRoutes.get('/:uuid',validateToken,getUserByUuidController.get.bind(getUserByUuidController))
+userRoutes.get('/:uuid',getUserByUuidController.get.bind(getUserByUuidController))
 
 
 
