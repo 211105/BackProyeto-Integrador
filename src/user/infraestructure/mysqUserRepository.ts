@@ -13,12 +13,18 @@ export class MysqlUserRepository implements IUsuarioRepository {
       
         try {
             // const hashPassword = await encrypt(password)
-            
+            console.log("se va a registrar")
             await isEmailRegistered(email)
-           
-            let sql = "INSERT INTO users(uuid, name, email, phone_number , password, img_url,type_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            console.log("se va a registrar, ya verifico el correo")
+            
+            let sql = "INSERT INTO users(uuid, name, email, phone_number , password, img_url, type_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            console.log("se va a registrar, ya insero los datos")
+
             const params: any[] = [uuid, name, email, phone_number, password, img_url,type_user];
+
             const [result]: any = await query(sql, params);
+            console.log("se va a registrar, aqui inseto los datos")
+
             return new User(uuid, name, email, phone_number, img_url , password,type_user);
         } catch (error) {
             console.error("Error adding review:", error);
@@ -42,35 +48,6 @@ export class MysqlUserRepository implements IUsuarioRepository {
                     return responseLogin;
                 }
             }
-    
-            // Si no se encontró en 'users', buscar en la tabla 'owner'
-            const [owners]: any = await query('SELECT * FROM owners WHERE email = ? LIMIT 1', [email]);
-    
-            if (owners && owners.length > 0) {
-                const owner = owners[0];
-                // Procesar el usuario de la tabla 'owner' y agregarlo a data_users
-                // ...
-    
-                const token: string = tokenSigIn(owner.uuid, owner.email);
-                const responseLogin: ResponseLoginAllUsers = new ResponseLoginAllUsers(owner, token);
-    
-                return responseLogin;
-            }
-    
-            // Si no se encontró en 'owner', buscar en la tabla 'driver'
-            const [drivers]: any = await query('SELECT * FROM drivers WHERE email = ? LIMIT 1', [email]);
-    
-            if (drivers && drivers.length > 0) {
-                const driver = drivers[0];
-                // Procesar el usuario de la tabla 'driver' y agregarlo a data_users
-                // ...
-    
-                const token: string = tokenSigIn(driver.uuid, driver.email);
-                const responseLogin: ResponseLoginAllUsers = new ResponseLoginAllUsers(driver, token);
-    
-                return responseLogin;
-            }
-    
             // Si no se encontró en ninguna tabla, devolver null
             return null;
         } catch (error) {
@@ -109,7 +86,7 @@ export class MysqlUserRepository implements IUsuarioRepository {
             if (!updatedRows || updatedRows.length === 0) {
                 throw new Error('No user found with the provided UUID.');
             }
-            await deleteFromFirebase(imgUrlUser[0].img_url)
+            // await deleteFromFirebase(imgUrlUser[0].img_url)cc
             const updatedUser = new User(
                 updatedRows[0].uuid,
                 updatedRows[0].name,

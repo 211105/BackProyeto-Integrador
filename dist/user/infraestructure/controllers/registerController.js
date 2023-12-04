@@ -24,6 +24,10 @@ class ResgisterUserController {
             console.log('controller');
             try {
                 let { name, email, phone_number, password, } = req.body;
+                console.log(name);
+                console.log(email);
+                console.log(phone_number);
+                console.log(password);
                 if (!req.files || !req.files.img_file) {
                     return res.status(400).send({
                         status: "error",

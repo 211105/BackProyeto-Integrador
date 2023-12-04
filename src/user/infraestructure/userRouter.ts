@@ -9,14 +9,12 @@ export const userRoutes = express.Router();
 userRoutes.get('/rutine', (req: Request, res: Response) => {
     res.status(200).send('Rutina ejecutada con éxito');
 })
-userRoutes.get('/rutine2', (req: Request, res: Response) => {
-    res.status(200).send('Rutina ejecutada con éxito');
-})
-userRoutes.post('/',resgisterUserController.run.bind(resgisterUserController)) 
 
-userRoutes.post('/login',loginUserController.run.bind(loginUserController))
+userRoutes.post('/auth/register',resgisterUserController.run.bind(resgisterUserController)) 
 
-userRoutes.put('/id',validateToken,updateUserByIdController.run.bind(updateUserByIdController))
+userRoutes.post('/auth/login',loginUserController.run.bind(loginUserController))
+
+userRoutes.put('/id',updateUserByIdController.run.bind(updateUserByIdController))
 
 userRoutes.put('/restar_password',validateToken,updatePasswordController.run.bind(updatePasswordController))
 
