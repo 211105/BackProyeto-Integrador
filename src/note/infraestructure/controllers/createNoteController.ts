@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { CreateNoteUseCase } from "../../application/createNoteUseCase";
-
 import { Note } from "../../domain/note";
+import { verificarUsuario } from "../service/userVerify";
 
 export class CreateNoteController {
     constructor(readonly createNoteUseCase: CreateNoteUseCase) { }
@@ -13,8 +13,10 @@ export class CreateNoteController {
         }
 
         try {
-            let { user_uuid,title,description } = req.body;
+            let { user_uuid, title, description } = req.body;
 
+            // Verifica la existencia del usuario antes de crear la nota
+            await verificarUsuario(user_uuid);
 
             const createFile = await this.createNoteUseCase.post(
                 user_uuid,
@@ -23,7 +25,6 @@ export class CreateNoteController {
                 false
             );
 
-            // Aquí, "createFile" es de tipo Note, pero sabemos que en tiempo de ejecución tiene la propiedad "created_at".
             const noteWithCreatedAt = createFile as NoteWithCreatedAt;
 
             if (createFile instanceof Note) {
@@ -54,6 +55,10 @@ export class CreateNoteController {
                         errors: JSON.parse(error.message)
                     });
                 }
+                return res.status(500).send({
+                    status: "error",
+                    message: error.message // Puedes personalizar el mensaje de error según tus necesidades
+                });
             }
             return res.status(500).send({
                 status: "error",

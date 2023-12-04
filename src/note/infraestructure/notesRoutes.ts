@@ -10,7 +10,8 @@ import { validateToken } from "../../helpers/veryfyToken";
 
 
 
-export const noteRoutes = express.Router();
+export const 
+noteRoutes = express.Router();
 
 noteRoutes.get('/rutine/', (req: Request, res: Response) => {
     res.status(200).send('Rutina ejecutada con éxito');
@@ -23,6 +24,7 @@ noteRoutes.post('/create/',createNoteController.post.bind(createNoteController))
 noteRoutes.put('/update/',updateNoteController.update.bind(updateNoteController))
 
 noteRoutes.get('/:folder_uuid',getNoteByUserController.get.bind(getNoteByUserController))   
+
 
 
 

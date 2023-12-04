@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateNoteController = void 0;
 const note_1 = require("../../domain/note");
+const userVerify_1 = require("../service/userVerify");
 class CreateNoteController {
     constructor(createNoteUseCase) {
         this.createNoteUseCase = createNoteUseCase;
@@ -19,6 +20,7 @@ class CreateNoteController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { user_uuid, title, description } = req.body;
+                yield (0, userVerify_1.verificarUsuario)(user_uuid);
                 const createFile = yield this.createNoteUseCase.post(user_uuid, title, description, false);
                 const noteWithCreatedAt = createFile;
                 if (createFile instanceof note_1.Note) {
@@ -50,6 +52,10 @@ class CreateNoteController {
                             errors: JSON.parse(error.message)
                         });
                     }
+                    return res.status(500).send({
+                        status: "error",
+                        message: error.message
+                    });
                 }
                 return res.status(500).send({
                     status: "error",
