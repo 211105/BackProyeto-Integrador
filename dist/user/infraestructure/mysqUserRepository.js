@@ -113,6 +113,22 @@ class MysqlUserRepository {
             }
         });
     }
+    getUserByUuid(uuid) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const [rows] = yield (0, connection_1.query)('SELECT * FROM users WHERE uuid = ? LIMIT 1', [uuid]);
+                if (rows && rows.length > 0) {
+                    const user = rows[0];
+                    return new user_1.User(user.uuid, user.name, user.email, user.phone_number, user.img_url, "", user.type_user);
+                }
+                return null;
+            }
+            catch (error) {
+                console.error('Error getting user by UUID:', error);
+                throw error;
+            }
+        });
+    }
 }
 exports.MysqlUserRepository = MysqlUserRepository;
 //# sourceMappingURL=mysqUserRepository.js.map

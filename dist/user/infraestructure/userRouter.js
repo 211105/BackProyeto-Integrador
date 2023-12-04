@@ -15,4 +15,6 @@ exports.userRoutes.post('/auth/register', dependencies_1.resgisterUserController
 exports.userRoutes.post('/auth/login', dependencies_1.loginUserController.run.bind(dependencies_1.loginUserController));
 exports.userRoutes.put('/id', dependencies_1.updateUserByIdController.run.bind(dependencies_1.updateUserByIdController));
 exports.userRoutes.put('/restar_password', veryfyToken_1.validateToken, dependencies_1.updatePasswordController.run.bind(dependencies_1.updatePasswordController));
+exports.userRoutes.put('/restar_password', veryfyToken_1.validateToken, dependencies_1.updatePasswordController.run.bind(dependencies_1.updatePasswordController));
+exports.userRoutes.get('/:uuid', dependencies_1.getUserByUuidController.get.bind(dependencies_1.getUserByUuidController));
 //# sourceMappingURL=userRouter.js.map
