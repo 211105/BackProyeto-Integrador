@@ -10,6 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserAssistController = void 0;
+const FUERA_RANGO = "Usuario fuera de rango.";
+const ASISTENCIA_DUPLICADA = "El usuario ya ha asistido.";
 class UserAssistController {
     constructor(userAsistUseCase) {
         this.userAsistUseCase = userAsistUseCase;
@@ -25,13 +27,13 @@ class UserAssistController {
                         message: assistUser
                     });
                 }
-                else if (assistUser == "Usuario fuera de rango.") {
+                else if (assistUser == FUERA_RANGO) {
                     return res.status(400).send({
                         status: "error-fuera-de-rango",
                         message: assistUser
                     });
                 }
-                else if (assistUser == "El usuario ya ha asistido.") {
+                else if (assistUser == ASISTENCIA_DUPLICADA) {
                     return res.status(400).send({
                         status: "error-ya-asistio",
                         message: assistUser

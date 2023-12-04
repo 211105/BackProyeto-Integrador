@@ -6,16 +6,19 @@ export class ListMarkController{
 
     async  run(req: Request, res: Response) {
         try {
+
             let {
                 userLatitude,
                 userLongitude,      
             } = req.query
+            
             //verificar si llegaron con algo 
             let createMark = await this.listMarkUseCase.run(Number(userLatitude), Number(userLongitude))
             return res.status(200).send({
                 status: "ok",
                 message: createMark
             });
+
         } catch (error) {
             if (error instanceof Error) {
                 if (error.message.startsWith('[')) {      

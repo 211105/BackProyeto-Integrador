@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.evaluateImage = exports.uploadToFirebase = void 0;
+exports.verfyImage = exports.evaluateImage = exports.uploadToFirebase = void 0;
 const admin = __importStar(require("firebase-admin"));
 const vision_1 = __importDefault(require("@google-cloud/vision"));
 const deleteImage_1 = __importDefault(require("./deleteImage"));
@@ -91,4 +91,18 @@ function evaluateImage(imageData) {
     });
 }
 exports.evaluateImage = evaluateImage;
+function verfyImage(file) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!file) {
+            throw new Error('No se ha proporcionado ningún archivo de imagen.');
+        }
+        yield evaluateImage(file.data);
+        const urlImage = yield uploadToFirebase(file);
+        if (urlImage === null) {
+            throw new Error('Error al subir la imagen a Firebase.');
+        }
+        return urlImage;
+    });
+}
+exports.verfyImage = verfyImage;
 //# sourceMappingURL=saveImages.js.map

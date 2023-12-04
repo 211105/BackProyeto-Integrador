@@ -1,7 +1,7 @@
 import { CreateMarkUseCase } from "../../application/createMarkUseCase";
 import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
-import { evaluateImage, uploadToFirebase } from "../../../helpers/saveImages";
+import { evaluateImage, uploadToFirebase, verfyImage } from "../../../helpers/saveImages";
 
 export class CreateMarkController{ 
     constructor(readonly createMarkUseCase: CreateMarkUseCase){}
@@ -19,35 +19,11 @@ export class CreateMarkController{
             } = req.body
 
                 
-            if (!req.files || !req.files.img_file) {
-                return res.status(400).send({
-                    status: "error",
-                    message: "No image file uploaded."
-                });
-            }   
+       
 
-            const imgFile = req.files.img_file as UploadedFile;
-
-            try {
+            const urlImage = await verfyImage(req.files?.img_file as UploadedFile);
+           
             
-                await evaluateImage(imgFile.data);
-            } catch (error) {
-                // Si la imagen es inapropiada, se devuelve un error HTTP 400
-                return res.status(400).send({
-                    status: "error",
-                    message: "La imagen no cumple con las políticas de contenido y se considera inapropiada."
-                });
-            }
-
-            const urlImage = await uploadToFirebase(imgFile)
-            if (urlImage === null) {
-                return res.status(400).send({
-                    status: "error",
-                    message: "Failed to upload image."
-                });
-            }
-
-
             let createMark = await this.createMarkUseCase.run(
                 latitude,
                 longitude,
@@ -57,6 +33,7 @@ export class CreateMarkController{
                 userUuid,
                 activityUuid
             )
+
             console.log(typeof(createMark))
             return res.status(201).send({
                 status: "ok",
@@ -82,7 +59,7 @@ export class CreateMarkController{
             
             return res.status(500).send({
                 status: "error",
-                message: "An error occurred while adding the book."
+                message: ("An error occurred while adding the Mark. "+error)
             });
         }
 

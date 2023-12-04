@@ -13,6 +13,8 @@ export class ListActivitysController {
                     status: "succes",
                         message: listActivitys
                 })
+
+                
         } catch (error) {
             if (error instanceof Error) {
                 if (error.message.startsWith('[')) {

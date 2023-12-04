@@ -16,32 +16,11 @@ class CreateMarkController {
         this.createMarkUseCase = createMarkUseCase;
     }
     run(req, res) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { latitude, longitude, description, endDate, userUuid, activityUuid, } = req.body;
-                if (!req.files || !req.files.img_file) {
-                    return res.status(400).send({
-                        status: "error",
-                        message: "No image file uploaded."
-                    });
-                }
-                const imgFile = req.files.img_file;
-                try {
-                    yield (0, saveImages_1.evaluateImage)(imgFile.data);
-                }
-                catch (error) {
-                    return res.status(400).send({
-                        status: "error",
-                        message: "La imagen no cumple con las políticas de contenido y se considera inapropiada."
-                    });
-                }
-                const urlImage = yield (0, saveImages_1.uploadToFirebase)(imgFile);
-                if (urlImage === null) {
-                    return res.status(400).send({
-                        status: "error",
-                        message: "Failed to upload image."
-                    });
-                }
+                const urlImage = yield (0, saveImages_1.verfyImage)((_a = req.files) === null || _a === void 0 ? void 0 : _a.img_file);
                 let createMark = yield this.createMarkUseCase.run(latitude, longitude, description, urlImage, endDate, userUuid, activityUuid);
                 console.log(typeof (createMark));
                 return res.status(201).send({
@@ -67,7 +46,7 @@ class CreateMarkController {
                 }
                 return res.status(500).send({
                     status: "error",
-                    message: "An error occurred while adding the book."
+                    message: ("An error occurred while adding the Mark. " + error)
                 });
             }
         });

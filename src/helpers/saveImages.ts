@@ -19,6 +19,7 @@ const client = new vision.ImageAnnotatorClient({
  * @returns {Promise<string>} La URL pública del archivo subido.
  */
 export async function uploadToFirebase(file: UploadedFile): Promise<string | null> {
+
     const bucket = admin.storage().bucket();
 
     return new Promise((resolve, reject) => {
@@ -66,4 +67,19 @@ export async function evaluateImage(imageData: Buffer): Promise<void> {
 }
 
 
+export async function verfyImage(file: UploadedFile | undefined): Promise<string> {
+    if (!file) {
+        throw new Error('No se ha proporcionado ningún archivo de imagen.');
+    }
 
+    // Evaluar el contenido de la imagen
+    await evaluateImage(file.data);
+
+    // Subir imagen a Firebase
+    const urlImage = await uploadToFirebase(file);
+    if (urlImage === null) {
+        throw new Error('Error al subir la imagen a Firebase.');
+    }
+
+    return urlImage;
+}
