@@ -1,7 +1,7 @@
 import { UploadedFile } from "express-fileupload";
 import { AddActivityUseCase } from "../../application/addActivityUseCase";
 import { Request, Response } from "express";    
-import { uploadToFirebase } from "../../../helpers/saveImages";
+import { uploadToFirebase, verfyImage } from "../../../helpers/saveImages";
 export class AddActivityController {
     constructor(readonly addActivityUseCase: AddActivityUseCase) {}
     async run(req: Request, res:Response){
@@ -10,17 +10,9 @@ export class AddActivityController {
                 name
             } = req.body
 
-            if (!req.files || !req.files.img_file) {
-                return res.status(400).send({
-                    status: "error",
-                    message: "No image file uploaded."
-                });
-            }
-
-            const imgFile = req.files.img_file as UploadedFile;
-            const imgUrl = await uploadToFirebase(imgFile)
+            const urlImage = await verfyImage(req.files?.img_file as UploadedFile);
             
-            let addActivity = await this.addActivityUseCase.run(name, imgUrl || "")
+            let addActivity = await this.addActivityUseCase.run(name, urlImage || "")
             
             return res.status(201).send({
                 status: "succes",
@@ -47,7 +39,7 @@ export class AddActivityController {
             }
             return res.status(500).send({
                 status: "error",
-                message: "An unexpected error occurred. Please try again later.",
+                message: ("An error occurred while adding the Activity. "+error)
             });
         }
     }

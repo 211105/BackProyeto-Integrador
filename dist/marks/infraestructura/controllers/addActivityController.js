@@ -16,18 +16,12 @@ class AddActivityController {
         this.addActivityUseCase = addActivityUseCase;
     }
     run(req, res) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { name } = req.body;
-                if (!req.files || !req.files.img_file) {
-                    return res.status(400).send({
-                        status: "error",
-                        message: "No image file uploaded."
-                    });
-                }
-                const imgFile = req.files.img_file;
-                const imgUrl = yield (0, saveImages_1.uploadToFirebase)(imgFile);
-                let addActivity = yield this.addActivityUseCase.run(name, imgUrl || "");
+                const urlImage = yield (0, saveImages_1.verfyImage)((_a = req.files) === null || _a === void 0 ? void 0 : _a.img_file);
+                let addActivity = yield this.addActivityUseCase.run(name, urlImage || "");
                 return res.status(201).send({
                     status: "succes",
                     data: {
@@ -53,7 +47,7 @@ class AddActivityController {
                 }
                 return res.status(500).send({
                     status: "error",
-                    message: "An unexpected error occurred. Please try again later.",
+                    message: ("An error occurred while adding the Activity. " + error)
                 });
             }
         });
