@@ -2,12 +2,12 @@ import { Request, Response } from "express";
 import { CreateNoteUseCase } from "../../application/createNoteUseCase";
 import { Note } from "../../domain/note";
 import { verificarUsuario } from "../service/userVerify";
+import axios, { AxiosError } from 'axios';
 
 export class CreateNoteController {
     constructor(readonly createNoteUseCase: CreateNoteUseCase) { }
 
     async post(req: Request, res: Response) {
-
         interface NoteWithCreatedAt extends Note {
             created_at: Date;
         }
@@ -15,9 +15,17 @@ export class CreateNoteController {
         try {
             let { user_uuid, title, description } = req.body;
 
-            // Verifica la existencia del usuario antes de crear la nota
-            await verificarUsuario(user_uuid);
+            // Validate the existence of the user before creating the note
+            const userExists = await verificarUsuario(user_uuid);
 
+            if (!userExists) {
+                return res.status(404).send({
+                    status: "error",
+                    message: `The user ${user_uuid} does not exist. Cannot create the note.`
+                });
+            }
+
+            // Continue with note creation if the user exists
             const createFile = await this.createNoteUseCase.post(
                 user_uuid,
                 title,
@@ -45,9 +53,16 @@ export class CreateNoteController {
                     message: "An unexpected error occurred while registering the Note."
                 });
             }
-
         } catch (error) {
-            if (error instanceof Error) {
+            if (axios.isAxiosError(error)) {
+                console.error(`Error en la solicitud HTTP: ${(error as AxiosError).message}, Código de estado: ${(error as AxiosError).response?.status}`);
+                if ((error as AxiosError).response?.status === 500) {
+                    return res.status(500).send({
+                        status: "error",
+                        message: "An unexpected error occurred while verifying the user. The user may not exist."
+                    });
+                }
+            } else if (error instanceof Error) {
                 if (error.message.startsWith('[')) {
                     return res.status(400).send({
                         status: "error",
@@ -57,8 +72,10 @@ export class CreateNoteController {
                 }
                 return res.status(500).send({
                     status: "error",
-                    message: error.message // Puedes personalizar el mensaje de error según tus necesidades
+                    message: error.message // Customize the error message as needed
                 });
+            } else {
+                console.error(`Error general: ${(error as Error).message}`);
             }
             return res.status(500).send({
                 status: "error",

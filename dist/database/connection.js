@@ -27,6 +27,7 @@ const config = {
     waitForConnections: true,
     connectionLimit: 10,
 };
+console.log(config);
 const pool = promise_1.default.createPool(config);
 function query(sql, params) {
     return __awaiter(this, void 0, void 0, function* () {

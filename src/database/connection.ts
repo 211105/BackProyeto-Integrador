@@ -10,10 +10,12 @@ const config = {
     user: process.env.DB_USER,
     database: process.env.DB_DATABASE,
     password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306, // Lee el puerto desde las variables de entorno o usa el valor predeterminado 3306
+    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306,
     waitForConnections: true,
     connectionLimit: 10,
 };
+
+console.log(config); // Opcional: Registrar la configuración
 
 const pool = mysql.createPool(config);
 

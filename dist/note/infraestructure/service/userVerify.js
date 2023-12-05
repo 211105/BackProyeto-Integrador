@@ -15,21 +15,35 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.verificarUsuario = void 0;
 const axios_1 = __importDefault(require("axios"));
 function verificarUsuario(user_uuid) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         console.log('Verificando si el usuario existe...');
         try {
             const servicioUrl = `https://allgate.cristilex.com/api/v1/users/${user_uuid}`;
             const response = yield axios_1.default.get(servicioUrl);
-            if (response.data && response.data.user_uuid === user_uuid) {
+            if (response.status === 200 || response.status === 201) {
                 console.log(`El usuario ${user_uuid} existe.`);
+                return true;
+            }
+            else if (response.status === 404) {
+                console.log(`El usuario ${user_uuid} no existe.`);
+                return false;
+            }
+            else if (response.status === 500) {
+                console.error('Error en el servidor:', response);
+                return false;
             }
             else {
-                console.log(`El usuario ${user_uuid} no existe. Mensaje adicional si es necesario.`);
-                throw new Error(`El usuario ${user_uuid} no existe.`);
+                throw new Error(`Error en la solicitud HTTP. Código de estado: ${response.status}`);
             }
         }
         catch (error) {
-            console.error(`Error en la solicitud HTTP: ${error.message}`);
+            if (axios_1.default.isAxiosError(error)) {
+                console.error(`Error en la solicitud HTTP: ${error.message}, Código de estado: ${(_a = error.response) === null || _a === void 0 ? void 0 : _a.status}`);
+            }
+            else {
+                console.error(`Error general: ${error.message}`);
+            }
             throw error;
         }
     });

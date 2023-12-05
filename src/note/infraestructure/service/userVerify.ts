@@ -1,24 +1,33 @@
-import axios from 'axios';
+// In your userVerify.ts file
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
-export async function verificarUsuario(user_uuid: string): Promise<void> {
+export async function verificarUsuario(user_uuid: string): Promise<boolean> {
     console.log('Verificando si el usuario existe...');
     try {
-        // URL del servicio que trae la información del usuario
         const servicioUrl = `https://allgate.cristilex.com/api/v1/users/${user_uuid}`;
+        const response: AxiosResponse = await axios.get(servicioUrl);
 
-        // Realizar la solicitud HTTP al servicio para obtener la información del usuario
-        const response = await axios.get(servicioUrl);
-
-        // Verificar si el usuario existe en la respuesta
-        if (response.data && response.data.user_uuid === user_uuid) {
+        if (response.status === 200 ||  response.status === 201) {
             console.log(`El usuario ${user_uuid} existe.`);
+            return true; // User exists
+        } else if (response.status === 404) {
+            console.log(`El usuario ${user_uuid} no existe.`);
+            return false; // User does not exist
+        } else if (response.status === 500) {
+            // Handle 500 error as needed
+            console.error('Error en el servidor:', response);
+            return false;
         } else {
-            console.log(`El usuario ${user_uuid} no existe. Mensaje adicional si es necesario.`);
-            // Puedes agregar un mensaje adicional aquí si lo deseas
-            throw new Error(`El usuario ${user_uuid} no existe.`);
+            // Handle other status codes
+            throw new Error(`Error en la solicitud HTTP. Código de estado: ${response.status}`);
         }
     } catch (error) {
-        console.error(`Error en la solicitud HTTP: ${(error as Error).message}`);
-        throw error; // Relanza el error para que el controlador pueda manejarlo adecuadamente
+        // Handle errors
+        if (axios.isAxiosError(error)) {
+            console.error(`Error en la solicitud HTTP: ${(error as AxiosError).message}, Código de estado: ${(error as AxiosError).response?.status}`);
+        } else {
+            console.error(`Error general: ${(error as Error).message}`);
+        }
+        throw error;
     }
 }
