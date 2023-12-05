@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateFileController = void 0;
 const saveFile_1 = __importDefault(require("../../../helpers/saveFile"));
 const file_1 = require("../../domain/file");
+const userVerify_1 = require("../service/userVerify");
 class CreateFileController {
     constructor(createFileUseCase) {
         this.createFileUseCase = createFileUseCase;
@@ -27,6 +28,13 @@ class CreateFileController {
                     return res.status(400).send({
                         status: "error",
                         message: "No image file uploaded."
+                    });
+                }
+                const userExists = yield (0, userVerify_1.verificarUsuario)(user_uuid);
+                if (!userExists) {
+                    return res.status(404).send({
+                        status: "error",
+                        message: `The user ${user_uuid} does not exist. Cannot create the note.`
                     });
                 }
                 const imgFile = req.files.url_file;

@@ -3,6 +3,7 @@ import { CreateFileUseCase } from "../../application/createFileUseCase";
 import { UploadedFile } from "express-fileupload";
 import uploadToFirebase from "../../../helpers/saveFile";
 import { File } from "../../domain/file";
+import { verificarUsuario } from "../service/userVerify";
 
 export class CreateFileController {
     constructor(readonly createFileUseCase: CreateFileUseCase) { }
@@ -16,6 +17,16 @@ export class CreateFileController {
                 return res.status(400).send({
                     status: "error",
                     message: "No image file uploaded."
+                });
+            }
+
+            // Validate the existence of the user before creating the note
+            const userExists = await verificarUsuario(user_uuid);
+
+            if (!userExists) {
+                return res.status(404).send({
+                    status: "error",
+                    message: `The user ${user_uuid} does not exist. Cannot create the note.`
                 });
             }
 
