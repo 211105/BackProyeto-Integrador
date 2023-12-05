@@ -56,6 +56,7 @@ export class MysqlMarkRepository implements IMarkRepository {
             if (!result) {
                 return null;
             }
+            ///
             const [pines]: any[] = result;
             // Para cada pin, obtenemos los datos adicionales de UserOwner, UserAsist y Activity
             for (const pin of pines) {
@@ -66,10 +67,6 @@ export class MysqlMarkRepository implements IMarkRepository {
                 pin.userOwners = userOwner;
                     //pasar como endpoit a la api de usuarios
                 // Obtener UserAsist
-                sql = "SELECT u.uuid, u.name, u.img_url AS urlImage FROM users u JOIN assists a ON u.uuid = a.user_uuid WHERE a.pin_uuid = ?";
-                const [userAsists]: any = await query(sql, [pin.uuid]);
-                pin.userAsists = userAsists;
-    
                 // Obtener Activity
                 sql = "SELECT uuid, name, url_image FROM activitys WHERE uuid = ?";
                 const [activity]: any = await query(sql, [pin.activity_uuid]);
@@ -88,7 +85,7 @@ export class MysqlMarkRepository implements IMarkRepository {
                 pin.user_uuid,  
                 pin.activity_uuid, 
                 pin.userOwners,  
-                pin.userAsists,  
+              
                 pin.infoActivity    
             ));
             

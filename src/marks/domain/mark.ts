@@ -45,7 +45,6 @@ export class MarkDescription {
         public userUuid: string,
         public activityUuid: string,
         public userOwners: UserOwner[],
-        public userAsists: UserAsist[],
         public infoActivity: activity
     ) {}
 }

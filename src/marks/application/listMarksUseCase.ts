@@ -10,7 +10,7 @@ export class ListMarkUseCase {
     async run(
         userLatitude: number, 
         userLongitude: number
-    ): Promise<MarkDescription[] | null | string> {
+    ): Promise<MarkDescription[] | null | any> {
         
         const numLatitude = Number(userLatitude);
         const numLongitude = Number(userLongitude);

@@ -13,7 +13,7 @@ export interface IMarkRepository {
         activityUuid: string,
     ): Promise <string | null>
 
-    listMarks(userLatitude: number, userLongitude: number): Promise <MarkDescription[] | null | string>; 
+    listMarks(userLatitude: number, userLongitude: number): Promise <MarkDescription[] | null | any>; 
 
     userAsist(uuid: string, markUuid: string, userUuid: string, latitude: number, longitude: number):Promise<string | null | Error>;
 

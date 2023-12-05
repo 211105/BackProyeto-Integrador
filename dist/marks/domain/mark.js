@@ -16,7 +16,7 @@ class Mark {
 }
 exports.Mark = Mark;
 class MarkDescription {
-    constructor(uuid, latitude, longitude, description, createDate, endDate, urlImage, userUuid, activityUuid, userOwners, userAsists, infoActivity) {
+    constructor(uuid, latitude, longitude, description, createDate, endDate, urlImage, userUuid, activityUuid, userOwners, infoActivity) {
         this.uuid = uuid;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -27,7 +27,6 @@ class MarkDescription {
         this.userUuid = userUuid;
         this.activityUuid = activityUuid;
         this.userOwners = userOwners;
-        this.userAsists = userAsists;
         this.infoActivity = infoActivity;
     }
 }

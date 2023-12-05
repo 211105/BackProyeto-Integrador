@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ListMarkUseCase } from "../../application/listMarksUseCase";
 
+
 export class ListMarkController{ 
     constructor(readonly listMarkUseCase: ListMarkUseCase){}
 
@@ -11,8 +12,8 @@ export class ListMarkController{
                 userLatitude,
                 userLongitude,      
             } = req.query
-            
-            //verificar si llegaron con algo 
+
+           
             let createMark = await this.listMarkUseCase.run(Number(userLatitude), Number(userLongitude))
             return res.status(200).send({
                 status: "ok",
