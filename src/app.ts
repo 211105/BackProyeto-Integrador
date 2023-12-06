@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import { Signale } from 'signale';
-import { userRoutes } from "./user/infraestructure/userRouter";
 import * as serviceAccount from "./helpers/integrador-image-firebase-adminsdk-17aek-114f65daa8.json";
 import * as admin from "firebase-admin";
 import fileUpload from 'express-fileupload';
@@ -24,7 +23,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(userRoutes);
 app.use(expenseRouter);
 
 
