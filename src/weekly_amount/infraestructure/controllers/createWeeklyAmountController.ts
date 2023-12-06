@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CreateWeeklyAmountUseCase } from "../../application/createWeeklyAmountUseCase";
 import { createWeekly } from "../../domain/weekly_amount";
 import { verifyWeeklyAmount } from "../validations/mysqlweeklyamount";
+import { verificarUsuario } from "../service/userVerify";
 
 
 export class CreateWeeklyAmountController {
@@ -12,6 +13,15 @@ export class CreateWeeklyAmountController {
             let { user_uuid, amount } = req.body;
 
             
+            // Validate the existence of the user before creating the note
+            const userExists = await verificarUsuario(user_uuid);
+
+            if (!userExists) {
+                return res.status(404).send({
+                    status: "error",
+                    message: `The user ${user_uuid} does not exist. Cannot create the weekly amount.`
+                });
+            }
 
             const createWeeklyAmount = await this.createWeeklyAmountUseCase.post(user_uuid, amount, amount, true);
 

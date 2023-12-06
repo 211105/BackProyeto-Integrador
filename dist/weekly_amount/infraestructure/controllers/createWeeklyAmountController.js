@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateWeeklyAmountController = void 0;
 const weekly_amount_1 = require("../../domain/weekly_amount");
+const userVerify_1 = require("../service/userVerify");
 class CreateWeeklyAmountController {
     constructor(createWeeklyAmountUseCase) {
         this.createWeeklyAmountUseCase = createWeeklyAmountUseCase;
@@ -19,6 +20,13 @@ class CreateWeeklyAmountController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { user_uuid, amount } = req.body;
+                const userExists = yield (0, userVerify_1.verificarUsuario)(user_uuid);
+                if (!userExists) {
+                    return res.status(404).send({
+                        status: "error",
+                        message: `The user ${user_uuid} does not exist. Cannot create the weekly amount.`
+                    });
+                }
                 const createWeeklyAmount = yield this.createWeeklyAmountUseCase.post(user_uuid, amount, amount, true);
                 if (createWeeklyAmount instanceof weekly_amount_1.createWeekly) {
                     return res.status(201).send({
