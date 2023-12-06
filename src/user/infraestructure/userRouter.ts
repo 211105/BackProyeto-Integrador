@@ -22,7 +22,6 @@ userRoutes.put('/restar_password',validateToken,updatePasswordController.run.bin
 
 userRoutes.get("/owners/", getUserOwnersControllers.get.bind(getUserOwnersControllers))
 
-
 userRoutes.get('/:uuid',getUserByUuidController.get.bind(getUserByUuidController))
 
 

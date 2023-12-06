@@ -113,41 +113,6 @@ class MysqlUserRepository {
             }
         });
     }
-    getUserByUuid(uuid) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const [rows] = yield (0, connection_1.query)('SELECT * FROM users WHERE uuid = ? LIMIT 1', [uuid]);
-                if (rows && rows.length > 0) {
-                    const user = rows[0];
-                    return new user_1.User(user.uuid, user.name, user.email, user.phone_number, user.img_url, "", user.type_user);
-                }
-                return null;
-            }
-            catch (error) {
-                console.error('Error getting user by UUID:', error);
-                throw error;
-            }
-        });
-    }
-    getUserOwners(userOwners) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                let owners = [];
-                for (const uuid of userOwners) {
-                    let sql = "SELECT uuid, name, img_url AS urlImage FROM users WHERE uuid = ?";
-                    const [userOwner] = yield (0, connection_1.query)(sql, [uuid]);
-                    if (userOwner && userOwner.length > 0) {
-                        owners.push(userOwner[0]);
-                    }
-                }
-                return owners;
-            }
-            catch (error) {
-                console.error(error);
-                return [];
-            }
-        });
-    }
 }
 exports.MysqlUserRepository = MysqlUserRepository;
 //# sourceMappingURL=mysqUserRepository.js.map
