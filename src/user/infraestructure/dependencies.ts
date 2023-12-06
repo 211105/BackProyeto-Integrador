@@ -14,6 +14,8 @@ import { UpdatePasswordController } from "./controllers/updatePasswordUserContro
 
 import { GetUserByUuidUseCase } from "../application/getUserByUuidUseCase";
 import { GetUserByUuidController } from "./controllers/getUserByUuidUseCase";
+import { GetUserOwnersUseCase } from "../application/getUserOwnersUseCase";
+import { GetUserOwnersControllers } from "./controllers/getUserOwnersController";
 
 
 export const mysqlUserRepository = new MysqlUserRepository()
@@ -36,3 +38,7 @@ export const updatePasswordController = new UpdatePasswordController(updatePassw
 
 export const getUserByUuidUseCase = new GetUserByUuidUseCase(mysqlUserRepository);
 export const getUserByUuidController = new GetUserByUuidController(getUserByUuidUseCase)
+
+
+export const getUserOwnersUseCase = new GetUserOwnersUseCase(mysqlUserRepository)
+export const getUserOwnersControllers = new GetUserOwnersControllers(getUserOwnersUseCase)

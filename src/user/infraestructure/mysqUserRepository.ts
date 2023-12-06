@@ -1,5 +1,5 @@
 import { query } from "../../database/connection";
-import { ResponseLogin, User,ResponseLoginAllUsers } from "../domain/user";
+import { ResponseLogin, User,ResponseLoginAllUsers, UserOwner } from "../domain/user";
 import { IUsuarioRepository } from "../domain/userRepository";
 import { compare, encrypt } from '../../helpers/ashs';
 import { tokenSigIn } from "../../helpers/token";
@@ -7,30 +7,30 @@ import { isEmailRegistered } from "./validation/usermysql";
 import deleteFromFirebase from "../../helpers/deleteImage";
 
 export class MysqlUserRepository implements IUsuarioRepository {
-    
 
-    async registerUser(uuid: string, name: string, email: string, phone_number: string, img_url: string, password: string,type_user:string): Promise<User | null | string | Error> {
-      
-        try {
-            // const hashPassword = await encrypt(password)
-            console.log("se va a registrar")
-            await isEmailRegistered(email)
-            console.log("se va a registrar, ya verifico el correo")
-            
-            let sql = "INSERT INTO users(uuid, name, email, phone_number , password, img_url, type_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            console.log("se va a registrar, ya insero los datos")
 
-            const params: any[] = [uuid, name, email, phone_number, password, img_url,type_user];
+        async registerUser(uuid: string, name: string, email: string, phone_number: string, img_url: string, password: string,type_user:string): Promise<User | null | string | Error> {
+        
+            try {
+                // const hashPassword = await encrypt(password)
+                console.log("se va a registrar")
+                await isEmailRegistered(email)
+                console.log("se va a registrar, ya verifico el correo")
+                
+                let sql = "INSERT INTO users(uuid, name, email, phone_number , password, img_url, type_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                console.log("se va a registrar, ya insero los datos")
 
-            const [result]: any = await query(sql, params);
-            console.log("se va a registrar, aqui inseto los datos")
+                const params: any[] = [uuid, name, email, phone_number, password, img_url,type_user];
 
-            return new User(uuid, name, email, phone_number, img_url , password,type_user);
-        } catch (error) {
-            console.error("Error adding review:", error);
-            return error as Error;
+                const [result]: any = await query(sql, params);
+                console.log("se va a registrar, aqui inseto los datos")
+
+                return new User(uuid, name, email, phone_number, img_url , password,type_user);
+            } catch (error) {
+                console.error("Error adding review:", error);
+                return error as Error;
+            }
         }
-    }
 
     async loginUser(email: string, password: string): Promise<ResponseLoginAllUsers | string | null> {
         try {
@@ -163,5 +163,27 @@ export class MysqlUserRepository implements IUsuarioRepository {
   
 
         }}
+
+       async getUserOwners(userOwners: string[]): Promise<UserOwner[]> {
+    try {
+        // Array para almacenar los resultados
+        let owners: UserOwner[] = [];
+
+        // Para cada UUID en userOwners, obtenemos los datos del usuario
+        for (const uuid of userOwners) {
+            let sql = "SELECT uuid, name, img_url AS urlImage FROM users WHERE uuid = ?";
+            const [userOwner]: any = await query(sql, [uuid]);
+            
+            // Si se encuentra el usuario, lo agregamos al array de resultados
+            if (userOwner && userOwner.length > 0) {
+                owners.push(userOwner[0]); // Asumiendo que la consulta devuelve un único resultado por UUID
+            }
+        }
+        return owners;
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
 
 }

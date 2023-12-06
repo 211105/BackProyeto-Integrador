@@ -1,5 +1,5 @@
 import express from "express";
-import { loginUserController, resgisterUserController, updatePasswordController, updateUserByIdController,getUserByUuidController } from "./dependencies";
+import { loginUserController, resgisterUserController, updatePasswordController, updateUserByIdController,getUserByUuidController, getUserOwnersControllers } from "./dependencies";
 import { validateToken } from "../../helpers/veryfyToken";
 import { Request, Response } from "express";
 
@@ -20,7 +20,11 @@ userRoutes.put('/restar_password',validateToken,updatePasswordController.run.bin
 
 userRoutes.put('/restar_password',validateToken,updatePasswordController.run.bind(updatePasswordController))
 
+userRoutes.get("/owners/", getUserOwnersControllers.get.bind(getUserOwnersControllers))
+
+
 userRoutes.get('/:uuid',getUserByUuidController.get.bind(getUserByUuidController))
+
 
 
 

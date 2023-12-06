@@ -1,4 +1,4 @@
-import { ResponseLogin, User,ResponseLoginAllUsers } from "./user";
+import { ResponseLogin, User,ResponseLoginAllUsers, UserOwner } from "./user";
 
 export interface IUsuarioRepository {
     registerUser( 
@@ -30,5 +30,7 @@ export interface IUsuarioRepository {
         ): Promise<User | null>  //listo
 
     getUserByUuid(uuid: string): Promise<User | null>
+
+    getUserOwners(UserOwners: string[]):Promise<UserOwner[]| any>
 }
 

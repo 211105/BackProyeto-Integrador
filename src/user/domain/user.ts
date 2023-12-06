@@ -30,3 +30,11 @@ export class ResponseLoginAllUsers{
         public token: string
     ){}    
 }
+
+export interface UserOwner {
+    uuid: string;
+    name: string;
+    urlImage: string;
+}
+
+
