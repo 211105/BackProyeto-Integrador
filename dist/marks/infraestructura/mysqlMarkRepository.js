@@ -31,39 +31,32 @@ class MysqlMarkRepository {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let sql = `
-                SELECT p.uuid, 
-                ST_X(p.location) AS latitude, 
-                ST_Y(p.location) AS longitude, 
-                p.description, 
-                p.create_date, 
-                p.end_date, 
-                p.url_image, 
-                p.user_uuid, 
-                p.activity_uuid,
-                (ST_Distance_Sphere(
-                    POINT(ST_Y(p.location), ST_X(p.location)), 
-                    POINT(?, ?)
-                ) / 1000) AS distance_km
-            FROM pines p
-            WHERE p.end_date > NOW()
-            HAVING distance_km <= 4;   
-                `;
-                const result = yield (0, connection_1.query)(sql, [userLongitude, userLatitude]);
+            SELECT p.uuid, 
+            ST_X(p.location) AS latitude, 
+            ST_Y(p.location) AS longitude, 
+            p.description, 
+            p.create_date, 
+            p.end_date, 
+            p.url_image, 
+            p.user_uuid, 
+            p.activity_uuid,
+            (ST_Distance_Sphere(
+                POINT(ST_Y(p.location), ST_X(p.location)), 
+                POINT(?, ?)
+            ) / 1000) AS distance_km
+        FROM pines p
+        WHERE p.end_date > NOW()
+        HAVING distance_km <= 4;     
+            `;
+                const [result] = yield (0, connection_1.query)(sql, [userLongitude, userLatitude]);
+                console.log("aquipaaa");
+                console.log(result);
+                console.log("aquipaaa");
                 if (!result) {
                     return null;
                 }
-                const [pines] = result;
-                for (const pin of pines) {
-                    sql = "SELECT uuid, name, img_url AS urlImage FROM users WHERE uuid = ?";
-                    const [userOwner] = yield (0, connection_1.query)(sql, [pin.user_uuid]);
-                    pin.userOwners = userOwner;
-                    sql = "SELECT uuid, name, url_image FROM activitys WHERE uuid = ?";
-                    const [activity] = yield (0, connection_1.query)(sql, [pin.activity_uuid]);
-                    pin.infoActivity = activity[0];
-                }
-                console.log(pines);
-                const marks = pines.map((pin) => new mark_1.MarkDescription(pin.uuid, pin.latitude, pin.longitude, pin.description, pin.create_date, pin.end_date, pin.url_image, pin.user_uuid, pin.activity_uuid, pin.userOwners, pin.infoActivity));
-                return marks;
+                const rows = result;
+                return result;
             }
             catch (error) {
                 console.error(error);
@@ -130,6 +123,27 @@ class MysqlMarkRepository {
             catch (error) {
                 console.error("Error adding activity:", error);
                 return null;
+            }
+        });
+    }
+    addOwnerMarks(owners, marks) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (owners.length !== marks.length) {
+                    console.error('Los arreglos owners y marks tienen longitudes diferentes.');
+                    return null;
+                }
+                const markDescriptionsPromises = owners.map((owner, index) => __awaiter(this, void 0, void 0, function* () {
+                    const userOwner = marks[index];
+                    const sql = "SELECT uuid, name, url_image FROM activitys WHERE uuid = ?";
+                    const [activity] = yield (0, connection_1.query)(sql, [owner.activity_uuid]);
+                    return new mark_1.MarkDescription(owner.uuid, owner.latitude, owner.longitude, owner.description, owner.create_date, owner.end_date, owner.url_image, owner.user_uuid, owner.activity_uuid, [userOwner], activity[0]);
+                }));
+                return yield Promise.all(markDescriptionsPromises);
+            }
+            catch (error) {
+                console.error('Error en addOwnerMarks:', error);
+                throw error;
             }
         });
     }

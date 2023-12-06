@@ -10,18 +10,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ListMarkController = void 0;
+const usersOwners_1 = require("./sevices/usersOwners");
 class ListMarkController {
-    constructor(listMarkUseCase) {
+    constructor(listMarkUseCase, addOwnerMarksUseCase) {
         this.listMarkUseCase = listMarkUseCase;
+        this.addOwnerMarksUseCase = addOwnerMarksUseCase;
     }
     run(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { userLatitude, userLongitude, } = req.query;
                 let createMark = yield this.listMarkUseCase.run(Number(userLatitude), Number(userLongitude));
+                const recibo = yield (0, usersOwners_1.fetchUserOwners)(createMark);
+                let markAddOwner = yield this.addOwnerMarksUseCase.run(createMark, recibo.data.getUser);
                 return res.status(200).send({
                     status: "ok",
-                    message: createMark
+                    message: markAddOwner
                 });
             }
             catch (error) {

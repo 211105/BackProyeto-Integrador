@@ -1,10 +1,14 @@
 import { Request, Response } from "express";
 import { ListMarkUseCase } from "../../application/listMarksUseCase";
 import { fetchUserOwners } from "./sevices/usersOwners";
+import { AddOwnerMarksUseCase } from "../../application/addOwnerMarksUseCase";
 
 
 export class ListMarkController{ 
-    constructor(readonly listMarkUseCase: ListMarkUseCase){}
+    constructor(
+        readonly listMarkUseCase: ListMarkUseCase,
+        readonly addOwnerMarksUseCase: AddOwnerMarksUseCase
+        ){}
 
     async  run(req: Request, res: Response) {
         try {
@@ -16,18 +20,21 @@ export class ListMarkController{
 
            
             let createMark = await this.listMarkUseCase.run(Number(userLatitude), Number(userLongitude))
-            console.log("aquipa 2")
-            console.log(createMark)
-            fetchUserOwners(createMark)
+
+            const recibo = await fetchUserOwners(createMark)
+
+            let markAddOwner = await this.addOwnerMarksUseCase.run(createMark,recibo.data.getUser)
+
+
 
             return res.status(200).send({
                 status: "ok",
-                message: createMark
+                message: markAddOwner
             });
 
         } catch (error) {
             if (error instanceof Error) {
-                if (error.message.startsWith('[')) {      
+                if (error.message.startsWith('[')) {     
                     const errors = JSON.parse(error.message);
                     const modifiedErrors = errors.map(({ property, children, constraints }) => ({
                         property,

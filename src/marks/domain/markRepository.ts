@@ -25,4 +25,6 @@ export interface IMarkRepository {
 
     listActyvitiys():Promise<Activity[] | null>
 
+    addOwnerMarks(marks: any[], owners: UserOwner[]):Promise<any | null>
+
 }

@@ -1,11 +1,12 @@
 import { error } from "console";
 import { query } from "../../database/connection";
-import { Activity, MarkDescription } from "../domain/mark";
+import { Activity, MarkDescription, UserOwner } from "../domain/mark";
 import { IMarkRepository } from "../domain/markRepository";
 import { RowDataPacket } from "mysql2";
 
 
 export class MysqlMarkRepository implements IMarkRepository {
+  
     
     async createMark(
         uuid: string,
@@ -35,22 +36,22 @@ export class MysqlMarkRepository implements IMarkRepository {
     ): Promise<string[] | null> {
         try {
             let sql = `
-                SELECT p.uuid, 
-                ST_X(p.location) AS latitude, 
-                ST_Y(p.location) AS longitude, 
-                p.description, 
-                p.create_date, 
-                p.end_date, 
-                p.url_image, 
-                p.user_uuid, 
-                p.activity_uuid,
-                (ST_Distance_Sphere(
-                    POINT(ST_Y(p.location), ST_X(p.location)), 
-                    POINT(?, ?)
-                ) / 1000) AS distance_km
-            FROM pines p
-         
-            HAVING distance_km <= 4;   
+            SELECT p.uuid, 
+            ST_X(p.location) AS latitude, 
+            ST_Y(p.location) AS longitude, 
+            p.description, 
+            p.create_date, 
+            p.end_date, 
+            p.url_image, 
+            p.user_uuid, 
+            p.activity_uuid,
+            (ST_Distance_Sphere(
+                POINT(ST_Y(p.location), ST_X(p.location)), 
+                POINT(?, ?)
+            ) / 1000) AS distance_km
+        FROM pines p
+        WHERE p.end_date > NOW()
+        HAVING distance_km <= 4;     
             `;
                 const [result]: any = await query(sql, [userLongitude, userLatitude]);
             console.log("aquipaaa")
@@ -63,9 +64,9 @@ export class MysqlMarkRepository implements IMarkRepository {
     
             // Asegurarse de que result es tratado como RowDataPacket[]
             const rows = result as RowDataPacket[];
-            const userUuids = rows.map(pin => pin.user_uuid);
+            //  const userUuids = rows.map(pin => pin.user_uuid);
     
-            return userUuids;
+            return result;
         } catch (error) {
             console.error(error);
             return null;
@@ -140,6 +141,48 @@ export class MysqlMarkRepository implements IMarkRepository {
             return null;
         }
         }
-    
+        
+
+        async addOwnerMarks(owners: any[], marks: UserOwner[]): Promise<MarkDescription[] | null> {
+            try {
+        
+                // Verificar que ambos arreglos tienen la misma longitud
+                if (owners.length !== marks.length) {
+                    console.error('Los arreglos owners y marks tienen longitudes diferentes.');
+                    return null;
+                }
+        
+                const markDescriptionsPromises: Promise<MarkDescription>[] = owners.map(async (owner, index) => {
+                    const userOwner = marks[index]; // Obtener el correspondiente UserOwner basado en el índice
+        
+                    const sql = "SELECT uuid, name, url_image FROM activitys WHERE uuid = ?";
+                    const [activity]: any = await query(sql, [owner.activity_uuid]);
+                    
+        
+                    return new MarkDescription(
+                        owner.uuid,
+                        owner.latitude,
+                        owner.longitude,
+                        owner.description,
+                        owner.create_date,
+                        owner.end_date,
+                        owner.url_image,
+                        owner.user_uuid,
+                        owner.activity_uuid,
+                        [userOwner], // Envolver en un arreglo
+                        activity[0]
+                    );
+                });
+        
+                return await Promise.all(markDescriptionsPromises);
+            } catch (error) {
+                console.error('Error en addOwnerMarks:', error);
+                throw error;
+            }
+        }
+        
+        
+        
+        
 
 }
