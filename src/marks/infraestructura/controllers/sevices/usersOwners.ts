@@ -1,40 +1,25 @@
-type Suspender<T> = {
-    read: () => T;
-};
 
-const getSuspender = <T>(promise: Promise<T>): Suspender<T> => {
-    let status: "pending" | "success" | "error" = "pending";
-    let response: T | Error;
+export async function fetchUserOwners(uuids: string[]): Promise<any> {
+    const url = "https://allgate.cristilex.com/api/v1/users/owners/";
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiYWVmMzhiZmItYTBmZS00OGE3LTkxNWEtMzkyZTI4MTQ0ZDE1IiwiZW1haWwiOiJtYXJpYUBnbWFpbC5jb20iLCJpYXQiOjE3MDE1MDAwODksImV4cCI6MTcwMTc2NjQ4OX0.EcMU1AANOMlciWMsUnu2eg1qF_uFyludx2Mu6-Mtoxc";
 
-    const suspender = promise.then(
-        (res) => {
-            status = "success";
-            response = res;
-        },
-        (err) => {
-            status = "error";
-            response = err;
-        }
-    );
+    let headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("Authorization", `Bearer ${token}`);
 
-    const read = (): T => {
-        switch (status) {
-            case "pending":
-                throw suspender;
-            case "error":
-                throw response;
-            default:
-                return response as T;
-        }
+    const requestOptions: RequestInit = {
+        method: 'GET',
+        headers: headers,
+        body: JSON.stringify({ uuids }),
+        redirect: 'follow' // Ajuste aquí
     };
 
-    return { read };
-};
-
-export function fetchData(url: string): Suspender<any> {
-    const promise = fetch(url)
-        .then((response) => response.json())
-        .then((json) => json);
-
-    return getSuspender(promise);
+    try {
+        const response = await fetch(url, requestOptions);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error fetching user owners:', error);
+        throw error;
+    }
 }

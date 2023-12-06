@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
-
 import { ListActivitysUseCase } from "../../application/listActyvitiysUseCase";
 
 export class ListActivitysController {
     constructor(readonly listActivitysUseCase: ListActivitysUseCase) { }
     async run(req: Request, res: Response) {
         try {
-            let listActivitys = await this.listActivitysUseCase.run()
 
-          
+            let listActivitys = await this.listActivitysUseCase.run()
+                
                 return res.status(200).send({
                     status: "succes",
                         message: listActivitys

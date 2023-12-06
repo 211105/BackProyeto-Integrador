@@ -2,6 +2,7 @@ import { error } from "console";
 import { query } from "../../database/connection";
 import { Activity, MarkDescription } from "../domain/mark";
 import { IMarkRepository } from "../domain/markRepository";
+import { RowDataPacket } from "mysql2";
 
 
 export class MysqlMarkRepository implements IMarkRepository {
@@ -31,9 +32,8 @@ export class MysqlMarkRepository implements IMarkRepository {
     async listMarks(
         userLatitude: number, 
         userLongitude: number
-        ): Promise<MarkDescription[] | null | string> {
+    ): Promise<string[] | null> {
         try {
-            // Primero, obtenemos todos los datos básicos de los pines
             let sql = `
                 SELECT p.uuid, 
                 ST_X(p.location) AS latitude, 
@@ -49,53 +49,29 @@ export class MysqlMarkRepository implements IMarkRepository {
                     POINT(?, ?)
                 ) / 1000) AS distance_km
             FROM pines p
-            WHERE p.end_date > NOW()
+         
             HAVING distance_km <= 4;   
-                `;
-            const result = await query(sql, [userLongitude, userLatitude]);
+            `;
+                const [result]: any = await query(sql, [userLongitude, userLatitude]);
+            console.log("aquipaaa")
+            console.log(result)
+            console.log("aquipaaa")
+
             if (!result) {
                 return null;
             }
-            ///
-            const [pines]: any[] = result;
-            // Para cada pin, obtenemos los datos adicionales de UserOwner, UserAsist y Activity
-            for (const pin of pines) {
-                    //desde la api
-                // Obtener UserOwner
-                sql = "SELECT uuid, name, img_url AS urlImage FROM users WHERE uuid = ?";
-                const [userOwner]: any = await query(sql, [pin.user_uuid]);
-                pin.userOwners = userOwner;
-                    //pasar como endpoit a la api de usuarios
-                // Obtener UserAsist
-                // Obtener Activity
-                sql = "SELECT uuid, name, url_image FROM activitys WHERE uuid = ?";
-                const [activity]: any = await query(sql, [pin.activity_uuid]);
-                pin.infoActivity = activity[0];
-            }
-            console.log(pines);
-            // Convertir cada pin a un objeto MarkDescription
-            const marks = pines.map((pin: any) => new MarkDescription(
-                pin.uuid,
-                pin.latitude,
-                pin.longitude,
-                pin.description,
-                pin.create_date, 
-                pin.end_date,    
-                pin.url_image,   
-                pin.user_uuid,  
-                pin.activity_uuid, 
-                pin.userOwners,  
-              
-                pin.infoActivity    
-            ));
-            
     
-            return marks;
+            // Asegurarse de que result es tratado como RowDataPacket[]
+            const rows = result as RowDataPacket[];
+            const userUuids = rows.map(pin => pin.user_uuid);
+    
+            return userUuids;
         } catch (error) {
             console.error(error);
             return null;
         }
     }
+    
 
     async userAsist(uuid: string, markUuid: string, userUuid: string, latitude: number, longitude: number): Promise<string | null | Error> {
         try {

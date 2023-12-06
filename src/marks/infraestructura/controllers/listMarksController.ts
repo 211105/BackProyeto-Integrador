@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ListMarkUseCase } from "../../application/listMarksUseCase";
+import { fetchUserOwners } from "./sevices/usersOwners";
 
 
 export class ListMarkController{ 
@@ -15,6 +16,10 @@ export class ListMarkController{
 
            
             let createMark = await this.listMarkUseCase.run(Number(userLatitude), Number(userLongitude))
+            console.log("aquipa 2")
+            console.log(createMark)
+            fetchUserOwners(createMark)
+
             return res.status(200).send({
                 status: "ok",
                 message: createMark
