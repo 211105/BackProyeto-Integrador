@@ -11,27 +11,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateExpenseController = void 0;
 const expense_1 = require("../../domain/expense");
-const mysqlexpense_1 = require("../validations/mysqlexpense");
 class CreateExpenseController {
-    constructor(createExpenseUseCase) {
+    constructor(createExpenseUseCase, verifyWeeklyExistUseCase, verifyWeeklyAmountUseCase) {
         this.createExpenseUseCase = createExpenseUseCase;
+        this.verifyWeeklyExistUseCase = verifyWeeklyExistUseCase;
+        this.verifyWeeklyAmountUseCase = verifyWeeklyAmountUseCase;
     }
     post(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { weekly_amount_uuid, category, amount } = req.body;
-                const weeklyAmountUuidRegistered = yield (0, mysqlexpense_1.isWeeklyAmountUuidRegistered)(weekly_amount_uuid);
-                if (!weeklyAmountUuidRegistered) {
+                const verifyWeekly = yield this.verifyWeeklyExistUseCase.get(weekly_amount_uuid);
+                if (!verifyWeekly) {
                     return res.status(409).send({
                         status: 'error',
-                        message: 'El weekly_amount_uuid no existe.',
+                        message: 'El weekly_amount_uuid no existe dentro de la base de datos.',
                     });
                 }
-                const isUpdateValid = yield (0, mysqlexpense_1.isAmountUpdateValid)(weekly_amount_uuid, amount);
-                if (!isUpdateValid) {
+                const VerifyWeeklyAmountUseCase = yield this.verifyWeeklyAmountUseCase.get(weekly_amount_uuid, amount);
+                if (!VerifyWeeklyAmountUseCase) {
                     return res.status(400).send({
                         status: 'error',
-                        message: 'La cantidad que ingresaste, rebasa a la cantiad de gasto semanal o esta en 0 la cantidad semanal',
+                        message: 'La cantidad que ingresaste, rebasa a la cantiad de gasto semanal o esta en 0 :c',
                     });
                 }
                 const createExpense = yield this.createExpenseUseCase.post(weekly_amount_uuid, category, amount);

@@ -165,4 +165,84 @@ export class MysqlExpenseRepository implements ExpenseRepository {
             return error as Error;
         }
     }
+
+    async verifyWeeklyExist(weekly_amount_uuid: string): Promise<boolean | null | Error> {
+        try {
+            const checkWeeklyAmountUuidSql = `
+                SELECT COUNT(*) as weeklyAmountUuidCount
+                FROM weekly_amount
+                WHERE uuid = ?;
+            `;
+    
+            const [weeklyAmountUuidResults]: any = await query(checkWeeklyAmountUuidSql, [weekly_amount_uuid]);
+            return weeklyAmountUuidResults[0].weeklyAmountUuidCount > 0;
+        } catch (error) {
+            console.error("Error during weekly_amount_uuid verification check:", error);
+            return error as Error; // Devolver null en caso de error
+        }
+    }
+
+    async verifyWeeklyAmount(weekly_amount_uuid: string, amount: number): Promise<boolean | Error | null> {
+        try {
+            const getAmountUpdateSql = `
+                SELECT amount_update
+                FROM weekly_amount
+                WHERE uuid = ?;
+            `;
+            const [amountUpdateResults]: any = await query(getAmountUpdateSql, [weekly_amount_uuid]);
+    
+            if (!amountUpdateResults || amountUpdateResults.length === 0) {
+                throw new Error("No se encontró el registro correspondiente en la tabla weekly_amount.");
+            }
+    
+            const { amount_update: currentAmountUpdate } = amountUpdateResults[0];
+            const result = currentAmountUpdate - amount;
+    
+            return result >= 0; // Retorna true si la resta es mayor o igual a 0, false si es menor a 0.
+        } catch (error) {
+            console.error("Error during amount verification:", error);
+            return error as Error; // Devuelve el objeto de error en lugar de lanzar una excepción
+        }
+    }
+
+    async  verifyUpdateAmount(uuid: string, amount: number): Promise<boolean | Error | null> {
+        try {
+            // Obtener el UUID de weekly_amount asociado con el gasto
+            const getWeeklyAmountUuidSql = "SELECT weekly_amount_uuid FROM expenses WHERE uuid = ?";
+            const getWeeklyAmountUuidParams: any[] = [uuid];
+            const [weeklyAmountUuidResult]: any = await query(getWeeklyAmountUuidSql, getWeeklyAmountUuidParams);
+    
+            const weeklyAmountUuid = weeklyAmountUuidResult[0].weekly_amount_uuid;
+    
+            // Obtener el valor de amount_update en la tabla weekly_amount
+            const getAmountUpdateSql = "SELECT amount_update FROM weekly_amount WHERE uuid = ?";
+            const getAmountUpdateParams: any[] = [weeklyAmountUuid];
+            const [amountUpdateResult]: any = await query(getAmountUpdateSql, getAmountUpdateParams);
+    
+            const amountUpdate = parseFloat(amountUpdateResult[0].amount_update); // Convertir a número
+    
+            // Obtener el valor de amount en la tabla expenses
+            const getAmountSql = "SELECT amount FROM expenses WHERE uuid = ?";
+            const getAmountParams: any[] = [uuid];
+            const [amountResult]: any = await query(getAmountSql, getAmountParams);
+    
+            const expenseAmount = parseFloat(amountResult[0].amount); // Convertir a número
+    
+            // Verificar si los valores son numéricos válidos después de la conversión
+            if (isNaN(expenseAmount) || isNaN(amountUpdate)) {
+                throw new Error("Invalid numeric values for the validation.");
+            }
+    
+            // Calcular la suma de amount y amount_update
+            const sumResult = expenseAmount + amountUpdate;
+    
+            // Verificar si la resta es mayor o igual a 0
+            const difference = sumResult - amount;
+    
+            return difference >= 0;
+        } catch (error) {
+            console.error("Error during amount update validation:", error);
+            return error as Error; // Devuelve el objeto de error en lugar de lanzar una excepción
+        }
+    }
 }

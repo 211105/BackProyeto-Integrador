@@ -1,23 +1,21 @@
 import { Request, Response } from "express";
 import { UpdataAmountExpenseUseCase } from "../../application/updateAmountExpenseUseCase";
-
-import {isAmountUpdateValited } from "../validations/mysqlexpense";
-
+import { VerifyUpdateAmountUseCase } from "../../application/verifyUpdateAmountUseCase";
 
 export class UpdateAmountExpenseController {
-    constructor(readonly updataAmountExpenseUseCase: UpdataAmountExpenseUseCase) { }
+    constructor(readonly updataAmountExpenseUseCase: UpdataAmountExpenseUseCase, readonly verifyUpdateAmountUseCase:VerifyUpdateAmountUseCase) { }
 
     async update(req: Request, res: Response) {
         try {
 
             let { uuid, amount } = req.body;
 
-            const isUpdateValid = await isAmountUpdateValited(uuid, amount);
+            const verifyAmount = await this.verifyUpdateAmountUseCase.get(uuid, amount);
 
-            if (!isUpdateValid) {
+            if (!verifyAmount) {
                 return res.status(400).send({
                     status: 'error',
-                    message: 'La actualización del amount no es válida. Revasa a la cantiada semanal disponible',
+                    message: 'La actualización del amount no es válida. Revasa a la cantiada semanal disponibleee',
                 });
             }
 

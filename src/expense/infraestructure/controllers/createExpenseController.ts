@@ -1,29 +1,35 @@
 import { Request, Response } from "express";
 import { CreateExpenseUseCase } from "../../application/createExpenseUseCase";
+import { VerifyWeeklyExistUseCase } from "../../application/verifyWeeklyExistUseCase";
+import { VerifyWeeklyAmountUseCase } from "../../application/verifyWeeklyAmountUseCase";
 import { Expense } from "../../domain/expense";
-import { isWeeklyAmountUuidRegistered,isAmountUpdateValid } from "../validations/mysqlexpense";
 
 export class CreateExpenseController {
-    constructor(readonly createExpenseUseCase: CreateExpenseUseCase) { }
+    constructor(
+        readonly createExpenseUseCase: CreateExpenseUseCase, 
+        readonly verifyWeeklyExistUseCase:VerifyWeeklyExistUseCase,
+        readonly verifyWeeklyAmountUseCase:VerifyWeeklyAmountUseCase
+    ){}
 
     async post(req: Request, res: Response) {
         try {
             let { weekly_amount_uuid, category, amount } = req.body;
 
-            //Verifica si el UUID de  weekly existe
-            const weeklyAmountUuidRegistered = await isWeeklyAmountUuidRegistered(weekly_amount_uuid);
-            if (!weeklyAmountUuidRegistered) {
+            //Verifica si el uuid del weekly_amount existe en la base de datos
+            const verifyWeekly = await this.verifyWeeklyExistUseCase.get(weekly_amount_uuid);
+            if (!verifyWeekly) {
                 return res.status(409).send({
                     status: 'error',
-                    message: 'El weekly_amount_uuid no existe.',
+                    message: 'El weekly_amount_uuid no existe dentro de la base de datos.',
                 });
             }
 
-            const isUpdateValid = await isAmountUpdateValid(weekly_amount_uuid, amount);
-            if (!isUpdateValid) {
+           // verifica que la categoria a agregar no rebase a la cantidad semanal
+            const VerifyWeeklyAmountUseCase = await this.verifyWeeklyAmountUseCase.get(weekly_amount_uuid,amount);
+            if (!VerifyWeeklyAmountUseCase) {
                 return res.status(400).send({
                     status: 'error',
-                    message: 'La cantidad que ingresaste, rebasa a la cantiad de gasto semanal o esta en 0 la cantidad semanal',
+                    message: 'La cantidad que ingresaste, rebasa a la cantiad de gasto semanal o esta en 0 :c',
                 });
             }
 

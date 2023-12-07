@@ -10,4 +10,11 @@ export interface ExpenseRepository{
 
     getExpensesByWeekly(weekly_amount_uuid:string):Promise<Expense[] | null | string | Error>
 
+    // VERIFICACIONES
+    verifyWeeklyExist(weekly_amount_uuid:string):Promise<boolean | null | Error>
+
+    verifyWeeklyAmount(weekly_amount_uuid:string, amount:number):Promise<boolean | null | Error>
+
+    verifyUpdateAmount(uuid:string, amount:number):Promise<boolean | null | Error>
+
 }

@@ -128,6 +128,73 @@ class MysqlExpenseRepository {
             }
         });
     }
+    verifyWeeklyExist(weekly_amount_uuid) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const checkWeeklyAmountUuidSql = `
+                SELECT COUNT(*) as weeklyAmountUuidCount
+                FROM weekly_amount
+                WHERE uuid = ?;
+            `;
+                const [weeklyAmountUuidResults] = yield (0, connection_1.query)(checkWeeklyAmountUuidSql, [weekly_amount_uuid]);
+                return weeklyAmountUuidResults[0].weeklyAmountUuidCount > 0;
+            }
+            catch (error) {
+                console.error("Error during weekly_amount_uuid verification check:", error);
+                return error;
+            }
+        });
+    }
+    verifyWeeklyAmount(weekly_amount_uuid, amount) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const getAmountUpdateSql = `
+                SELECT amount_update
+                FROM weekly_amount
+                WHERE uuid = ?;
+            `;
+                const [amountUpdateResults] = yield (0, connection_1.query)(getAmountUpdateSql, [weekly_amount_uuid]);
+                if (!amountUpdateResults || amountUpdateResults.length === 0) {
+                    throw new Error("No se encontró el registro correspondiente en la tabla weekly_amount.");
+                }
+                const { amount_update: currentAmountUpdate } = amountUpdateResults[0];
+                const result = currentAmountUpdate - amount;
+                return result >= 0;
+            }
+            catch (error) {
+                console.error("Error during amount verification:", error);
+                return error;
+            }
+        });
+    }
+    verifyUpdateAmount(uuid, amount) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const getWeeklyAmountUuidSql = "SELECT weekly_amount_uuid FROM expenses WHERE uuid = ?";
+                const getWeeklyAmountUuidParams = [uuid];
+                const [weeklyAmountUuidResult] = yield (0, connection_1.query)(getWeeklyAmountUuidSql, getWeeklyAmountUuidParams);
+                const weeklyAmountUuid = weeklyAmountUuidResult[0].weekly_amount_uuid;
+                const getAmountUpdateSql = "SELECT amount_update FROM weekly_amount WHERE uuid = ?";
+                const getAmountUpdateParams = [weeklyAmountUuid];
+                const [amountUpdateResult] = yield (0, connection_1.query)(getAmountUpdateSql, getAmountUpdateParams);
+                const amountUpdate = parseFloat(amountUpdateResult[0].amount_update);
+                const getAmountSql = "SELECT amount FROM expenses WHERE uuid = ?";
+                const getAmountParams = [uuid];
+                const [amountResult] = yield (0, connection_1.query)(getAmountSql, getAmountParams);
+                const expenseAmount = parseFloat(amountResult[0].amount);
+                if (isNaN(expenseAmount) || isNaN(amountUpdate)) {
+                    throw new Error("Invalid numeric values for the validation.");
+                }
+                const sumResult = expenseAmount + amountUpdate;
+                const difference = sumResult - amount;
+                return difference >= 0;
+            }
+            catch (error) {
+                console.error("Error during amount update validation:", error);
+                return error;
+            }
+        });
+    }
 }
 exports.MysqlExpenseRepository = MysqlExpenseRepository;
 //# sourceMappingURL=mysqlExpenseRepository.js.map

@@ -10,20 +10,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateAmountExpenseController = void 0;
-const mysqlexpense_1 = require("../validations/mysqlexpense");
 class UpdateAmountExpenseController {
-    constructor(updataAmountExpenseUseCase) {
+    constructor(updataAmountExpenseUseCase, verifyUpdateAmountUseCase) {
         this.updataAmountExpenseUseCase = updataAmountExpenseUseCase;
+        this.verifyUpdateAmountUseCase = verifyUpdateAmountUseCase;
     }
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { uuid, amount } = req.body;
-                const isUpdateValid = yield (0, mysqlexpense_1.isAmountUpdateValited)(uuid, amount);
-                if (!isUpdateValid) {
+                const verifyAmount = yield this.verifyUpdateAmountUseCase.get(uuid, amount);
+                if (!verifyAmount) {
                     return res.status(400).send({
                         status: 'error',
-                        message: 'La actualización del amount no es válida. Revasa a la cantiada semanal disponible',
+                        message: 'La actualización del amount no es válida. Revasa a la cantiada semanal disponibleee',
                     });
                 }
                 const updateAmount = yield this.updataAmountExpenseUseCase.update(uuid, amount);
