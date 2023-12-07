@@ -26,3 +26,5 @@ weeklyAmountRoutes.put('/',updateWeeklyAmountController.update.bind(updateWeekly
 
 
 
+
+

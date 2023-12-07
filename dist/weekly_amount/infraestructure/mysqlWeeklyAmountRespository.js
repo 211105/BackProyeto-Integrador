@@ -110,6 +110,35 @@ class MysqlWeeklyAmountRepository {
             }
         });
     }
+    verifyWeeklyAmount(uuid, amount) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const checkWeeklyAmountUuidSql = `
+                SELECT COUNT(*) as weeklyAmountUuidCount
+                FROM weekly_amount
+                WHERE uuid = ?;
+            `;
+                const [weeklyAmountUuidResults] = yield (0, connection_1.query)(checkWeeklyAmountUuidSql, [uuid]);
+                const weeklyAmountUuidCount = weeklyAmountUuidResults[0].weeklyAmountUuidCount;
+                if (weeklyAmountUuidCount === 0) {
+                    return false;
+                }
+                const sumExpenseAmountSql = `
+                SELECT SUM(amount) as totalExpenseAmount
+                FROM expenses
+                WHERE weekly_amount_uuid = ?;
+            `;
+                const [sumExpenseResults] = yield (0, connection_1.query)(sumExpenseAmountSql, [uuid]);
+                const totalExpenseAmountString = sumExpenseResults[0].totalExpenseAmount || "0";
+                const totalExpenseAmount = Number(totalExpenseAmountString);
+                return totalExpenseAmount > amount;
+            }
+            catch (error) {
+                console.error("Error during weekly_amount verification:", error);
+                throw new Error("Error during weekly_amount verification");
+            }
+        });
+    }
 }
 exports.MysqlWeeklyAmountRepository = MysqlWeeklyAmountRepository;
 //# sourceMappingURL=mysqlWeeklyAmountRespository.js.map

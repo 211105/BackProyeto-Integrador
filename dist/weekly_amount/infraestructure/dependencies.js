@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateWeeklyAmountController = exports.updateWeeklyAmountUseCase = exports.updateStatusByUserController = exports.updateStatusByUserUseCase = exports.getWeeklyAmountByUserController = exports.getWeekAmountByUserUseCase = exports.createWeeklyAmountController = exports.createWeeklyAmountUseCase = exports.mysqlWeeklyAmountRepository = void 0;
+exports.updateWeeklyAmountController = exports.verifyWeeklyAmountUseCase = exports.updateWeeklyAmountUseCase = exports.updateStatusByUserController = exports.updateStatusByUserUseCase = exports.getWeeklyAmountByUserController = exports.getWeekAmountByUserUseCase = exports.createWeeklyAmountController = exports.createWeeklyAmountUseCase = exports.mysqlWeeklyAmountRepository = void 0;
 const mysqlWeeklyAmountRespository_1 = require("./mysqlWeeklyAmountRespository");
 const createWeeklyAmountUseCase_1 = require("../application/createWeeklyAmountUseCase");
 const createWeeklyAmountController_1 = require("./controllers/createWeeklyAmountController");
@@ -9,6 +9,7 @@ const getWeeklyAmountByUserController_1 = require("./controllers/getWeeklyAmount
 const updateStatusByUserUseCase_1 = require("../application/updateStatusByUserUseCase");
 const updateStatusByUserController_1 = require("./controllers/updateStatusByUserController");
 const updateWeeklyAmountUseCase_1 = require("../application/updateWeeklyAmountUseCase");
+const veriFyWeeklyAmountUseCase_1 = require("../application/veriFyWeeklyAmountUseCase");
 const updateWeeklyAmountController_1 = require("./controllers/updateWeeklyAmountController");
 exports.mysqlWeeklyAmountRepository = new mysqlWeeklyAmountRespository_1.MysqlWeeklyAmountRepository();
 exports.createWeeklyAmountUseCase = new createWeeklyAmountUseCase_1.CreateWeeklyAmountUseCase(exports.mysqlWeeklyAmountRepository);
@@ -18,5 +19,6 @@ exports.getWeeklyAmountByUserController = new getWeeklyAmountByUserController_1.
 exports.updateStatusByUserUseCase = new updateStatusByUserUseCase_1.UpdateStatusByUserUseCase(exports.mysqlWeeklyAmountRepository);
 exports.updateStatusByUserController = new updateStatusByUserController_1.UpdateStatusByUserController(exports.updateStatusByUserUseCase);
 exports.updateWeeklyAmountUseCase = new updateWeeklyAmountUseCase_1.UpdateWeeklyAmountUseCase(exports.mysqlWeeklyAmountRepository);
-exports.updateWeeklyAmountController = new updateWeeklyAmountController_1.UpdateWeeklyAmountController(exports.updateWeeklyAmountUseCase);
+exports.verifyWeeklyAmountUseCase = new veriFyWeeklyAmountUseCase_1.VerifyWeeklyAmountUseCase(exports.mysqlWeeklyAmountRepository);
+exports.updateWeeklyAmountController = new updateWeeklyAmountController_1.UpdateWeeklyAmountController(exports.updateWeeklyAmountUseCase, exports.verifyWeeklyAmountUseCase);
 //# sourceMappingURL=dependencies.js.map

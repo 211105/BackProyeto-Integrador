@@ -10,20 +10,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateWeeklyAmountController = void 0;
-const mysqlweeklyamount_1 = require("../validations/mysqlweeklyamount");
 class UpdateWeeklyAmountController {
-    constructor(UpdateWeeklyAmountUseCase) {
+    constructor(UpdateWeeklyAmountUseCase, verifyWeeklyAmountUseCase) {
         this.UpdateWeeklyAmountUseCase = UpdateWeeklyAmountUseCase;
+        this.verifyWeeklyAmountUseCase = verifyWeeklyAmountUseCase;
     }
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { uuid, amount } = req.body;
-                const verificationResult = yield (0, mysqlweeklyamount_1.verifyWeeklyAmount)(uuid, amount);
-                if (verificationResult) {
+                const verificationMount = yield this.verifyWeeklyAmountUseCase.get(uuid, amount);
+                if (verificationMount) {
                     return res.status(409).send({
                         status: 'error',
-                        message: 'La verificación del monto semanal no fue exitosa.',
+                        message: 'El nuevo monto sobre pasa a los gatos .',
                     });
                 }
                 const updateAmount = yield this.UpdateWeeklyAmountUseCase.update(uuid, amount);
