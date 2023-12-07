@@ -1,22 +1,23 @@
 import { Request, Response } from "express";
 import { UpdateWeeklyAmountUseCase } from "../../application/updateWeeklyAmountUseCase";
+import { VerifyWeeklyAmountUseCase } from "../../application/veriFyWeeklyAmountUseCase";
 import { Weeklyamount } from "../../domain/weekly_amount";
-import { verifyWeeklyAmount } from "../validations/mysqlweeklyamount";
 
 
 export class UpdateWeeklyAmountController{
-    constructor(readonly UpdateWeeklyAmountUseCase: UpdateWeeklyAmountUseCase){}
+    constructor(readonly UpdateWeeklyAmountUseCase: UpdateWeeklyAmountUseCase, readonly verifyWeeklyAmountUseCase:VerifyWeeklyAmountUseCase){}
 
     async update(req: Request, res: Response){
         try {
             let {uuid,amount} = req.body;
 
-            const verificationResult = await verifyWeeklyAmount(uuid, amount);
+            //Verifica que el nuevo monto semanal no sobre pase a los gatos
+            const verificationMount = await this.verifyWeeklyAmountUseCase.get(uuid, amount);
 
-            if (verificationResult) {
+            if (verificationMount) {
                 return res.status(409).send({
                     status: 'error',
-                    message: 'La verificación del monto semanal no fue exitosa.',
+                    message: 'El nuevo monto sobre pasa a los gatos .',
                 });
             }
 

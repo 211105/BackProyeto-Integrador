@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { CreateWeeklyAmountUseCase } from "../../application/createWeeklyAmountUseCase";
 import { createWeekly } from "../../domain/weekly_amount";
-import { verifyWeeklyAmount } from "../validations/mysqlweeklyamount";
 import { verificarUsuario } from "../service/userVerify";
 
 

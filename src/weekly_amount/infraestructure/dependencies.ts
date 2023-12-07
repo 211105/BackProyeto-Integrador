@@ -10,6 +10,7 @@ import { UpdateStatusByUserUseCase } from "../application/updateStatusByUserUseC
 import { UpdateStatusByUserController } from "./controllers/updateStatusByUserController";
 
 import { UpdateWeeklyAmountUseCase } from "../application/updateWeeklyAmountUseCase";
+import { VerifyWeeklyAmountUseCase } from "../application/veriFyWeeklyAmountUseCase";
 import { UpdateWeeklyAmountController } from "./controllers/updateWeeklyAmountController";
 
 export const mysqlWeeklyAmountRepository = new MysqlWeeklyAmountRepository();
@@ -24,4 +25,5 @@ export const updateStatusByUserUseCase = new UpdateStatusByUserUseCase(mysqlWeek
 export const updateStatusByUserController = new UpdateStatusByUserController(updateStatusByUserUseCase)
 
 export const updateWeeklyAmountUseCase = new UpdateWeeklyAmountUseCase(mysqlWeeklyAmountRepository);
-export const updateWeeklyAmountController = new UpdateWeeklyAmountController(updateWeeklyAmountUseCase);
+export const verifyWeeklyAmountUseCase = new VerifyWeeklyAmountUseCase(mysqlWeeklyAmountRepository);
+export const updateWeeklyAmountController = new UpdateWeeklyAmountController(updateWeeklyAmountUseCase,verifyWeeklyAmountUseCase);

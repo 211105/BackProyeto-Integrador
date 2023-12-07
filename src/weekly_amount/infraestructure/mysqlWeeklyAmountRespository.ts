@@ -128,4 +128,40 @@ export class MysqlWeeklyAmountRepository implements Weekly_amountRepository{
             return new Error('Error al actualizar el monto semanal.');
         }
     }
+    async verifyWeeklyAmount(uuid: string, amount: number): Promise<boolean> {
+        try {
+            // Verifica si el UUID de weekly_amount existe
+            const checkWeeklyAmountUuidSql = `
+                SELECT COUNT(*) as weeklyAmountUuidCount
+                FROM weekly_amount
+                WHERE uuid = ?;
+            `;
+    
+            const [weeklyAmountUuidResults]: any = await query(checkWeeklyAmountUuidSql, [uuid]);
+            const weeklyAmountUuidCount = weeklyAmountUuidResults[0].weeklyAmountUuidCount;
+    
+            if (weeklyAmountUuidCount === 0) {
+                return false; // UUID not registered
+            }
+    
+            // Suma los valores de amount de la tabla expense para el weekly_amount_uuid dado
+            const sumExpenseAmountSql = `
+                SELECT SUM(amount) as totalExpenseAmount
+                FROM expenses
+                WHERE weekly_amount_uuid = ?;
+            `;
+    
+            const [sumExpenseResults]: any = await query(sumExpenseAmountSql, [uuid]);
+            const totalExpenseAmountString = sumExpenseResults[0].totalExpenseAmount || "0";
+    
+            // Convertir la suma de gastos a un número
+            const totalExpenseAmount = Number(totalExpenseAmountString);
+    
+            // Compara con el amount proporcionado por el usuario
+            return totalExpenseAmount > amount;
+        } catch (error) {
+            console.error("Error during weekly_amount verification:", error);
+            throw new Error("Error during weekly_amount verification");
+        }
+    }
 }

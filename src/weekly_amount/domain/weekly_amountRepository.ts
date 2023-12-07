@@ -1,3 +1,4 @@
+import { BlobOptions } from "buffer";
 import { Weeklyamount, createWeekly } from "./weekly_amount"
 
 
@@ -10,4 +11,9 @@ export interface Weekly_amountRepository{
     updateStatusByUser(user_uuid:string):Promise<Weeklyamount | null | string | Error>
 
     updateWeeklyAmount(uuid:string, amount:number):Promise<Weeklyamount | null | string | Error>
+
+
+    //Metodos de verificaciones
+    verifyWeeklyAmount(uuid:string, amount:number):Promise<Weeklyamount | null | string | Error | boolean>
+
 }
