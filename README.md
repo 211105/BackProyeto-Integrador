@@ -34,7 +34,9 @@ Añade las siguientes variables de entorno al archivo .env, reemplazando los val
 #### Instalación de Dependencias
 Ejecuta el siguiente comando para instalar las dependencias necesarias:
 
- npm install 
+ 1. npm install 
+ 2. npm install nodemon
+ 3. npm install typescript ts-node --save-dev
 
 #### Ejecución del Proyecto
 Para iniciar el servidor de desarrollo, ejecuta:
