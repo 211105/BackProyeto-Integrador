@@ -1,0 +1,22 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getExpensesByWeeklyController = exports.getExpensesByWeeklyUseCase = exports.deleteExpenseByUuidController = exports.deleteExpenseByUuidUseCase = exports.updateAmountExpenseController = exports.updataAmountExpenseUseCase = exports.createExpenseController = exports.createExpenseUseCase = exports.mysqlExpenseRepository = void 0;
+const mysqlExpenseRepository_1 = require("./mysqlExpenseRepository");
+const createExpenseUseCase_1 = require("../application/createExpenseUseCase");
+const createExpenseController_1 = require("./controllers/createExpenseController");
+const updateAmountExpenseUseCase_1 = require("../application/updateAmountExpenseUseCase");
+const updateAmountExpenseController_1 = require("./controllers/updateAmountExpenseController");
+const deleteExpenseByUuidUseCase_1 = require("../application/deleteExpenseByUuidUseCase");
+const deleteExpenseByUuidController_1 = require("./controllers/deleteExpenseByUuidController");
+const getExpensesByWeeklyUseCase_1 = require("../application/getExpensesByWeeklyUseCase");
+const getExpensesByWeeklyController_1 = require("./controllers/getExpensesByWeeklyController");
+exports.mysqlExpenseRepository = new mysqlExpenseRepository_1.MysqlExpenseRepository();
+exports.createExpenseUseCase = new createExpenseUseCase_1.CreateExpenseUseCase(exports.mysqlExpenseRepository);
+exports.createExpenseController = new createExpenseController_1.CreateExpenseController(exports.createExpenseUseCase);
+exports.updataAmountExpenseUseCase = new updateAmountExpenseUseCase_1.UpdataAmountExpenseUseCase(exports.mysqlExpenseRepository);
+exports.updateAmountExpenseController = new updateAmountExpenseController_1.UpdateAmountExpenseController(exports.updataAmountExpenseUseCase);
+exports.deleteExpenseByUuidUseCase = new deleteExpenseByUuidUseCase_1.DeleteExpenseByUuidUseCase(exports.mysqlExpenseRepository);
+exports.deleteExpenseByUuidController = new deleteExpenseByUuidController_1.DeleteExpenseByUuidController(exports.deleteExpenseByUuidUseCase);
+exports.getExpensesByWeeklyUseCase = new getExpensesByWeeklyUseCase_1.GetExpensesByWeeklyUseCase(exports.mysqlExpenseRepository);
+exports.getExpensesByWeeklyController = new getExpensesByWeeklyController_1.GetExpensesByWeeklyController(exports.getExpensesByWeeklyUseCase);
+//# sourceMappingURL=dependencies.js.map
