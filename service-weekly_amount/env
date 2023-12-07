@@ -1,0 +1,5 @@
+DB_HOST =integrado-notas-files.cnihecgfgkcq.us-east-1.rds.amazonaws.com
+DB_USER=admin  
+DB_DATABASE=notas
+DB_PASSWORD=12345678
+KEY_TOKEN =EjemploSecretKey$12345
