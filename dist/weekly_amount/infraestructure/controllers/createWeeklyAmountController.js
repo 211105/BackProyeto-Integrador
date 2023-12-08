@@ -20,7 +20,8 @@ class CreateWeeklyAmountController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { user_uuid, amount } = req.body;
-                const userExists = yield (0, userVerify_1.verificarUsuario)(user_uuid);
+                const authToken = req.header('Authorization');
+                const userExists = yield (0, userVerify_1.verificarUsuario)(user_uuid, authToken);
                 if (!userExists) {
                     return res.status(404).send({
                         status: "error",

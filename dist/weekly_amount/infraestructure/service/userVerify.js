@@ -14,13 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verificarUsuario = void 0;
 const axios_1 = __importDefault(require("axios"));
-function verificarUsuario(user_uuid) {
+function verificarUsuario(user_uuid, authToken) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         console.log('Verificando si el usuario existe...');
         try {
             const servicioUrl = `https://allgate.cristilex.com/api/v1/users/${user_uuid}`;
-            const response = yield axios_1.default.get(servicioUrl);
+            const headers = {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json',
+            };
+            const response = yield axios_1.default.get(servicioUrl, { headers });
             if (response.status === 200 || response.status === 201) {
                 console.log(`El usuario ${user_uuid} existe.`);
                 return true;

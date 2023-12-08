@@ -10,11 +10,10 @@ export class CreateWeeklyAmountController {
     async post(req: Request, res: Response) {
         try {
             let { user_uuid, amount } = req.body;
+            const authToken = req.header('Authorization');
 
-            
             // Validate the existence of the user before creating the note
-            const userExists = await verificarUsuario(user_uuid);
-
+            const userExists = await verificarUsuario(user_uuid,authToken!);
             if (!userExists) {
                 return res.status(404).send({
                     status: "error",
@@ -23,7 +22,6 @@ export class CreateWeeklyAmountController {
             }
 
             const createWeeklyAmount = await this.createWeeklyAmountUseCase.post(user_uuid, amount, amount, true);
-
             if (createWeeklyAmount instanceof createWeekly) {
                 return res.status(201).send({
                     status: "succes",
