@@ -21,7 +21,7 @@ class ListMarkController {
             try {
                 let { userLatitude, userLongitude, } = req.query;
                 let createMark = yield this.listMarkUseCase.run(Number(userLatitude), Number(userLongitude));
-                const recibo = yield (0, usersOwners_1.fetchUserOwners)(createMark);
+                const recibo = yield (0, usersOwners_1.fetchUserOwners)(createMark, req.headers.authorization);
                 let markAddOwner = yield this.addOwnerMarksUseCase.run(createMark, recibo.data.getUser);
                 return res.status(200).send({
                     status: "ok",

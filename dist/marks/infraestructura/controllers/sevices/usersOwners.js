@@ -10,24 +10,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchUserOwners = void 0;
-function fetchUserOwners(userUuids) {
+function fetchUserOwners(userUuids, token) {
     return __awaiter(this, void 0, void 0, function* () {
-        const rows = userUuids;
-        const uuids = rows.map(pin => pin.user_uuid);
-        console.log("desde el fetch", userUuids);
-        console.log(userUuids);
-        const url = "https://allgate.cristilex.com/api/v1/users/owners/";
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiYTdjZTM0MDMtYjY2NS00MjFhLTk2OWYtYTFmZWM3NDJiM2E2IiwiZW1haWwiOiJtYXJpYUBnbWFpbC5jb20iLCJpYXQiOjE3MDE4NTA4NjAsImV4cCI6MTcwMjExNzI2MH0.Zl7NTEl8MpeFzznfLnlK-G_JPUlFObKeHehuNvxkfnk";
-        let headers = new Headers();
-        headers.append("Content-Type", "application/json");
-        headers.append("Authorization", `Bearer ${token}`);
-        const requestOptions = {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify({ uuids }),
-            redirect: 'follow'
-        };
         try {
+            if (!token) {
+                throw Error("No hay token ");
+            }
+            const rows = userUuids;
+            const uuids = rows.map(pin => pin.user_uuid);
+            const url = "https://allgate.cristilex.com/api/v1/users/owners/";
+            let headers = new Headers();
+            headers.append("Content-Type", "application/json");
+            headers.append("Authorization", `Bearer ${token}`);
+            const requestOptions = {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({ uuids }),
+                redirect: 'follow'
+            };
             const response = yield fetch(url, requestOptions);
             const result = yield response.json();
             return result;

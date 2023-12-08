@@ -32,7 +32,7 @@ class UserAsistUseCase {
                 return createMark;
             }
             catch (error) {
-                return `${error}`;
+                throw error;
             }
         });
     }

@@ -95,7 +95,7 @@ class MysqlMarkRepository {
                 }
             }
             catch (error) {
-                return error;
+                throw error;
             }
         });
     }
