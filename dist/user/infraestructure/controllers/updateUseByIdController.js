@@ -19,17 +19,12 @@ class UpdateUserByIdController {
         this.updateUserByIdUseCase = updateUserByIdUseCase;
     }
     run(req, res) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { uuid, name, email, phone_number, } = req.body;
-                let img_url;
-                if (!req.files || !req.files.img_file) {
-                    img_url = undefined;
-                }
-                else {
-                    const imgFile = req.files.img_file;
-                    img_url = yield (0, saveImages_1.default)(imgFile);
-                }
+                const imgFile = (_a = req.files) === null || _a === void 0 ? void 0 : _a.img_file;
+                const img_url = yield (0, saveImages_1.default)(imgFile);
                 if (name === undefined && email === undefined && phone_number === undefined && img_url === undefined) {
                     return res.status(200).send({
                         status: "succes",

@@ -20,50 +20,22 @@ class ResgisterUserController {
         this.registerUserUseCase = registerUserUseCase;
     }
     run(req, res) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('controller');
             try {
                 let { name, email, phone_number, password, } = req.body;
-                console.log(name);
-                console.log(email);
-                console.log(phone_number);
-                console.log(password);
-                if (!req.files || !req.files.img_file) {
-                    return res.status(400).send({
-                        status: "error",
-                        message: "No image file uploaded."
-                    });
-                }
-                const imgFile = req.files.img_file;
+                const imgFile = (_a = req.files) === null || _a === void 0 ? void 0 : _a.img_file;
                 const img_url = yield (0, saveImages_1.default)(imgFile);
-                console.log(img_url);
                 let registerUser = yield this.registerUserUseCase.run(name, email, phone_number, img_url, password, 'user');
-                if (registerUser instanceof Error) {
-                    return res.status(409).send({
-                        status: "error",
-                        message: registerUser.message
-                    });
-                }
                 if (registerUser instanceof user_1.User) {
                     return res.status(201).send({
                         status: "succes",
-                        data: {
-                            id: registerUser.uuid,
-                            name: registerUser.name,
-                            email: registerUser.email,
-                            phone_number: registerUser.phone_number,
-                            type_user: registerUser.type_user
-                        }
-                    });
-                }
-                else {
-                    return res.status(500).send({
-                        status: "error",
-                        message: "An unexpected error occurred while register the user."
+                        registerUser
                     });
                 }
             }
             catch (error) {
+                console.log("entre al error");
                 if (error instanceof Error) {
                     if (error.message.includes('Duplicate entry') && error.message.includes('for key \'users.email\'')) {
                         return res.status(409).send({
@@ -81,7 +53,7 @@ class ResgisterUserController {
                 }
                 return res.status(500).send({
                     status: "error",
-                    message: "An unexpected error occurred. Please try again later.",
+                    message: "Please try again later.",
                 });
             }
         });

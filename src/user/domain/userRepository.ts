@@ -33,4 +33,3 @@ export interface IUsuarioRepository {
 
     getUserOwners(UserOwners: string[]):Promise<UserOwner[]| any>
 }
-

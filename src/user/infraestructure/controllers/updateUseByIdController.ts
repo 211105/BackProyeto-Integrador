@@ -18,13 +18,9 @@ export class UpdateUserByIdController {
                 phone_number,
             } = req.body
 
-            let img_url: undefined | string;
-            if (!req.files || !req.files.img_file) {
-                img_url = undefined;
-            } else {
-                const imgFile = req.files.img_file as UploadedFile;
-                img_url = await uploadToFirebase(imgFile);
-            }
+            const imgFile = req.files?.img_file as UploadedFile | null;
+            const img_url = await uploadToFirebase(imgFile);
+
 
             if (name === undefined && email === undefined && phone_number === undefined && img_url === undefined) {
                 return res.status(200).send({
