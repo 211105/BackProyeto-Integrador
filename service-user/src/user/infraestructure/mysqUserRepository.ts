@@ -9,8 +9,20 @@ export class MysqlUserRepository implements IUsuarioRepository {
 
 
         async registerUser(uuid: string, name: string, email: string, phone_number: string, img_url: string, password: string,type_user:string): Promise<User | null | string | Error> {
+
         
             try {
+
+                const checkEmailSql = `
+                SELECT COUNT(*) as emailCount
+                FROM users
+                WHERE email = ?;
+                `;
+                
+                const [emailResults]: any = await query(checkEmailSql, [email]);
+                if (emailResults[0].emailCount > 0) {
+                    throw new Error("El correo electrónico ya está registrado en la base de datos.");
+                }
                 
                 let sql = "INSERT INTO users(uuid, name, email, phone_number , password, img_url, type_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 const params: any[] = [uuid, name, email, phone_number, password, img_url,type_user];

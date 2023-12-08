@@ -40,7 +40,7 @@ export class ResgisterUserController {
             }
 
         } catch (error) {
-            console.log("entre al error")
+            console.log("entre al error", error)
             // Manejo de errores específicos
             if (error instanceof Error) {
                 if (error.message.includes('Duplicate entry') && error.message.includes('for key \'users.email\'')) {
@@ -60,7 +60,7 @@ export class ResgisterUserController {
             // Para errores generales, se devuelve un error 500 con un mensaje genérico
             return res.status(500).send({
                 status: "error",
-                message: "Please try again later.",
+                message: "Please try again later:" + error,
             });
         }
     }
