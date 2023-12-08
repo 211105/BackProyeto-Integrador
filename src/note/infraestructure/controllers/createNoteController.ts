@@ -8,16 +8,21 @@ export class CreateNoteController {
     constructor(readonly createNoteUseCase: CreateNoteUseCase) { }
 
     async post(req: Request, res: Response) {
-        interface NoteWithCreatedAt extends Note {
-            created_at: Date;
-        }
 
         try {
+
             let { user_uuid, title, description } = req.body;
 
-            // Validate the existence of the user before creating the note
-            const userExists = await verificarUsuario(user_uuid);
+            const authToken = req.header('Authorization');
+            if (!authToken) {
+                return res.status(401).send({
+                    status: "error",
+                    message: "Missing authorization token. Cannot verify the user."
+                });
+            }
 
+            // Validate the existence of the user before creating the note
+            const userExists = await verificarUsuario(user_uuid,authToken);
             if (!userExists) {
                 return res.status(404).send({
                     status: "error",
@@ -26,25 +31,17 @@ export class CreateNoteController {
             }
 
             // Continue with note creation if the user exists
-            const createFile = await this.createNoteUseCase.post(
-                user_uuid,
-                title,
-                description,
-                false
-            );
-
-            const noteWithCreatedAt = createFile as NoteWithCreatedAt;
+            const createFile = await this.createNoteUseCase.post(user_uuid,title,description,false);
 
             if (createFile instanceof Note) {
                 return res.status(201).send({
                     status: "success",
                     data: {
-                        uuid: noteWithCreatedAt.uuid,
-                        user_uuid: noteWithCreatedAt.user_uuid,
-                        title: noteWithCreatedAt.title,
-                        description: noteWithCreatedAt.description,
-                        status: noteWithCreatedAt.status,
-                        created_at: noteWithCreatedAt.created_at
+                        uuid: createFile.uuid,
+                        user_uuid: createFile.user_uuid,
+                        title: createFile.title,
+                        description: createFile.description,
+                        status: createFile.status
                     }
                 });
             } else {

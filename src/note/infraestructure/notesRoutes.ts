@@ -17,13 +17,13 @@ noteRoutes.get('/rutine/', (req: Request, res: Response) => {
     res.status(200).send('Rutina ejecutada con éxito');
 })
 
-noteRoutes.delete('/:uuid',deleteFileController.delete.bind(deleteFileController))
+noteRoutes.delete('/:uuid',validateToken,deleteFileController.delete.bind(deleteFileController))
 
-noteRoutes.post('/create/',createNoteController.post.bind(createNoteController))
+noteRoutes.post('/create/',validateToken,createNoteController.post.bind(createNoteController))
 
-noteRoutes.put('/update/',updateNoteController.update.bind(updateNoteController))
+noteRoutes.put('/update/',validateToken,updateNoteController.update.bind(updateNoteController))
 
-noteRoutes.get('/:folder_uuid',getNoteByUserController.get.bind(getNoteByUserController))   
+noteRoutes.get('/:folder_uuid',validateToken,getNoteByUserController.get.bind(getNoteByUserController))   
 
 
 
