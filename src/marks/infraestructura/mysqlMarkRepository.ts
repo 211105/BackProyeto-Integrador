@@ -82,6 +82,7 @@ export class MysqlMarkRepository implements IMarkRepository {
             const checkAttendanceParams = [userUuid, markUuid];
             const [attendanceResult]: any = await query(checkAttendanceSql, checkAttendanceParams);
             if (attendanceResult.length > 0) {
+                
                 throw Error("El usuario ya ha asistido");
             }
     
@@ -110,7 +111,8 @@ export class MysqlMarkRepository implements IMarkRepository {
 
         
         } catch (error) {
-            return error as Error ;
+
+            throw error;
         }
     }
 
