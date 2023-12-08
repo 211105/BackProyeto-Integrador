@@ -9,11 +9,11 @@ markRouter.get('/rutine', (req: Request, res: Response) => {
     res.status(200).send('Rutina ejecutáda con éxito');
 })
 
-markRouter.post('/',validateToken,createMarkController.run.bind(createMarkController))
-markRouter.get('/',validateToken,listMarkController.run.bind(listMarkController))
-markRouter.post('/assist',validateToken,userAssistController.run.bind(userAssistController))
-markRouter.get('/list/activity',validateToken,listActivitysController.run.bind(listActivitysController))
-markRouter.post('/activity/',validateToken,adActivityController.run.bind(adActivityController))
+markRouter.post('/',createMarkController.run.bind(createMarkController))
+markRouter.get('/',listMarkController.run.bind(listMarkController))
+markRouter.post('/assist',userAssistController.run.bind(userAssistController))
+markRouter.get('/list/activity',listActivitysController.run.bind(listActivitysController))
+markRouter.post('/activity/',adActivityController.run.bind(adActivityController))
 
 
 

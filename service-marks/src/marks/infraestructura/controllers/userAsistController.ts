@@ -31,13 +31,7 @@
                         message: assistUser
                     });
                 }
-                else if (assistUser instanceof Error) {
-                    return res.status(500).send({
-                        status: "error",
-                        message: assistUser.message 
-                    });
-                }
-
+              
             } catch (error) {
                 console.log("fallo")
                 if (error instanceof Error) {
