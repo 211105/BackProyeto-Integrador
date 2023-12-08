@@ -23,7 +23,15 @@ noteRoutes.post('/create/',validateToken,createNoteController.post.bind(createNo
 
 noteRoutes.put('/update/',validateToken,updateNoteController.update.bind(updateNoteController))
 
-noteRoutes.get('/:folder_uuid',validateToken,getNoteByUserController.get.bind(getNoteByUserController))   
+noteRoutes.get('/:folder_uuid',validateToken,getNoteByUserController.get.bind(getNoteByUserController)) 
+
+
+
+
+
+
+
+
 
 
 
