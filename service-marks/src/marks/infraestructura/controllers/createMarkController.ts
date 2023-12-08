@@ -34,7 +34,6 @@ export class CreateMarkController{
                 activityUuid
             )
 
-            console.log(typeof(createMark))
             return res.status(201).send({
                 status: "ok",
                 message: createMark
