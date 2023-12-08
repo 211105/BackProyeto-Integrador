@@ -15,9 +15,7 @@ export class GetUserByUuidController{
             if (getUser) {
                 return res.status(201).send({
                     status: "succes",
-                    data: {
-                        getUser
-                    }
+                    data: getUser
                 })
             }
             else {

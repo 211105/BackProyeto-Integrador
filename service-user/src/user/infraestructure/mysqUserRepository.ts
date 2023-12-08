@@ -3,8 +3,7 @@ import { ResponseLogin, User,ResponseLoginAllUsers, UserOwner } from "../domain/
 import { IUsuarioRepository } from "../domain/userRepository";
 import { compare, encrypt } from '../../helpers/ashs';
 import { tokenSigIn } from "../../helpers/token";
-import { isEmailRegistered } from "./validation/usermysql";
-import deleteFromFirebase from "../../helpers/deleteImage";
+
 
 export class MysqlUserRepository implements IUsuarioRepository {
 
