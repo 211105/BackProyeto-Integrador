@@ -32,7 +32,7 @@ class RegisterUserUseCase {
                 return createUser;
             }
             catch (error) {
-                return null;
+                throw error;
             }
         });
     }

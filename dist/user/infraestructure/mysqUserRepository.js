@@ -18,6 +18,15 @@ class MysqlUserRepository {
     registerUser(uuid, name, email, phone_number, img_url, password, type_user) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const checkEmailSql = `
+                SELECT COUNT(*) as emailCount
+                FROM users
+                WHERE email = ?;
+                `;
+                const [emailResults] = yield (0, connection_1.query)(checkEmailSql, [email]);
+                if (emailResults[0].emailCount > 0) {
+                    throw new Error("El correo electrónico ya está registrado en la base de datos.");
+                }
                 let sql = "INSERT INTO users(uuid, name, email, phone_number , password, img_url, type_user) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 const params = [uuid, name, email, phone_number, password, img_url, type_user];
                 const [result] = yield (0, connection_1.query)(sql, params);

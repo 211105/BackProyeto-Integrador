@@ -35,7 +35,7 @@ class ResgisterUserController {
                 }
             }
             catch (error) {
-                console.log("entre al error");
+                console.log("entre al error", error);
                 if (error instanceof Error) {
                     if (error.message.includes('Duplicate entry') && error.message.includes('for key \'users.email\'')) {
                         return res.status(409).send({
@@ -53,7 +53,7 @@ class ResgisterUserController {
                 }
                 return res.status(500).send({
                     status: "error",
-                    message: "Please try again later.",
+                    message: "Please try again later:" + error,
                 });
             }
         });
