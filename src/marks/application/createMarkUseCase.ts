@@ -3,6 +3,7 @@ import moment from 'moment-timezone';
 import { v4 as uuid } from "uuid";
 import { ValidatorCreateMark } from "../domain/validations/mark";
 import { validate } from "class-validator";
+import { Mark } from "../domain/mark";
 
 
 export class CreateMarkUseCase {
@@ -16,8 +17,7 @@ export class CreateMarkUseCase {
         endDate: string,
         userUuid: string,
         activityUuid: string,
-    ): Promise<string | null> {
-        console.log("se ejecuta primero use case")
+    ): Promise<string | null | Mark | Error> {
         const miuuid: string = uuid()
         const numLatitude = Number(latitude);
         const numLongitude = Number(longitude);
@@ -41,7 +41,7 @@ export class CreateMarkUseCase {
             )
             return createMark
         } catch (error) {
-            return null
+            throw error;
         }
     }
 }

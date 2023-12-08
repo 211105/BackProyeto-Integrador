@@ -1,4 +1,4 @@
-import { Activity, MarkDescription, UserAsist, UserOwner } from "./mark";
+import { Activity, Mark, MarkDescription, UserAsist, UserOwner } from "./mark";
 
 
 export interface IMarkRepository {
@@ -11,7 +11,7 @@ export interface IMarkRepository {
         urlImage: string,
         userUuid: string,
         activityUuid: string,
-    ): Promise <string | null>
+    ): Promise <string | null | Mark | Error>
 
     listMarks(userLatitude: number, userLongitude: number): Promise <MarkDescription[] | null | any>; 
 

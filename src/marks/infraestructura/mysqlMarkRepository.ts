@@ -1,6 +1,6 @@
 import { error } from "console";
 import { query } from "../../database/connection";
-import { Activity, MarkDescription, UserOwner } from "../domain/mark";
+import { Activity, Mark, MarkDescription, UserOwner } from "../domain/mark";
 import { IMarkRepository } from "../domain/markRepository";
 import { RowDataPacket } from "mysql2";
 
@@ -17,7 +17,7 @@ export class MysqlMarkRepository implements IMarkRepository {
         urlImage: string,
         userUuid: string,
         activityUuid: string
-    ): Promise<string | null> {
+    ): Promise<string | null | Mark | Error> {
 
         try {
             let sql = "INSERT INTO pines(uuid, location, description, create_date, end_date, url_image, user_uuid, activity_uuid) VALUES (?, POINT(?, ?), ?, UTC_TIMESTAMP(), ADDDATE(UTC_TIMESTAMP(), INTERVAL ? HOUR_MINUTE), ?, ?, ?)";
@@ -26,8 +26,7 @@ export class MysqlMarkRepository implements IMarkRepository {
             // Si necesitas devolver algo, puedes hacerlo aquí
             return result;
         } catch (error) {
-            console.log(error)
-            return `${error}`
+            throw error;
         }
     }
     async listMarks(

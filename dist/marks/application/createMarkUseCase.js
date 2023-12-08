@@ -19,7 +19,6 @@ class CreateMarkUseCase {
     }
     run(latitude, longitude, description, urlImage, endDate, userUuid, activityUuid) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("se ejecuta primero use case");
             const miuuid = (0, uuid_1.v4)();
             const numLatitude = Number(latitude);
             const numLongitude = Number(longitude);
@@ -33,7 +32,7 @@ class CreateMarkUseCase {
                 return createMark;
             }
             catch (error) {
-                return null;
+                throw error;
             }
         });
     }
