@@ -26,12 +26,6 @@ class CreateNoteController {
             try {
                 let { user_uuid, title, description } = req.body;
                 const authToken = req.header('Authorization');
-                if (!authToken) {
-                    return res.status(401).send({
-                        status: "error",
-                        message: "Missing authorization token. Cannot verify the user."
-                    });
-                }
                 const userExists = yield (0, userVerify_1.verificarUsuario)(user_uuid, authToken);
                 if (!userExists) {
                     return res.status(404).send({
