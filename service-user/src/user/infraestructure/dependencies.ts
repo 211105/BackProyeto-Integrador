@@ -17,6 +17,8 @@ import { GetUserByUuidController } from "./controllers/getUserByUuidUseCase";
 import { GetUserOwnersUseCase } from "../application/getUserOwnersUseCase";
 import { GetUserOwnersControllers } from "./controllers/getUserOwnersController";
 
+import { UpdateImgUrlUserUsecase } from "../application/updateImgUrlUseCase";
+import {UpdateImgUrlController} from "./controllers/updateImgUrlController";
 
 export const mysqlUserRepository = new MysqlUserRepository()
 
@@ -42,3 +44,6 @@ export const getUserByUuidController = new GetUserByUuidController(getUserByUuid
 
 export const getUserOwnersUseCase = new GetUserOwnersUseCase(mysqlUserRepository)
 export const getUserOwnersControllers = new GetUserOwnersControllers(getUserOwnersUseCase)
+
+export const updateImgUrlUserUsecase = new UpdateImgUrlUserUsecase(mysqlUserRepository)
+export const updateImgUrlController = new UpdateImgUrlController(updateImgUrlUserUsecase)

@@ -1,25 +1,25 @@
 import { Request, Response } from "express";
-import { UpdateUserByIdUseCase } from "../../application/updateUserByIdUseCase";
+import { UpdateImgUrlUserUsecase } from "../../application/updateImgUrlUseCase";
 import { UploadedFile } from "express-fileupload";
 import uploadToFirebase from "../../../helpers/saveImages";
 
 
 
 
-export class UpdateUserByIdController {
-    constructor(readonly updateUserByIdUseCase: UpdateUserByIdUseCase) { }
+export class UpdateImgUrlController {
+    constructor(readonly UpdateImgUrlUserUsecase: UpdateImgUrlUserUsecase) { }
     async run(req: Request, res: Response) {
         try {
 
             let {
                 uuid,
-                name,
-                email,
-                phone_number,
             } = req.body
 
+            const imgFile = req.files?.img_url as UploadedFile;
+            const img_urls = await uploadToFirebase(imgFile);
 
-            let UpdateUserById = await this.updateUserByIdUseCase.run(uuid, name, email, phone_number,)
+            let UpdateUserById = await this.UpdateImgUrlUserUsecase.run(uuid, img_urls)
+
             console.log(UpdateUserById)
             if (UpdateUserById) {
                 return res.status(200).send({

@@ -31,15 +31,9 @@ export class UserAssistController{
                     message: assistUser
                 });
             }
-            else if (assistUser instanceof Error) {
-                return res.status(500).send({
-                    status: "error",
-                    message: assistUser.message 
-                });
-            }
-
+    
         } catch (error) {
-            console.log("fallo")
+            console.log("fallo",error)
             if (error instanceof Error) {
                 console.log("entre 1")
                 if (error.message.startsWith('[')) {      
@@ -56,9 +50,11 @@ export class UserAssistController{
                     });
                 }
             }
+            console.log("fallo",error)
+
             return res.status(500).send({
                 status: "error",
-                message: error,
+                message: `${error}`,
             });
         }
     }

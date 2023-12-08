@@ -18,11 +18,10 @@ export interface IUsuarioRepository {
 
     updateUserById( //listo 
         uuid: string,
-        name?: string,
-        email?: string,
-        phone_number?: string,
-        img_url?: string
-    ): Promise<User | null>
+        name: string,
+        email: string,
+        phone_number: string,
+    ): Promise<User | null | Error>
 
     updatePassword(
         uuid: string, 
@@ -32,5 +31,7 @@ export interface IUsuarioRepository {
     getUserByUuid(uuid: string): Promise<User | null>
 
     getUserOwners(UserOwners: string[]):Promise<UserOwner[]| any>
+
+    updateImgUrl(uuid:string,img_url:string):Promise<User | null | Error>
 }
 

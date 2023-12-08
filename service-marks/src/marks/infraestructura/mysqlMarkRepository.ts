@@ -133,8 +133,12 @@ export class MysqlMarkRepository implements IMarkRepository {
     
     async addActivity(uuid: string, name: string, imgUrl: string): Promise<string | Error | Activity | null> {
         try {
+            console.log("aqui")
             let sql = "INSERT INTO activitys(uuid, name, url_image) VALUES (?,?,?)";
+            console.log("aqui")
             const params: any[] = [uuid, name, imgUrl];
+            console.log("aqui")
+
             const [rsult]: any = await  query(sql,params);
             return new Activity(uuid,name,imgUrl);      
         } catch (error) {

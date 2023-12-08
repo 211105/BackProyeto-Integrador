@@ -8,7 +8,7 @@ export async function fetchUserOwners(userUuids: any[], token: string | undefine
     
     const rows = userUuids as RowDataPacket[];
     const uuids = rows.map(pin => pin.user_uuid);
-    const url = "https://allgate.cristilex.com/api/v1/users/owners/";
+    const url = "http://localhost:3000/api/v1/users/owners/";
    
     let headers = new Headers();
     headers.append("Content-Type", "application/json");

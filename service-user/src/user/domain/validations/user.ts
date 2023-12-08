@@ -94,6 +94,22 @@ export class ValidatorId {
     }
 }
 
+
+export class ValidatorImg {
+
+    @IsNotEmpty()
+    @IsUUID()
+    public uuid: string;
+
+    @IsNotEmpty()
+    @IsString()
+    public img_url: string;
+    constructor(uuid:string,img_url:string) {
+        this.uuid = uuid;
+        this.img_url = img_url
+    }
+}
+
 export class ValidatorUpdate {
     @IsNotEmpty()
     @IsUUID()
@@ -102,34 +118,29 @@ export class ValidatorUpdate {
     @IsOptional()
     @IsString()
     @Length(1, 100)
-    public name?: string;
+    public name: string;
 
     @IsOptional()
     @IsString()
     @Length(1, 100)
-    public email?: string;
+    public email: string;
 
     @IsOptional()
     @IsString()
     @Length(10)  
-    public phone_number?: string;
+    public phone_number: string;
 
-    @IsOptional()
-    @IsString()
-    public img_url?: string;
 
    
     constructor( 
         uuid: string,
-        name?: string,
-        email?: string,
-        phone_number?: string,
-        img_url?: string,
+        name: string,
+        email: string,
+        phone_number: string,
         ) {
         this.uuid = uuid;
         this.name = name;
         this.email = email;
         this.phone_number = phone_number
-        this.img_url = img_url
     }
 }

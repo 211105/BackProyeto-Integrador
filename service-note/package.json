@@ -28,7 +28,7 @@
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.6.5",
-    "nodemon": "^3.0.1",
+    "nodemon": "^3.0.2",
     "signale": "^1.4.0",
     "uuid": "^9.0.1"
   },
@@ -46,7 +46,7 @@
     "@types/node": "^20.9.1",
     "@types/signale": "^1.4.4",
     "@types/uuid": "^9.0.4",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   }
 }

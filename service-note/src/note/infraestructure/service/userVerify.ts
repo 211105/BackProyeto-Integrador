@@ -3,7 +3,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 export async function verificarUsuario(user_uuid: string, authToken: string): Promise<boolean> {
     console.log('Verificando si el usuario existe...');
     try {
-        const servicioUrl = `https://allgate.cristilex.com/api/v1/users/${user_uuid}`;
+        const servicioUrl = `http://localhost:3000/api/v1/users/${user_uuid}`;
         
         // Configurar los encabezados con el token de autenticación
         const headers = {

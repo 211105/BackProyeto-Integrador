@@ -176,6 +176,7 @@ export class MysqlExpenseRepository implements ExpenseRepository {
     
             const [weeklyAmountUuidResults]: any = await query(checkWeeklyAmountUuidSql, [weekly_amount_uuid]);
             return weeklyAmountUuidResults[0].weeklyAmountUuidCount > 0;
+
         } catch (error) {
             console.error("Error during weekly_amount_uuid verification check:", error);
             return error as Error; // Devolver null en caso de error

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { ListMarkUseCase } from "../../application/listMarksUseCase";
 import { fetchUserOwners } from "./sevices/usersOwners";
 import { AddOwnerMarksUseCase } from "../../application/addOwnerMarksUseCase";
+import { Console } from "console";
 
 
 export class ListMarkController{ 
@@ -20,11 +21,8 @@ export class ListMarkController{
 
            
             let createMark = await this.listMarkUseCase.run(Number(userLatitude), Number(userLongitude))
-
             const recibo = await fetchUserOwners(createMark,req.headers.authorization)
-            
             let markAddOwner = await this.addOwnerMarksUseCase.run(createMark,recibo.data.getUser)
-
 
 
             return res.status(200).send({

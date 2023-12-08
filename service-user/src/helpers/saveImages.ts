@@ -8,7 +8,8 @@ import * as admin from 'firebase-admin';
  * @param {UploadedFile} file El archivo a subir.
  * @returns {Promise<string>} La URL pública del archivo subido.
  */
-async function uploadToFirebase(file: UploadedFile | null): Promise<string> {
+async function uploadToFirebase(file: UploadedFile | null,): Promise<string> {
+    
     if (!file) {
         throw new Error("No image file uploaded.");
     }

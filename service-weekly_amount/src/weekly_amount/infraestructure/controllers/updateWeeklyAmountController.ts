@@ -50,7 +50,7 @@ export class UpdateWeeklyAmountController{
             }
             return res.status(500).send({
                 status: "error",
-                message: "An error occurred while update the expense."
+                message: "An error occurred while update the weekly amount."
             });
         }
     }

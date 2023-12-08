@@ -37,7 +37,7 @@ export class CreateWeeklyAmountController {
             else {
                 return res.status(500).send({
                     status: "error",
-                    message: "An unexpected error occurred while register the user."
+                    message: "An unexpected error occurred while register weekly amount."
                 });
             }
         } catch (error) {
@@ -52,7 +52,7 @@ export class CreateWeeklyAmountController {
             }
             return res.status(500).send({
                 status: "error",
-                message: "An error occurred while update the expense."
+                message: "An error occurred while update the weekly amount."
             });
         }
     }

@@ -19,7 +19,7 @@ export class ResgisterUserController {
                 password,
             } = req.body
 
-            const imgFile = req.files?.img_file as UploadedFile | null;
+            const imgFile = req.files?.img_file as UploadedFile;
             const img_url = await uploadToFirebase(imgFile);
 
             let registerUser = await this.registerUserUseCase.run(
@@ -31,7 +31,7 @@ export class ResgisterUserController {
                 'user'
             )
          
-
+            console.log(registerUser)
             if (registerUser instanceof User) {
                 return res.status(201).send({
                     status: "succes",
