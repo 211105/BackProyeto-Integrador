@@ -14,15 +14,15 @@ userRoutes.post('/auth/register',resgisterUserController.run.bind(resgisterUserC
 
 userRoutes.post('/auth/login',loginUserController.run.bind(loginUserController))
 
-userRoutes.put('/id',updateUserByIdController.run.bind(updateUserByIdController))
+userRoutes.put('/id',validateToken,updateUserByIdController.run.bind(updateUserByIdController))
 
 userRoutes.put('/restar_password',validateToken,updatePasswordController.run.bind(updatePasswordController))
 
 userRoutes.put('/restar_password',validateToken,updatePasswordController.run.bind(updatePasswordController))
 
-userRoutes.post("/owners/", getUserOwnersControllers.get.bind(getUserOwnersControllers))
+userRoutes.post("/owners/",validateToken, getUserOwnersControllers.get.bind(getUserOwnersControllers))
 
-userRoutes.get('/:uuid',getUserByUuidController.get.bind(getUserByUuidController))
+userRoutes.get('/:uuid',validateToken,getUserByUuidController.get.bind(getUserByUuidController))
 
 
 

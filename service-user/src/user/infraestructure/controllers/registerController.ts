@@ -8,7 +8,7 @@ import uploadToFirebase from "../../../helpers/saveImages";
 export class ResgisterUserController {
     constructor(readonly registerUserUseCase: RegisterUserUseCase) { }
     async run(req: Request, res: Response) {
-        console.log('controller')
+        
 
         try {
 
@@ -18,23 +18,9 @@ export class ResgisterUserController {
                 phone_number,
                 password,
             } = req.body
-            console.log(name)
-            console.log(email)
-            console.log(phone_number)
-            console.log(password)
 
-
-            if (!req.files || !req.files.img_file) {
-                return res.status(400).send({
-                    status: "error",
-                    message: "No image file uploaded."
-                });
-            }
-
-               // Castear el archivo a UploadedFile (express-fileupload)
-               const imgFile = req.files.img_file as UploadedFile;
-               const img_url = await uploadToFirebase(imgFile)
-               console.log(img_url)
+            const imgFile = req.files?.img_file as UploadedFile | null;
+            const img_url = await uploadToFirebase(imgFile);
 
             let registerUser = await this.registerUserUseCase.run(
                 name,
@@ -44,32 +30,17 @@ export class ResgisterUserController {
                 password,
                 'user'
             )
-            if (registerUser instanceof Error) {
-                return res.status(409).send({
-                    status: "error",
-                    message: registerUser.message
-                });
-            }
+         
+
             if (registerUser instanceof User) {
                 return res.status(201).send({
                     status: "succes",
-                    data: {
-                        id: registerUser.uuid,
-                        name: registerUser.name,
-                        email: registerUser.email,
-                        phone_number: registerUser.phone_number,
-                        type_user: registerUser.type_user
-                    }
+                    registerUser
                 })
-            }
-            else {
-                return res.status(500).send({
-                    status: "error",
-                    message: "An unexpected error occurred while register the user."
-                });
             }
 
         } catch (error) {
+            console.log("entre al error")
             // Manejo de errores específicos
             if (error instanceof Error) {
                 if (error.message.includes('Duplicate entry') && error.message.includes('for key \'users.email\'')) {
@@ -89,7 +60,7 @@ export class ResgisterUserController {
             // Para errores generales, se devuelve un error 500 con un mensaje genérico
             return res.status(500).send({
                 status: "error",
-                message: "An unexpected error occurred. Please try again later.",
+                message: "Please try again later.",
             });
         }
     }

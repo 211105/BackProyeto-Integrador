@@ -8,8 +8,12 @@ import * as admin from 'firebase-admin';
  * @param {UploadedFile} file El archivo a subir.
  * @returns {Promise<string>} La URL pública del archivo subido.
  */
-async function uploadToFirebase(file: UploadedFile): Promise<string> {
+async function uploadToFirebase(file: UploadedFile | null): Promise<string> {
+    if (!file) {
+        throw new Error("No image file uploaded.");
+    }
     const bucket = admin.storage().bucket();
+
 
     return new Promise((resolve, reject) => {
         // Genera un nombre único para el archivo basado en la fecha y el nombre original
