@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateFileController = void 0;
-const saveFile_1 = __importDefault(require("../../../helpers/saveFile"));
+const saveImages_1 = __importDefault(require("../../../helpers/saveImages"));
 const file_1 = require("../../domain/file");
 const userVerify_1 = require("../service/userVerify");
 class CreateFileController {
@@ -21,62 +21,22 @@ class CreateFileController {
         this.createFileUseCase = createFileUseCase;
     }
     post(req, res) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { user_uuid, notes_uuid } = req.body;
-                if (!req.files || !req.files.url_file) {
-                    return res.status(400).send({
-                        status: "error",
-                        message: "No image file uploaded."
-                    });
-                }
-                const userExists = yield (0, userVerify_1.verificarUsuario)(user_uuid);
+                const authToken = req.header('Authorization');
+                const userExists = yield (0, userVerify_1.verificarUsuario)(user_uuid, authToken);
                 if (!userExists) {
                     return res.status(404).send({
                         status: "error",
                         message: `The user ${user_uuid} does not exist. Cannot create the note.`
                     });
                 }
-                const imgFile = req.files.url_file;
-                let type_file = null;
-                const fileName = imgFile.name;
-                console.log(fileName);
-                const fileExtension = imgFile.name.split('.').pop();
-                if (fileExtension) {
-                    switch (fileExtension.toLowerCase()) {
-                        case 'png':
-                            type_file = 'image/png';
-                            break;
-                        case 'jpg':
-                        case 'jpeg':
-                            type_file = 'image/jpeg';
-                            break;
-                        case 'gif':
-                            type_file = 'image/gif';
-                            break;
-                        case 'mp3':
-                            type_file = 'audio/mpeg';
-                            break;
-                        case 'wav':
-                            type_file = 'audio/wav';
-                            break;
-                        case 'oog':
-                            type_file = 'audio/ogg';
-                            break;
-                        case 'aac':
-                            type_file = 'audio/aac';
-                            break;
-                        case '""':
-                            type_file = 'audio/aac';
-                            break;
-                        case 'pdf':
-                            type_file = 'document/pdf';
-                            break;
-                    }
-                }
-                const url_file = yield (0, saveFile_1.default)(imgFile, type_file);
-                console.log(url_file);
-                const createFile = yield this.createFileUseCase.post(user_uuid, notes_uuid, fileName, url_file, type_file || '', false);
+                const imgFile = (_a = req.files) === null || _a === void 0 ? void 0 : _a.url_file;
+                const fileName = imgFile === null || imgFile === void 0 ? void 0 : imgFile.name;
+                const url_file = yield (0, saveImages_1.default)(imgFile);
+                const createFile = yield this.createFileUseCase.post(user_uuid, notes_uuid, fileName || "", url_file, '', false);
                 if (createFile instanceof file_1.File) {
                     return res.status(201).send({
                         status: "success",

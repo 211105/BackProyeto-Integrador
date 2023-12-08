@@ -12,13 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ValidatorUpdate = exports.ValidatorId = exports.ValidatorFile = void 0;
 const class_validator_1 = require("class-validator");
 class ValidatorFile {
-    constructor(uuid, user_uuid, notes_uuid, title, url_file, type_file, status) {
+    constructor(uuid, user_uuid, notes_uuid, title, url_file, status) {
         this.uuid = uuid;
         this.user_uuid = user_uuid;
         this.notes_uuid = notes_uuid;
         this.title = title;
         this.url_file = url_file;
-        this.type_file = type_file;
         this.status = status;
     }
 }
@@ -49,11 +48,6 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], ValidatorFile.prototype, "url_file", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], ValidatorFile.prototype, "type_file", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsBoolean)(),

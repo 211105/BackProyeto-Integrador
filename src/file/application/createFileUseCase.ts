@@ -11,7 +11,7 @@ export class CreateFileUseCase{
         //valres generados 
         const miuuid: string = uuid();
 
-        let data = new ValidatorFile(miuuid, user_uuid,notes_uuid, title, url_file, type_file,status);
+        let data = new ValidatorFile(miuuid, user_uuid,notes_uuid, title, url_file,status);
         const validation = await validate(data)
         if (validation.length > 0) {
             throw new Error(JSON.stringify(validation));

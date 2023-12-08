@@ -25,10 +25,6 @@ export class ValidatorFile {
     public url_file: string;
 
     @IsNotEmpty()
-    @IsString()
-    public type_file: string;
-
-    @IsNotEmpty()
     @IsBoolean()
     public status: boolean;
 
@@ -40,7 +36,6 @@ export class ValidatorFile {
         title: string,
         
         url_file: string,
-        type_file: string,
         status: boolean
 
     ) {
@@ -50,7 +45,6 @@ export class ValidatorFile {
         this.title = title;
         
         this.url_file = url_file;
-        this.type_file = type_file;
         this.status = status;
 
     }

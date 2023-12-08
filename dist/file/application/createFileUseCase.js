@@ -20,7 +20,7 @@ class CreateFileUseCase {
     post(user_uuid, notes_uuid, title, url_file, type_file, status) {
         return __awaiter(this, void 0, void 0, function* () {
             const miuuid = (0, uuid_1.v4)();
-            let data = new file_1.ValidatorFile(miuuid, user_uuid, notes_uuid, title, url_file, type_file, status);
+            let data = new file_1.ValidatorFile(miuuid, user_uuid, notes_uuid, title, url_file, status);
             const validation = yield (0, class_validator_1.validate)(data);
             if (validation.length > 0) {
                 throw new Error(JSON.stringify(validation));

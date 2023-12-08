@@ -35,6 +35,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const admin = __importStar(require("firebase-admin"));
 function uploadToFirebase(file) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (!file) {
+            throw new Error("No image file uploaded.");
+        }
         const bucket = admin.storage().bucket();
         return new Promise((resolve, reject) => {
             const uniqueName = `${Date.now()}-${file.name}`;
