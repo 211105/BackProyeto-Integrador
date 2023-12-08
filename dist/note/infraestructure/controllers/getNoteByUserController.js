@@ -30,7 +30,7 @@ class GetNoteByUserController {
                 else {
                     return res.status(404).send({
                         status: "error",
-                        message: "User not found "
+                        message: "Note not found "
                     });
                 }
             }
