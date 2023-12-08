@@ -21,8 +21,8 @@ export class ListMarkController{
            
             let createMark = await this.listMarkUseCase.run(Number(userLatitude), Number(userLongitude))
 
-            const recibo = await fetchUserOwners(createMark)
-
+            const recibo = await fetchUserOwners(createMark,req.headers.authorization)
+            
             let markAddOwner = await this.addOwnerMarksUseCase.run(createMark,recibo.data.getUser)
 
 
