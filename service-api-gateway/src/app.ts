@@ -14,12 +14,12 @@ const PORT = process.env.PORT || 3000;
 app.get('/rutine', (req: Request, res: Response) => {
   res.status(200).send('Rutina ejecutada con éxito');
 })
-app.use('/api/v1/users',proxy('https://user.cristilex.com'))
-app.use('/api/v1/marks',proxy('https://mark.cristilex.com'));
-app.use('/api/v1/notes',proxy('https://note.cristilex.com'));
-app.use('/api/v1/files',proxy('https://file.cristilex.com'));
-app.use('/api/v1/mount',proxy('https://mount.cristilex.com'));
-app.use('/api/v1/expense',proxy('https://expense.cristilex.com'));
+app.use('/api/v1/users',proxy('http://localhost:3005'))
+app.use('/api/v1/marks',proxy('http://localhost:3003'));
+app.use('/api/v1/notes',proxy('http://localhost:3004'));
+app.use('/api/v1/files',proxy('http://localhost:3002'));
+app.use('/api/v1/mount',proxy('http://localhost:3006'));
+app.use('/api/v1/expense',proxy('http://localhost:3001'));
 
 
 
