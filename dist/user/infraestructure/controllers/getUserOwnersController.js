@@ -18,8 +18,6 @@ class GetUserOwnersControllers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { uuids } = req.body;
-                console.log("holaaa");
-                console.log(uuids);
                 const getUser = yield this.getUserOwnersUseCase.get(uuids);
                 if (getUser) {
                     return res.status(201).send({

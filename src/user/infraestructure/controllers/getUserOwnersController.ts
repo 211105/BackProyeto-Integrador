@@ -8,8 +8,6 @@ export class GetUserOwnersControllers{
     async get(req: Request, res: Response){
         try {
             let {uuids} = req.body;
-            console.log("holaaa")
-            console.log(uuids)
             const getUser = await this.getUserOwnersUseCase.get(uuids);
 
             if (getUser) {
